@@ -1,0 +1,130 @@
+\documentclass[12pt,a4paper,titlepage]{article}
+
+\usepackage{a4wide}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usetikzlibrary{calc, riscvproc, positioning, fit, decorations, decorations.pathmorphing}
+\usepackage{ctikzmanutils}
+\usepackage{ifthen}
+\usepackage{xparse}
+\usepackage{showexpl}
+\usepackage{ragged2e}
+
+\parindent=0pt
+\parskip=4pt plus 6pt minus 2pt
+
+%
+% modified gelrcoord: https://github.com/circuitikz/circuitikz/blob/master/doc/ctikzmanutils.sty
+%
+\newcommand{\modgeolrcoord}[2][]{\showanchors[#1]{#2}{text}(north/90/0.4, north east/45/0.4, east/0/0.4,
+	south east/-45/0.4,
+	south/-90/0.4, south west/-135/0.4, west/180/0.4, north west/135/0.4,
+	left/160/0.4, right/30/0.4, center/-120/0.3
+	)
+}
+\newcommand\defaultanchors{
+}
+
+\title{RISC-V Processor \Circuitikz{} Library}
+\date{\today}
+
+\begin{document}
+
+\begin{center}
+	\LARGE \textbf{\thetitle}
+
+	\normalsize \thedate
+\end{center}
+
+%\circuitdesc*{instrmem}{Instruction Memory}{}()
+%\modgeolrcoord{instrmem}
+%\showanchors{instrmem, align=center}{Instruction\\Memory}(
+%a/180/0.4,
+%rd/0/0.4
+%)
+
+\section{Components}
+
+\subsection{Instruction Memory}
+\begin{center}
+	
+	\begin{circuitikz}[]
+		\node[instrmem, align=center] (comp) {Instruction\\Memory};
+
+		\draw[->, red] (comp.a) -- ++(-1, 0) node[left] {a};
+		\draw[->, blue] (comp.rd) -- ++(1, 0) node[right] {rd};
+	\end{circuitikz}
+\end{center}
+
+\subsection{Data Memory}
+\begin{center}
+	\begin{circuitikz}[]
+		\node[datamem, align=center] (comp) {Data\\Memory};
+		\draw[->, red] (comp.a) -- ++(-1, 0) node[left] {a};
+		\draw[->, red] (comp.wd) -- ++(-1, 0) node[left] {wd};
+		\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
+		\draw[->, red] (comp.we) -- ++(0, 1) node[above] {we};
+		\draw[->, blue] (comp.rd) -- ++(1, 0) node[right] {rd};
+	\end{circuitikz}
+\end{center}
+
+\subsection{Register File}
+\begin{center}
+	\begin{circuitikz}[]
+		\node[regfile, align=center] (comp) {Register\\File};
+		\draw[->, red] (comp.a1) -- ++(-1, 0) node[left] {a1};
+		\draw[->, red] (comp.a2) -- ++(-1, 0) node[left] {a2};
+		\draw[->, red] (comp.a3) -- ++(-1, 0) node[left] {a3};
+		\draw[->, red] (comp.wd3) -- ++(-1, 0) node[left] {wd3};
+		
+		\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
+		\draw[->, red] (comp.we3) -- ++(0, 1) node[above] {we3};
+		\draw[->, blue] (comp.rd1) -- ++(1, 0) node[right] {rd1};
+		\draw[->, blue] (comp.rd2) -- ++(1, 0) node[right] {rd2};
+	\end{circuitikz}
+\end{center}
+
+\subsection{Extend Unit}
+\begin{center}
+	\begin{circuitikz}[]
+		\node[extend, align=center] (comp) {Extend};
+		\draw[->, red] (comp.in) -- ++(-1, 0) node[left] {in};
+		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
+	\end{circuitikz}
+\end{center}
+
+\subsection{Arithmetic Logic Unit}
+\begin{center}
+	\begin{circuitikz}[]
+		\node[alu, align=center] (comp) {ALU};
+		\draw[->, red] (comp.a) -- ++(-1, 0) node[left] {a};
+		\draw[->, red] (comp.b) -- ++(-1, 0) node[left] {b};
+		\draw[->, red] (comp.ctrl) -- ++(0, 1) node[above] {ctrl};
+		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
+		\draw[->, blue] (comp.zero) -- ++(1, 0) node[right] {zero};
+	\end{circuitikz}
+\end{center}
+
+\subsection{Register}
+\begin{center}
+	\begin{circuitikz}[]
+		\node[reg, align=center] (comp) {};
+		\draw[->, red] (comp.in) -- ++(-1, 0) node[left] {in};
+		\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
+		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
+	\end{circuitikz}
+
+\subsection{Adder}
+\begin{center}
+	\begin{circuitikz}[]
+		\node[adder, align=center] (comp) {+};
+		\draw[->, red] (comp.a) -- ++(-1, 0) node[left] {a};
+		\draw[->, red] (comp.b) -- ++(-1, 0) node[left] {b};
+		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
+	\end{circuitikz}
+\end{center}
+	
+\end{center}
+\end{document}
+

@@ -1,0 +1,41 @@
+### LaTeX ###
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+*.dvi
+*.xdv
+_minted*
+*.pyg
+*.listing
+*.dpth
+*.md5
+*.auxlock
+*.bak*
+*.fdb_latexmk
+*.synctex.gz
+*.synctex*
+*.ps
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+.history
+.ionide
+
+### Other Stuff ###
+*.log
+*.DS_Store
