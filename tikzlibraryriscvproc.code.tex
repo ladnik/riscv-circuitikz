@@ -1132,15 +1132,19 @@
 	\savedmacro{\ctikzclass}{\edef\ctikzclass{processor}}
 	\saveddimen{\scaledRlen}{\pgfmathsetlength{\pgf@x}{\ctikzvalof{\ctikzclass/scale}\pgf@circ@Rlen}}
 	\anchor{center}{\pgfpointorigin} % set center to (0,0)
+	
 	% define northwest as scaled endpoint
 	\savedanchor\northwest{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
-		\pgf@y=\ctikzvalof{processor/memory/smallheight}\pgf@circ@scaled@Rlen
-		\pgf@y=.5\pgf@y 
 		\pgf@x=-\ctikzvalof{processor/memory/smallwidth}\pgf@circ@scaled@Rlen
 		\pgf@x=.5\pgf@x
+		\pgf@y=\ctikzvalof{processor/memory/smallheight}\pgf@circ@scaled@Rlen
+		\pgfmathsetmacro\slopeval{\ctikzvalof{processor/misc/slope}}
+		\pgfmathparse{.5*\pgf@y+2*\pgf@x*tan(\slopeval)}
+		\pgf@y=\pgfmathresult pt
 	}
 	
+	\pgfmathsetmacro\slopeval{\ctikzvalof{processor/misc/slope}}
 	\saveddimen\leadlen
 	{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
