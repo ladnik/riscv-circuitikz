@@ -1,0 +1,3 @@
+	\begin{circuitikz}
+		\node[instrmem,align=center] (i) {Instruction\\Memory};
+	\end{circuitikz}

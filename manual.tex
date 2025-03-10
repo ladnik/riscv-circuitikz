@@ -124,6 +124,17 @@
 		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
 	\end{circuitikz}
 \end{center}
+
+\subsection{Multiplexer}
+\begin{center}
+	\begin{circuitikz}[]
+		\node[mux, align=center] (comp) {};
+		\draw[->, red] (comp.in1) -- ++(-1, 0) node[left] {in1};
+		\draw[->, red] (comp.in2) -- ++(-1, 0) node[left] {in2};
+		\draw[->, red] (comp.sel) -- ++(0, 1) node[above] {sel};
+		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
+	\end{circuitikz}
+\end{center}
 	
 \end{center}
 \end{document}
