@@ -12,12 +12,14 @@
 \ctikzset{processor/memory/height/.initial=3}
 \ctikzset{processor/memory/width/.initial=1.75}
 \ctikzset{processor/memory/tickwidth/.initial=2.25}
-\ctikzset{processor/memory/smallwidth/.initial=0.55}
-\ctikzset{processor/memory/smallheight/.initial=1.125}
+\ctikzset{processor/memory/smallwidth/.initial=0.4}
+\ctikzset{processor/memory/smallheight/.initial=0.8}
 \ctikzset{processor/misc/slope/.initial=15}
 \ctikzset{processor/control/height/.initial=4}
 \ctikzset{processor/control/width/.initial=1.3}
 \ctikzset{processor/control/radius/.initial=0.25}
+\ctikzset{processor/alu/height/.initial=1.5}
+\ctikzset{processor/alu/width/.initial=1}
 
 \newif\ifpgfcirc@draw@input@leads\pgfcirc@draw@input@leadstrue
 \ctikzset{processor draw input leads/.is choice}
@@ -561,6 +563,7 @@
 
 	\saveddimen\bigheight
 	{
+		% TODO: use slope
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
 		\pgf@x=\ctikzvalof{processor/memory/height}\pgf@circ@scaled@Rlen
 		\pgf@x=.166\pgf@x % sixth of height
@@ -593,6 +596,13 @@
 		\pgfmathparse{-1*\pgf@x+\leadlen}
 		\pgf@x=\pgfmathresult pt
 		\pgf@y=0 pt
+	}
+	
+	\anchor{ctrl}{
+		\northwest
+		\pgfmathparse{0.5*(\pgf@y + \bigheight)}
+		\pgf@y=\pgfmathresult pt
+		\pgf@x=0 pt
 	}
 
 	%
@@ -666,10 +676,10 @@
 	% define northwest as scaled endpoint
 	\savedanchor\northwest{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
-		\pgf@y=\ctikzvalof{processor/memory/height}\pgf@circ@scaled@Rlen
-		\pgf@y=.33\pgf@y % take half times two thirds of height (e.g. 1/3)
-		\pgf@x=-\ctikzvalof{processor/memory/tickwidth}\pgf@circ@scaled@Rlen
-		\pgf@x=.25\pgf@x % take half times half width
+		\pgf@y=\ctikzvalof{processor/alu/height}\pgf@circ@scaled@Rlen
+		\pgf@y=.5\pgf@y
+		\pgf@x=-\ctikzvalof{processor/alu/width}\pgf@circ@scaled@Rlen
+		\pgf@x=.5\pgf@x
 	}
 
 	\saveddimen\leadlen
@@ -678,9 +688,9 @@
 		\pgf@x=\ctikzvalof{processor/memory/width}\pgf@circ@scaled@Rlen
 		\pgf@x=.15\pgf@x
 	}
-
+	
 	\pgfmathsetmacro\slopeval{\ctikzvalof{processor/misc/slope}}
-	\pgfmathsetlengthmacro{\cutinheight}{-0.5*\pgf@x*tan(\slopeval)}
+	\pgfmathsetlengthmacro{\cutinheight}{-0.25*\ctikzvalof{processor/alu/width}\pgf@circ@scaled@Rlen*tan(\slopeval)}
 
 	\savedmacro{\thisshape}{\def\thisshape{\tikz@fig@name}}
 	%\message{cutinheight=\cutinheight}
@@ -774,6 +784,7 @@
 		%\def\slopedegrees{{\ctikzvalof{processor/misc/slope}}}
 		%\pgfmathsetmacro\slopeval{\ctikzvalof{processor/misc/slope}}
 		\pgfmathsetmacro\slopeval{\ctikzvalof{processor/misc/slope}}
+		\northwest
 		\pgfmathsetlengthmacro{\cutinheight}{-0.5*\pgf@x*tan(\slopeval)}
 
 		\pgfmathparse{2*\pgf@circ@res@right*tan(\slopeval)}
@@ -973,10 +984,10 @@
 	% define northwest as scaled endpoint
 	\savedanchor\northwest{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
-		\pgf@y=\ctikzvalof{processor/memory/height}\pgf@circ@scaled@Rlen
-		\pgf@y=.33\pgf@y % take half times two thirds of height (e.g. 1/3)
-		\pgf@x=-\ctikzvalof{processor/memory/tickwidth}\pgf@circ@scaled@Rlen
-		\pgf@x=.25\pgf@x % take half times half width
+		\pgf@y=\ctikzvalof{processor/alu/height}\pgf@circ@scaled@Rlen
+		\pgf@y=.5\pgf@y
+		\pgf@x=-\ctikzvalof{processor/alu/width}\pgf@circ@scaled@Rlen
+		\pgf@x=.5\pgf@x
 	}
 	
 	\saveddimen\leadlen
@@ -1062,6 +1073,7 @@
 		%\def\slopedegrees{{\ctikzvalof{processor/misc/slope}}}
 		%\pgfmathsetmacro\slopeval{\ctikzvalof{processor/misc/slope}}
 		\pgfmathsetmacro\slopeval{\ctikzvalof{processor/misc/slope}}
+		\northwest
 		\pgfmathsetlengthmacro{\cutinheight}{-0.5*\pgf@x*tan(\slopeval)}
 		
 		\pgfmathparse{2*\pgf@circ@res@right*tan(\slopeval)}
@@ -1118,7 +1130,9 @@
 
 		\pgfusepath{draw}
 		
-		% no text to draw
+		%draw text
+		\pgf@circ@text@strokecolor
+		\pgftext[center,x=0pt,y=0pt]{\textbf{+}}
 	}
 }
 
@@ -1247,8 +1261,7 @@
 		%\message{cutinheight=\the\cutinheight}
 		
 		
-		\pgfpathmoveto{\pgfpoint{0pt}{\cutinheight}}
-		\pgfpathlineto{\pgfpoint{0pt}{\pgf@circ@res@up + \pgf@circ@res@step}}
+		\pgfpathmoveto{\pgfpoint{0pt}{\pgf@circ@res@up + \pgf@circ@res@step}}
 		\pgfpathlineto{\pgfpoint{2*\pgf@circ@res@right}{\pgf@circ@res@up}}
 		\pgfpathlineto{\pgfpoint{2*\pgf@circ@res@right}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{0pt}{\pgf@circ@res@down-\pgf@circ@res@step}}
