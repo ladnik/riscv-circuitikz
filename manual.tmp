@@ -1,0 +1,15 @@
+		\begin{circuitikz}[]
+			\node[ctrlunitsc, align=center] (comp) {Control\\Unit};
+			\draw[->, red] (comp.op) -- ++(-.5, 0) node[left] {op};
+			\draw[->, red] (comp.funct3) -- ++(-.5, 0) node[left] {funct3};
+			\draw[->, red] (comp.funct7) -- ++(-.5, 0) node[left] {funct7};
+			\draw[->, red] (comp.zero) -- ++(-.5, 0) node[left] {zero};
+
+			\draw[->, blue] (comp.pcsrc) -- ++(.5, 0) node[right] {pcsrc};
+			\draw[->, blue] (comp.resultsrc) -- ++(.5, 0) node[right] {resultsrc};
+			\draw[->, blue] (comp.memwrite) -- ++(.5, 0) node[right] {memwrite};
+			\draw[->, blue] (comp.alucontrol) -- ++(.5, 0) node[right] {alucontrol};
+			\draw[->, blue] (comp.alusrc) -- ++(.5, 0) node[right] {alusrc};
+			\draw[->, blue] (comp.immsrc) -- ++(.5, 0) node[right] {immsrc};
+			\draw[->, blue] (comp.regwrite) -- ++(.5, 0) node[right] {regwrite};
+		\end{circuitikz}

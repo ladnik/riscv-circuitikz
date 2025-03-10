@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper,titlepage]{article}
+\documentclass[.52pt,a4paper,titlepage]{article}
 
 \usepackage{a4wide}
 \usepackage[T1]{fontenc}
@@ -19,8 +19,8 @@
 %
 \newcommand{\modgeolrcoord}[2][]{\showanchors[#1]{#2}{text}(north/90/0.4, north east/45/0.4, east/0/0.4,
 	south east/-45/0.4,
-	south/-90/0.4, south west/-135/0.4, west/180/0.4, north west/135/0.4,
-	left/160/0.4, right/30/0.4, center/-120/0.3
+	south/-90/0.4, south west/-.535/0.4, west/.580/0.4, north west/.535/0.4,
+	left/.560/0.4, right/30/0.4, center/-.520/0.3
 	)
 }
 \newcommand\defaultanchors{
@@ -40,7 +40,7 @@
 %\circuitdesc*{instrmem}{Instruction Memory}{}()
 %\modgeolrcoord{instrmem}
 %\showanchors{instrmem, align=center}{Instruction\\Memory}(
-%a/180/0.4,
+%a/.580/0.4,
 %rd/0/0.4
 %)
 
@@ -48,111 +48,130 @@
 
 \subsection{Instruction Memory}
 \begin{center}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}
+			\node[instrmem, align=center] (comp) {Instruction\\Memory};
 
-	\begin{circuitikz}[]
-		\node[instrmem, align=center] (comp) {Instruction\\Memory};
-
-		\draw[->, red] (comp.a) -- ++(-1, 0) node[left] {a};
-		\draw[->, blue] (comp.rd) -- ++(1, 0) node[right] {rd};
-	\end{circuitikz}
+			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
+			\draw[->, blue] (comp.rd) -- ++(.5, 0) node[right] {rd};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
+
+
 
 \subsection{Data Memory}
 \begin{center}
-	\begin{circuitikz}[]
-		\node[datamem, align=center] (comp) {Data\\Memory};
-		\draw[->, red] (comp.a) -- ++(-1, 0) node[left] {a};
-		\draw[->, red] (comp.wd) -- ++(-1, 0) node[left] {wd};
-		\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
-		\draw[->, red] (comp.we) -- ++(0, 1) node[above] {we};
-		\draw[->, blue] (comp.rd) -- ++(1, 0) node[right] {rd};
-	\end{circuitikz}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[datamem, align=center] (comp) {Data\\Memory};
+			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
+			\draw[->, red] (comp.wd) -- ++(-.5, 0) node[left] {wd};
+			\draw[->, red] (comp.clk) -- ++(0, .5) node[above] {clk};
+			\draw[->, red] (comp.we) -- ++(0, .5) node[above] {we};
+			\draw[->, blue] (comp.rd) -- ++(.5, 0) node[right] {rd};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
 
 \subsection{Register File}
 \begin{center}
-	\begin{circuitikz}[]
-		\node[regfile, align=center] (comp) {Register\\File};
-		\draw[->, red] (comp.a1) -- ++(-1, 0) node[left] {a1};
-		\draw[->, red] (comp.a2) -- ++(-1, 0) node[left] {a2};
-		\draw[->, red] (comp.a3) -- ++(-1, 0) node[left] {a3};
-		\draw[->, red] (comp.wd3) -- ++(-1, 0) node[left] {wd3};
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[regfile, align=center] (comp) {Register\\File};
+			\draw[->, red] (comp.a1) -- ++(-.5, 0) node[left] {a1};
+			\draw[->, red] (comp.a2) -- ++(-.5, 0) node[left] {a2};
+			\draw[->, red] (comp.a3) -- ++(-.5, 0) node[left] {a3};
+			\draw[->, red] (comp.wd3) -- ++(-.5, 0) node[left] {wd3};
 
-		\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
-		\draw[->, red] (comp.we3) -- ++(0, 1) node[above] {we3};
-		\draw[->, blue] (comp.rd1) -- ++(1, 0) node[right] {rd1};
-		\draw[->, blue] (comp.rd2) -- ++(1, 0) node[right] {rd2};
-	\end{circuitikz}
+			\draw[->, red] (comp.clk) -- ++(0, .5) node[above] {clk};
+			\draw[->, red] (comp.we3) -- ++(0, .5) node[above] {we3};
+			\draw[->, blue] (comp.rd1) -- ++(.5, 0) node[right] {rd1};
+			\draw[->, blue] (comp.rd2) -- ++(.5, 0) node[right] {rd2};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
 
 \subsection{Extend Unit}
 \begin{center}
-	\begin{circuitikz}[]
-		\node[extend, align=center] (comp) {Extend};
-		\draw[->, red] (comp.in) -- ++(-1, 0) node[left] {in};
-		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
-	\end{circuitikz}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[extend, align=center] (comp) {Extend};
+			\draw[->, red] (comp.in) -- ++(-.5, 0) node[left] {in};
+			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
 
 \subsection{Arithmetic Logic Unit}
 \begin{center}
-	\begin{circuitikz}[]
-		\node[alu, align=center] (comp) {ALU};
-		\draw[->, red] (comp.a) -- ++(-1, 0) node[left] {a};
-		\draw[->, red] (comp.b) -- ++(-1, 0) node[left] {b};
-		\draw[->, red] (comp.ctrl) -- ++(0, 1) node[above] {ctrl};
-		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
-		\draw[->, blue] (comp.zero) -- ++(1, 0) node[right] {zero};
-	\end{circuitikz}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[alu, align=center] (comp) {ALU};
+			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
+			\draw[->, red] (comp.b) -- ++(-.5, 0) node[left] {b};
+			\draw[->, red] (comp.ctrl) -- ++(0, .5) node[above] {ctrl};
+			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
+			\draw[->, blue] (comp.zero) -- ++(.5, 0) node[right] {zero};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
 
 \subsection{Register}
 \begin{center}
-	\begin{circuitikz}[]
-		\node[reg, align=center] (comp) {};
-		\draw[->, red] (comp.in) -- ++(-1, 0) node[left] {in};
-		\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
-		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
-	\end{circuitikz}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[reg, align=center] (comp) {};
+			\draw[->, red] (comp.in) -- ++(-.5, 0) node[left] {in};
+			\draw[->, red] (comp.clk) -- ++(0, .5) node[above] {clk};
+			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
 \subsection{Adder}
 \begin{center}
-	\begin{circuitikz}[]
-		\node[adder, align=center] (comp) {+};
-		\draw[->, red] (comp.a) -- ++(-1, 0) node[left] {a};
-		\draw[->, red] (comp.b) -- ++(-1, 0) node[left] {b};
-		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
-	\end{circuitikz}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[adder, align=center] (comp) {\textbf{+}};
+			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
+			\draw[->, red] (comp.b) -- ++(-.5, 0) node[left] {b};
+			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
 
 \subsection{Multiplexer}
 \begin{center}
-	\begin{circuitikz}[]
-		\node[mux, align=center] (comp) {};
-		\draw[->, red] (comp.in1) -- ++(-1, 0) node[left] {in1};
-		\draw[->, red] (comp.in2) -- ++(-1, 0) node[left] {in2};
-		\draw[->, red] (comp.sel) -- ++(0, 1) node[above] {sel};
-		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
-	\end{circuitikz}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[mux, align=center] (comp) {};
+			\draw[->, red] (comp.in1) -- ++(-.5, 0) node[left] {in1};
+			\draw[->, red] (comp.in2) -- ++(-.5, 0) node[left] {in2};
+			\draw[->, red] (comp.sel) -- ++(0, .5) node[above] {sel};
+			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
 
 \subsection{Single-Cycle Control Unit}
 \begin{center}
-	\begin{circuitikz}[]
-		\node[ctrlunitsc, align=center] (comp) {Control\\Unit};
-		\draw[->, red] (comp.op) -- ++(-1, 0) node[left] {op};
-		\draw[->, red] (comp.funct3) -- ++(-1, 0) node[left] {funct3};
-		\draw[->, red] (comp.funct7) -- ++(-1, 0) node[left] {funct7};
-		\draw[->, red] (comp.zero) -- ++(-1, 0) node[left] {zero};
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[ctrlunitsc, align=center] (comp) {Control\\Unit};
+			\draw[->, red] (comp.op) -- ++(-.5, 0) node[left] {op};
+			\draw[->, red] (comp.funct3) -- ++(-.5, 0) node[left] {funct3};
+			\draw[->, red] (comp.funct7) -- ++(-.5, 0) node[left] {funct7};
+			\draw[->, red] (comp.zero) -- ++(-.5, 0) node[left] {zero};
 
-		\draw[->, blue] (comp.pcsrc) -- ++(1, 0) node[right] {pcsrc};
-		\draw[->, blue] (comp.resultsrc) -- ++(1, 0) node[right] {resultsrc};
-		\draw[->, blue] (comp.memwrite) -- ++(1, 0) node[right] {memwrite};
-		\draw[->, blue] (comp.alucontrol) -- ++(1, 0) node[right] {alucontrol};
-		\draw[->, blue] (comp.alusrc) -- ++(1, 0) node[right] {alusrc};
-		\draw[->, blue] (comp.immsrc) -- ++(1, 0) node[right] {immsrc};
-		\draw[->, blue] (comp.regwrite) -- ++(1, 0) node[right] {regwrite};
-	\end{circuitikz}
+			\draw[->, blue] (comp.pcsrc) -- ++(.5, 0) node[right] {pcsrc};
+			\draw[->, blue] (comp.resultsrc) -- ++(.5, 0) node[right] {resultsrc};
+			\draw[->, blue] (comp.memwrite) -- ++(.5, 0) node[right] {memwrite};
+			\draw[->, blue] (comp.alucontrol) -- ++(.5, 0) node[right] {alucontrol};
+			\draw[->, blue] (comp.alusrc) -- ++(.5, 0) node[right] {alusrc};
+			\draw[->, blue] (comp.immsrc) -- ++(.5, 0) node[right] {immsrc};
+			\draw[->, blue] (comp.regwrite) -- ++(.5, 0) node[right] {regwrite};
+		\end{circuitikz}
+	\end{LTXexample}
 \end{center}
 \end{document}
 
