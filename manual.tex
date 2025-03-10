@@ -48,7 +48,7 @@
 
 \subsection{Instruction Memory}
 \begin{center}
-	
+
 	\begin{circuitikz}[]
 		\node[instrmem, align=center] (comp) {Instruction\\Memory};
 
@@ -77,7 +77,7 @@
 		\draw[->, red] (comp.a2) -- ++(-1, 0) node[left] {a2};
 		\draw[->, red] (comp.a3) -- ++(-1, 0) node[left] {a3};
 		\draw[->, red] (comp.wd3) -- ++(-1, 0) node[left] {wd3};
-		
+
 		\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
 		\draw[->, red] (comp.we3) -- ++(0, 1) node[above] {we3};
 		\draw[->, blue] (comp.rd1) -- ++(1, 0) node[right] {rd1};
@@ -114,7 +114,7 @@
 		\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
 		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
 	\end{circuitikz}
-
+\end{center}
 \subsection{Adder}
 \begin{center}
 	\begin{circuitikz}[]
@@ -135,23 +135,24 @@
 		\draw[->, blue] (comp.out) -- ++(1, 0) node[right] {out};
 	\end{circuitikz}
 \end{center}
-	
-	\subsection{Single-Cycle Control Unit}
-	\begin{center}
-		\begin{circuitikz}[]
-			\node[ctrlunitsc, align=center] (comp) {Control\\Unit};
-			%\draw[->, red] (comp.a1) -- ++(-1, 0) node[left] {a1};
-			%\draw[->, red] (comp.a2) -- ++(-1, 0) node[left] {a2};
-			%\draw[->, red] (comp.a3) -- ++(-1, 0) node[left] {a3};
-			%\draw[->, red] (comp.wd3) -- ++(-1, 0) node[left] {wd3};
-			%
-			%\draw[->, red] (comp.clk) -- ++(0, 1) node[above] {clk};
-			%\draw[->, red] (comp.we3) -- ++(0, 1) node[above] {we3};
-			%\draw[->, blue] (comp.rd1) -- ++(1, 0) node[right] {rd1};
-			%\draw[->, blue] (comp.rd2) -- ++(1, 0) node[right] {rd2};
-		\end{circuitikz}
-	\end{center}
-	
+
+\subsection{Single-Cycle Control Unit}
+\begin{center}
+	\begin{circuitikz}[]
+		\node[ctrlunitsc, align=center] (comp) {Control\\Unit};
+		\draw[->, red] (comp.op) -- ++(-1, 0) node[left] {op};
+		\draw[->, red] (comp.funct3) -- ++(-1, 0) node[left] {funct3};
+		\draw[->, red] (comp.funct7) -- ++(-1, 0) node[left] {funct7};
+		\draw[->, red] (comp.zero) -- ++(-1, 0) node[left] {zero};
+
+		\draw[->, blue] (comp.pcsrc) -- ++(1, 0) node[right] {pcsrc};
+		\draw[->, blue] (comp.resultsrc) -- ++(1, 0) node[right] {resultsrc};
+		\draw[->, blue] (comp.memwrite) -- ++(1, 0) node[right] {memwrite};
+		\draw[->, blue] (comp.alucontrol) -- ++(1, 0) node[right] {alucontrol};
+		\draw[->, blue] (comp.alusrc) -- ++(1, 0) node[right] {alusrc};
+		\draw[->, blue] (comp.immsrc) -- ++(1, 0) node[right] {immsrc};
+		\draw[->, blue] (comp.regwrite) -- ++(1, 0) node[right] {regwrite};
+	\end{circuitikz}
 \end{center}
 \end{document}
 
