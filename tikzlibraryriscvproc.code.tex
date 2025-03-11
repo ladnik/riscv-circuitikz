@@ -1042,7 +1042,7 @@
 		\ifpgfcirc@draw@input@leads
 			%input leads
 			% a
-			\pgfmathparse{0.5*(\pgf@y - \cutinheight)}
+			\pgfmathparse{0.5*(\pgf@circ@res@up + \cutinheight)}
 			\pgf@circ@res@step=\pgfmathresult pt
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{\pgf@circ@res@step}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@step}}
