@@ -144,11 +144,24 @@
 		\end{circuitikz}
 	\end{LTXexample}
 \end{center}
+
 \subsection{Adder}
 \begin{center}
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[adder, align=center] (comp) {};
+			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
+			\draw[->, red] (comp.b) -- ++(-.5, 0) node[left] {b};
+			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
+		\end{circuitikz}
+	\end{LTXexample}
+\end{center}
+
+\subsection{Subtractor}
+\begin{center}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[sub, align=center] (comp) {};
 			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
 			\draw[->, red] (comp.b) -- ++(-.5, 0) node[left] {b};
 			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
@@ -274,6 +287,7 @@
 	\end{center}
 
 \end{landscape}
+\geolrcoord{instrmem}
 \end{document}
 
 \end{document}
