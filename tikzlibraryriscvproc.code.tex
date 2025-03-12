@@ -14,6 +14,8 @@
 \def\customfont{\rmfamily}
 \ctikzset{processor/font/.store in=\customfont}				% set font for component labels
 
+% TODO: line thickness for leads
+
 
 \ctikzset{processor/memory/height/.initial=2}				% height of memory components
 \ctikzset{processor/memory/width/.initial=1.25}				% width of memory components extend unit
@@ -24,18 +26,19 @@
 \ctikzset{processor/control/width/.initial=0.9}				% width of sc control unit
 \ctikzset{processor/control/radius/.initial=5}				% border radius fo control unit
 
-\ctikzset{processor/arith/height/.initial=0.9}				% height of arith components (e.g. alu/adder)
+\ctikzset{processor/arith/height/.initial=0.9}				% height of arith components
 \ctikzset{processor/arith/width/.initial=0.7}				% width of arith components
 \ctikzset{processor/arith/slope/.initial=15}				% slope of arith component sides
 
+\ctikzset{processor/extend/height/.initial=0.6}				% height of right side of extend
+\ctikzset{processor/extend/width/.initial=2}				% width of extend
 \ctikzset{processor/extend/slope/.initial=7}				% slope of extend unit side
-\ctikzset{processor/extend/smallheight/.initial=0.6}		% height of right side of extend
 
 \ctikzset{processor/mux/slope/.initial=15}					% slope of mux sides
 
+\ctikzset{processor/misc/smallheight/.initial=0.65}			% height for small components
 \ctikzset{processor/misc/smallwidth/.initial=0.3}			% width for small components (e.g. small reg/mux/clk input)
-\ctikzset{processor/misc/smallheight/.initial=0.65}			% height for small components (e.g. small reg/2-1-mux)
-\ctikzset{processor/misc/leadlen/.initial=.26}				% length of input and output leads (suggested 0.15 * /memory/width)
+\ctikzset{processor/misc/leadlen/.initial=.25}				% length of input and output leads (suggested ~ 0.15 * /memory/width)
 
 
 \ctikzset{processor/mux/inputs/.initial = 2}				% default number of mux inputs
@@ -795,9 +798,9 @@
 
 	% define northwest as scaled endpoint
 	\savedanchor\northwest{
-		\pgf@y=\ctikzvalof{\ctikzclass/extend/smallheight}\pgf@circ@scaled@Rlen
+		\pgf@y=\ctikzvalof{\ctikzclass/extend/height}\pgf@circ@scaled@Rlen
 		\pgf@y=.5\pgf@y
-		\pgf@x=-\ctikzvalof{\ctikzclass/memory/tickwidth}\pgf@circ@scaled@Rlen
+		\pgf@x=-\ctikzvalof{\ctikzclass/extend/width}\pgf@circ@scaled@Rlen
 		\pgf@x=.5\pgf@x % take half width
 	}
 

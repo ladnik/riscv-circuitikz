@@ -2,6 +2,7 @@
 
 \usepackage{a4wide}
 \usepackage[T1]{fontenc}
+\usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{circuitikz}
 \usetikzlibrary{calc, riscvproc, positioning, fit, decorations, decorations.pathmorphing}
@@ -16,6 +17,14 @@
 \usepackage{lmodern}
 
 \renewcommand{\rmdefault}{lmss} % set font to sans serif
+
+\hypersetup{
+	pdfauthor={Niklas Ladurner},
+	pdftitle={RISC-V Processor \Circuitikz{} Library},
+	pdfsubject={},
+	pdfkeywords={riscv, processor, circuitikz},
+	pdfcreator={pdflatex}
+}
 
 \parindent=0pt
 \parskip=4pt plus 6pt minus 2pt
@@ -33,18 +42,6 @@
 	\renewcommand{\footrulewidth}{0pt}% No footer rule
 }
 
-%
-% modified gelrcoord: https://github.com/circuitikz/circuitikz/blob/master/doc/ctikzmanutils.sty
-%
-\newcommand{\modgeolrcoord}[2][]{\showanchors[#1]{#2}{text}(north/90/0.4, north east/45/0.4, east/0/0.4,
-	south east/-45/0.4,
-	south/-90/0.4, south west/-.535/0.4, west/.580/0.4, north west/.535/0.4,
-	left/.560/0.4, right/30/0.4, center/-.520/0.3
-	)
-}
-\newcommand\defaultanchors{
-}
-
 \definecolor{modblue}{HTML}{288DCC}
 
 \title{RISC-V Processor \Circuitikz{} Library}
@@ -59,14 +56,7 @@
 	\normalsize \thedate
 \end{center}
 
-%\circuitdesc*{instrmem}{Instruction Memory}{}()
-%\modgeolrcoord{instrmem}
-%\showanchors{instrmem, align=center}{Instruction\\Memory}(
-%a/.580/0.4,
-%rd/0/0.4
-%)
-
-\section{Components}
+\section{Component List}
 
 \subsection{Instruction Memory}
 \begin{center}
@@ -250,7 +240,49 @@
 	\end{LTXexample}
 \end{center}
 
+\section{Keys}
+The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=value}|. E.g. if one whishes to set the line width of all components to 4, the line  \verb|\ctikzset{processor/thickness=4}| would have to be included in the specific circuitikz picture.
 
+\begin{figure}[htpb]
+	\begin{tabular}{|llr|}
+		\hline
+		Key & Description & Default value\\
+		\hline
+		\texttt{scale} & Sets scale for all processor components. & \texttt{1}\\
+		\texttt{thickness} & Sets line width for all processor components. & \texttt{2}\\
+		\texttt{font} & Sets font family for all labels of processor components. & \verb|\rmfamily|\\
+		\texttt{memory/height} & Sets height for all memory components.& \texttt{2}\\
+		\texttt{memory/width} & Sets width for all memory components except \texttt{regfile}. & \texttt{1.25}\\
+		\texttt{control/heightsc} & Sets height for \texttt{ctrlunitsc}. & \texttt{2.5}\\
+		\texttt{control/heightmc} & Sets height for \texttt{ctrlunitmc}. & \texttt{3.5}\\
+		\texttt{control/width} & Sets height for control components. & \texttt{3.5}\\
+		\texttt{control/radius} & Sets the border radius for control components. & \texttt{5}\\
+		\texttt{arith/height} & Sets height for arithmetic components. & \texttt{0.9}\\
+		\texttt{arith/width} & Sets height for arithmetic components. & \texttt{0.7}\\
+		\texttt{arith/slope} & Sets slope for arithmetic components in degrees. & \texttt{15}\\
+		\texttt{extend/height} & Sets height of the big side of the extend unit. & \texttt{0.6}\\
+		\texttt{extend/width} & Sets height of the extend unit. & \texttt{2}\\
+		\texttt{extend/slope} & Sets slope of the extend unit in degrees. & \texttt{7}\\
+		\texttt{mux/slope} & Sets slope of the multiplexers in degrees. & \texttt{15}\\
+		\texttt{misc/smallheight} & Sets height for small components & \texttt{0.65}\\
+		\texttt{misc/smallwidth} & Sets width for small components. Also affects the CLK input triangle. & \texttt{0.3}\\
+		\texttt{misc/leadlen} & Sets length of input and output leads. & \texttt{0.25}\\
+		\hline
+	\end{tabular}
+\end{figure}
+
+\begin{figure}[htpb]
+	\begin{tabular}{|ll|}
+		\hline
+		Component family & Component list\\
+		\hline
+		memory components &  \texttt{instrmem}, \texttt{datamem}, \texttt{regfile}\\
+		control components &  \texttt{ctrlunitsc}, \texttt{ctrlunitmc}\\
+		arithmetic components &  \texttt{alu}, \texttt{add}, \texttt{sub}\\
+		small components &  \texttt{mux}, \texttt{reg}\\
+		\hline
+	\end{tabular}
+\end{figure}
 \begin{landscape}
 	\thispagestyle{mylandscape}
 	\section{Single-Cycle RISC-V Processor}
