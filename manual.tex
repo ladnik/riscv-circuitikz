@@ -208,43 +208,49 @@
 
 \begin{landscape}
 	\thispagestyle{mylandscape}
-%	\section{Single-Cycle RISC-V Processor}
-%	\begin{center}
-%		\resizebox{!}{0.75\textheight}{
-%			\begin{circuitikz}
-%				% components
-%				\node[ctrlunitsc, align=center, blue] (cu) {Control\\Unit};
-%				
-%				\node[regfile, align=center, below=2cm of cu] (rf) {Register\\File};
-%				\node[instrmem, align=center, left=3cm of rf] (im) {Instruction\\Memory};
-%				\node[alu, align=center, right=2.5cm of rf.rd1, anchor=a] (alu) {ALU};
-%				\node[datamem, align=center, right=8cm of rf] (dm) {Data\\Memory};
-%				
-%				\node[extend, align=center, below=1.5cm of rf] (ext) {Extend};
-%				\node[adder, align=center, right=3cm of ext.out, anchor=a] (addpctarget) {};
-%				\node[adder, align=center, left=5cm of ext.in, anchor=a] (addpcplus4) {};
-%				
-%				\node[mux, align=center, right=0.5cm of rf.rd2, anchor=in1] (muxalusrc) {};
-%				\node[reg, align=center, left=1cm of im.a] (regpcnext) {};
-%				\node[mux, align=center, left=1.5cm of regpcnext] (muxpcnext) {};
-%				\node[mux, align=center, right=1.5cm of dm.rd, anchor=in2] (muxresult) {};
-%				
-%				% special nodes
-%				\node[align=center, above=0.35cm of regpcnext.clk] (clk1) {CLK};
-%				\draw[] (clk1) -- (regpcnext.clk);
-%				\node[align=center, above=0cm of rf.clk] (clkrf) {CLK};
-%				\node[align=center, above=0cm of dm.clk] (clkdm) {CLK};
-%				\node[align=right, left=of addpcplus4.b] (const4) {4};
-%				
-%				%\node[draw] (btop) at ([shift=({1cm, 4cm})]im.rd){test};
-%				
-%				% connections
-%				
-%				% register file
-%				\draw[blue] (cu.regwrite) -- ++(1, 0) node[align=left,above, pos=0.5] {RegWrite} |- (rf.we3);
-%				\draw[] (rf.rd1) -- (alu.a) node[align=right,above, pos=0.95] {SrcA};
-%				\draw[] (rf.rd2) -- (muxalusrc.in1);
-%				
+	\section{Single-Cycle RISC-V Processor}
+	\begin{center}
+	%	\resizebox{!}{0.75\textheight}{
+			\begin{circuitikz}
+				%\node[anchor=center,inner sep=0] at (1.25,0.6) {\includegraphics[width=1.5\textwidth]{/home/niklas/Pictures/Screenshots/sc.png}};
+				
+				% components
+				\node[regfile, align=center, no leads] (rf) {Register\\File};
+				\node[instrmem, align=center, left=2cm of rf, no leads] (im) {Instruction\\Memory};
+				\node[alu, align=center, right=2.25cm of rf.rd1, anchor=a, no leads] (alu) {ALU};
+				\node[datamem, align=center, right=6.25cm of rf, no leads] (dm) {Data\\Memory};
+		
+				\node[ctrlunitsc, align=center, blue, above=1cm of rf, xshift=-0.75cm, no leads] (cu) {Control\\Unit};
+				
+				\node[extend, align=center, below=1cm of rf, no leads] (ext) {Extend};
+				\node[adder, align=center, anchor=b, no leads] (addpctarget) at (ext.out -| alu.a) {};
+				\node[adder, align=center, anchor=a, no leads] (addpcplus4) at (ext.in -| im.a) {};
+		
+				% TODO: aling mux.out and alu.b
+				\node[mux, align=center, right=1cm of rf.rd2, anchor=in0, no leads] (muxalusrc) {};
+				\node[reg, align=center, left=0.3cm of im.a, no leads] (regpcnext) {};
+				\node[mux, align=center, left=1.25cm of regpcnext, no leads] (muxpcnext) {};
+				\node[mux, align=center, right=1cm of dm.rd, anchor=in1, no leads] (muxresult) {};
+				
+				% special nodes
+				% clks
+				\node[align=center, above=0.25cm of regpcnext.clk, inner sep=1pt] (clk1) {CLK};
+				\draw[] (clk1) -- (regpcnext.clk);
+				\node[align=center, above=0.25cm of rf.bclk, inner sep=1pt] (clkrf) {CLK};
+				\draw[] (clkrf) -- (rf.bclk);
+				\node[align=center, above=0.25cm of dm.bclk, inner sep=1pt] (clkdm) {CLK};
+				\draw[] (clkdm) -- (dm.bclk);
+				
+				% constants
+				\node[align=right, left=0.25cm of addpcplus4.bb,inner sep=1pt] (const4) {4};
+				\draw[] (const4) -- (addpcplus4.bb);
+		
+				% connections
+				% register file
+				\draw[blue] (cu.regwrite) -- ++(1, 0) node[align=left,above, pos=0.5] {RegWrite} |- (rf.we3);
+				\draw[] (rf.rd1) -- (alu.a) node[align=right,above, pos=0.95] {SrcA};
+				\draw[] (rf.rd2) -- (muxalusrc.in1);
+				
 %				% alu
 %				\draw[blue] (cu.alucontrol) -| (alu.ctrl) node[align=left,above, pos=0.1] {ALUControl\textsubscript{2:0}};
 %				\draw[blue] (cu.alusrc) -| (muxalusrc.sel) node[align=left,above, pos=0.1] {ALUSrc};
@@ -255,15 +261,15 @@
 %				
 %				% data memory
 %				\draw[blue] (cu.memwrite) -| (dm.we) node[align=left,above, pos=0.025] {MemWrite};
-%				\draw[] (dm.rd) -- (muxresult.in2) node[align=center,above, pos=0.5] {ReadData};
-%				\draw[] (alu.out) -- ++(2,0) -- ++(0, 2.5) -- ++(4.5,0) |- (muxresult.in1);
+%				\draw[] (dm.rd) -- (muxresult.in1) node[align=center,above, pos=0.5] {ReadData};
+%				\draw[] (alu.out) -- ++(2,0) -- ++(0, 2.5) -- ++(4.5,0) |- (muxresult.in0);
 %				\draw[blue] (cu.resultsrc) -- ++(2, 0) node[align=left,above, pos=0.2] {ResultSrc} -| (muxresult.sel);
 %				\draw[] (muxresult.out) -- ++(0,-4) -- ++(-18, 0) node[align=center,above,pos=0.05] {Result} |- (rf.wd3);
 %				
 %				% extend unit
 %				\draw[blue] (cu.immsrc) -- ++(1.3, 0) node[align=left,above, pos=0.2] {ImmSrc} -- ++(0, -8) -| (ext.ctrl);
 %				\draw[] (ext.out) -- (addpctarget.a) node[align=center,above, pos=0.5] {ImmExt};
-%				\draw[] (ext.out) ++(0.25, 0)|- (muxalusrc.in2);
+%				\draw[] (ext.out) ++(0.25, 0)|- (muxalusrc.in1);
 %				
 %				% instruction memory
 %				\draw[] (im.rd) -- ++(1, 0) |- (cu.op) node[align=right,above, pos=0.9] {\scriptsize{6:0}};
@@ -281,12 +287,12 @@
 %				\draw[] (regpcnext.out) |- (addpcplus4.a);
 %				\draw[] (regpcnext.out |- addpcplus4.a) ++ (0, 1.5) -- ++(4, 0) |- (addpctarget.b);
 %				\draw[] (const4) -- (addpcplus4.b);
-%				\draw[] (addpcplus4.out) -- ++(0, -2)  -- ++ (-7,0)  node[align=center,above, pos=0.5] {PCPlus4} |- (muxpcnext.in1);
-%				\draw[] (addpctarget.out) -- ++(0, -3)  -- ++ (-18.5,0)  node[align=center,above, pos=0.5] {PCTarget} |- (muxpcnext.in2);
+%				\draw[] (addpcplus4.out) -- ++(0, -2)  -- ++ (-7,0)  node[align=center,above, pos=0.5] {PCPlus4} |- (muxpcnext.in0);
+%				\draw[] (addpctarget.out) -- ++(0, -3)  -- ++ (-18.5,0)  node[align=center,above, pos=0.5] {PCTarget} |- (muxpcnext.in1);
 %				
-%			\end{circuitikz}
-%	}
-%	\end{center}
+			\end{circuitikz}
+	%}
+	\end{center}
 
 \end{landscape}
 \geolrcoord{instrmem}

@@ -8,26 +8,28 @@
 % Define keys
 %
 \ctikzset{processor/.is family}
-\ctikzset{processor/scale/.initial=1}
+\ctikzset{processor/scale/.initial=1}						% scale of all components
+\ctikzset{processor/thickness/.initial=2}					% line width of all components
 
-\ctikzset{processor/memory/height/.initial=3}				% height of memory components
-\ctikzset{processor/memory/width/.initial=1.75}				% width of memory components extend unit
-\ctikzset{processor/memory/tickwidth/.initial=2.25}			% width of register file
+\ctikzset{processor/memory/height/.initial=2}				% height of memory components
+\ctikzset{processor/memory/width/.initial=1.25}				% width of memory components extend unit
+\ctikzset{processor/memory/tickwidth/.initial=2}			% width of register file
 
-\ctikzset{processor/control/height/.initial=4}				% height of control unit
-\ctikzset{processor/control/width/.initial=1.3}				% width of control unit
-\ctikzset{processor/control/radius/.initial=10}				% border radius fo control unit
+\ctikzset{processor/control/height/.initial=2.5}				% height of sc control unit
+\ctikzset{processor/control/width/.initial=0.9}				% width of sc control unit
+\ctikzset{processor/control/radius/.initial=5}				% border radius fo control unit
 
-\ctikzset{processor/arith/height/.initial=1.5}				% height of arith components (e.g. alu/adder)
-\ctikzset{processor/arith/width/.initial=1}					% width of arith components
+\ctikzset{processor/arith/height/.initial=0.9}				% height of arith components (e.g. alu/adder)
+\ctikzset{processor/arith/width/.initial=0.7}				% width of arith components
 \ctikzset{processor/arith/slope/.initial=15}				% slope of arith component sides
 
-\ctikzset{processor/extend/slope/.initial=10}				% slope of extend unit side
+\ctikzset{processor/extend/slope/.initial=7}				% slope of extend unit side
+\ctikzset{processor/extend/smallheight/.initial=0.6}		% height of right side of extend
 
 \ctikzset{processor/mux/slope/.initial=15}					% slope of mux sides
 
-\ctikzset{processor/misc/smallwidth/.initial=0.4}			% width for small components (e.g. small reg/mux/clk input)
-\ctikzset{processor/misc/smallheight/.initial=0.8}			% height for small components (e.g. small reg/2-1-mux, right side of extend)
+\ctikzset{processor/misc/smallwidth/.initial=0.3}			% width for small components (e.g. small reg/mux/clk input)
+\ctikzset{processor/misc/smallheight/.initial=0.65}			% height for small components (e.g. small reg/2-1-mux)
 \ctikzset{processor/misc/leadlen/.initial=.26}				% length of input and output leads (suggested 0.15 * /memory/width)
 
 
@@ -74,17 +76,6 @@
 %
 % Define helpers
 %
-
-% Defines some useful saved dimensions and macros. Note: These are not global macros, i.e. they do not persist across scopes and need to be redefined.
-%\def\definedimensions{
-%	\savedmacro{\ctikzclass}{\edef\ctikzclass{processor}}
-%
-%	\pgfmathparse{\ctikzvalof{processor/scale}\pgf@circ@Rlen}
-%	\pgfmathsetmacro{\scaledRlen}{\pgfmathresult pt}
-%
-%	\pgfmathparse{\ctikzvalof{processor/scale} * \scaledRlen}
-%	\saveddimen{\leadlen}{\pgfmathsetlength{\pgf@x}{\pgfmathresult pt}}
-%}
 
 % Defines generic object anchors. Requires northwest to be a savedanchor
 \def\defineorientationanchors{
@@ -174,7 +165,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{tripoles}{\pgflinewidth}
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
@@ -279,6 +270,15 @@
 		\pgfmathparse{\pgf@x - \leadlen}
 		\pgf@x = -\pgfmathresult pt
 	}
+	
+	%
+	% b anchors
+	%
+	
+	\anchor{bclk}{
+		\northwest
+		\pgf@x = 0.5\pgf@x
+	}
 
 	%
 	% outline
@@ -297,7 +297,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{tripoles}{\pgflinewidth}
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
@@ -403,7 +403,7 @@
 		\northwest
 		\pgfmathparse{\pgf@x-\leadlen}
 		\pgf@x=\pgfmathresult pt
-		\pgf@y=0.3\pgf@y
+		\pgf@y=0pt
 	}
 	\anchor{a3}{
 		\northwest
@@ -428,7 +428,7 @@
 		\northwest
 		\pgfmathparse{-\pgf@x+\leadlen}
 		\pgf@x=\pgfmathresult pt
-		\pgf@y=0.3\pgf@y
+		\pgf@y=0pt
 	}
 
 	\anchor{clk}{
@@ -443,6 +443,15 @@
 		\pgfmathparse{\pgf@y+\leadlen}
 		\pgf@y=\pgfmathresult pt
 		\pgf@x=0pt
+	}
+	
+	%
+	% b anchors
+	%
+	
+	\anchor{bclk}{
+		\northwest
+		\pgf@x=0.5\pgf@x
 	}
 
 	%
@@ -462,7 +471,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{tripoles}{\pgflinewidth}
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
@@ -490,8 +499,8 @@
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.6\pgf@circ@res@up}}
 
 			% a2
-			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.3\pgf@circ@res@up}}
-			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.3\pgf@circ@res@up}}
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0pt}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0pt}}
 
 			% a3
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.3\pgf@circ@res@down}}
@@ -517,8 +526,8 @@
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right-\pgf@circ@res@other}{0.6\pgf@circ@res@up}}
 
 			% rd2
-			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.3\pgf@circ@res@up}}
-			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right-\pgf@circ@res@other}{0.3\pgf@circ@res@up}}
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right-\pgf@circ@res@other}{0pt}}
 		\fi
 		\pgfusepath{draw}
 
@@ -526,12 +535,12 @@
 		%draw text
 		\pgf@circ@text@strokecolor
 		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@up]{A1}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.3\pgf@circ@res@up]{A2}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{A2}
 		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.3\pgf@circ@res@down]{A3}
 		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{WD3}
 
 		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.6\pgf@circ@res@up]{RD1}
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.3\pgf@circ@res@up]{RD2}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0pt]{RD2}
 
 		\pgftext[center,x=0,y=0.85\pgf@circ@res@up]{WE3}
 	}
@@ -613,7 +622,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{tripoles}{\pgflinewidth}
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
@@ -664,7 +673,7 @@
 
 	% define northwest as scaled endpoint
 	\savedanchor\northwest{
-		\pgf@y=\ctikzvalof{\ctikzclass/misc/smallheight}\pgf@circ@scaled@Rlen
+		\pgf@y=\ctikzvalof{\ctikzclass/extend/smallheight}\pgf@circ@scaled@Rlen
 		\pgf@y=.5\pgf@y
 		\pgf@x=-\ctikzvalof{\ctikzclass/memory/tickwidth}\pgf@circ@scaled@Rlen
 		\pgf@x=.5\pgf@x % take half width
@@ -738,7 +747,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{tripoles}{\pgflinewidth}
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
 		\pgfmathparse{\pgf@y+2*\pgf@x*tan(\slopeval)}
 		\pgf@circ@res@step=\pgfmathresult pt
 
@@ -830,7 +839,7 @@
 
 		\anchor{a}{
 			\northwest
-			\pgfmathparse{0.5*\pgf@y + \cutinheight}
+			\pgfmathparse{0.75*\pgf@y + \cutinheight}
 			\pgf@y=\pgfmathresult pt
 			\pgfmathparse{\pgf@x-\leadlen}
 			\pgf@x=\pgfmathresult pt
@@ -838,7 +847,7 @@
 
 		\anchor{b}{
 			\northwest
-			\pgfmathparse{0.5*\pgf@y + \cutinheight}
+			\pgfmathparse{0.75*\pgf@y + \cutinheight}
 			\pgf@y=-\pgfmathresult pt
 			\pgfmathparse{\pgf@x-\leadlen}
 			\pgf@x=\pgfmathresult pt
@@ -871,6 +880,16 @@
 		\fi
 
 		%
+		% b anchors
+		%
+		
+		\anchor{bb}{
+			\northwest
+			\pgfmathparse{0.75*\pgf@y + \cutinheight}
+			\pgf@y=-\pgfmathresult pt
+		}
+
+		%
 		% outline
 		%
 
@@ -887,7 +906,7 @@
 
 			% draw shape
 			\pgfscope
-			\pgf@circ@setlinewidth{tripoles}{\pgflinewidth}
+			\pgf@circ@setlinewidth{processor}{\pgflinewidth}
 
 			\pgfmathparse{2*\pgf@circ@res@right*tan(\slopeval)}
 			\pgf@circ@res@step=\pgfmathresult pt
@@ -907,7 +926,7 @@
 			\ifpgfcirc@draw@input@leads
 				%input leads
 				% a
-				\pgfmathparse{0.5*\pgf@circ@res@up + \cutinheight}
+				\pgfmathparse{0.75*\pgf@circ@res@up + \cutinheight}
 				\pgf@circ@res@step=\pgfmathresult pt
 				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{\pgf@circ@res@step}}
 				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@step}}
@@ -1075,7 +1094,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{tripoles}{\pgflinewidth}
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down - \cutinheight}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up + \cutinheight}}
@@ -1247,7 +1266,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{tripoles}{\pgflinewidth}
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
 		\pgfsetcornersarced{\pgfpoint{\radius}{\radius}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
