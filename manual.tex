@@ -188,6 +188,20 @@
 	\end{LTXexample}
 \end{center}
 
+\subsection{Multiplexer with 3 inputs}
+\begin{center}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[3mux, align=center] (comp) {};
+			\draw[->, red] (comp.in0) -- ++(-.5, 0) node[left] {in0};
+			\draw[->, red] (comp.in1) -- ++(-.5, 0) node[left] {in1};
+			\draw[->, red] (comp.in2) -- ++(-.5, 0) node[left] {in2};
+			\draw[->, red] (comp.sel) -- ++(0, .5) node[above] {sel};
+			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
+		\end{circuitikz}
+	\end{LTXexample}
+\end{center}
+
 \subsection{Single-Cycle Control Unit}
 \begin{center}
 	\begin{LTXexample}[varwidth, rframe=]
@@ -205,6 +219,31 @@
 			\draw[->, blue] (comp.alusrc) -- ++(.5, 0) node[right] {alusrc};
 			\draw[->, blue] (comp.immsrc) -- ++(.5, 0) node[right] {immsrc};
 			\draw[->, blue] (comp.regwrite) -- ++(.5, 0) node[right] {regwrite};
+		\end{circuitikz}
+	\end{LTXexample}
+\end{center}
+
+\subsection{Multi-Cycle Control Unit}
+\begin{center}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}[]
+			\node[ctrlunitmc, align=center] (comp) {Control\\Unit};
+			\draw[->, red] (comp.op) -- ++(-.5, 0) node[left] {op};
+			\draw[->, red] (comp.funct3) -- ++(-.5, 0) node[left] {funct3};
+			\draw[->, red] (comp.funct7) -- ++(-.5, 0) node[left] {funct7};
+			\draw[->, red] (comp.zero) -- ++(-.5, 0) node[left] {zero};
+			\draw[->, red] (comp.clk) -- ++(0,.5) node[above] {clk};
+			
+			\draw[->, blue] (comp.resultsrc) -- ++(.5, 0) node[right] {resultsrc};
+			\draw[->, blue] (comp.memwrite) -- ++(-.5, 0) node[left] {memwrite};
+			\draw[->, blue] (comp.alucontrol) -- ++(.5, 0) node[right] {alucontrol};
+			\draw[->, blue] (comp.alusrca) -- ++(.5, 0) node[right] {alusrca};
+			\draw[->, blue] (comp.alusrcb) -- ++(.5, 0) node[right] {alusrcb};
+			\draw[->, blue] (comp.immsrc) -- ++(.5, 0) node[right] {immsrc};
+			\draw[->, blue] (comp.regwrite) -- ++(.5, 0) node[right] {regwrite};
+			\draw[->, blue] (comp.irwrite) -- ++(-.5, 0) node[left] {irwrite};
+			\draw[->, blue] (comp.adrsrc) -- ++(-.5, 0) node[left] {adrsrc};
+			\draw[->, blue] (comp.pcwrite) -- ++(-.5, 0) node[left] {pcwrite};
 		\end{circuitikz}
 	\end{LTXexample}
 \end{center}
