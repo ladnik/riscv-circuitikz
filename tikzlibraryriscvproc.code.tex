@@ -142,10 +142,23 @@
 
 	\anchor{rd}{
 		\northwest
-		\northwest
 		\pgf@y=0.5\pgf@y
 		\pgfmathparse{\pgf@x - \leadlen}
 		\pgf@x = -\pgfmathresult pt
+	}
+	
+	%
+	% b anchors
+	%
+	
+	\anchor{ba}{
+		\northwest
+		\pgf@y=0.5\pgf@y
+	}
+	
+	\anchor{brd}{
+		\northwest
+		\pgf@y=0.5\pgf@y
 	}
 
 	%
@@ -275,9 +288,30 @@
 	% b anchors
 	%
 	
+	\anchor{ba}{
+		\northwest
+		\pgf@y=0.5\pgf@y
+	}
+	
+	\anchor{bwd}{
+		\northwest
+		\pgf@y=-0.5\pgf@y
+	}
+	
 	\anchor{bclk}{
 		\northwest
 		\pgf@x = 0.5\pgf@x
+	}
+	
+	\anchor{bwe}{
+		\northwest
+		\pgf@x = -0.5\pgf@x
+	}
+	
+	\anchor{brd}{
+		\northwest
+		\pgf@y=0.5\pgf@y
+		\pgf@x = -\pgf@x
 	}
 
 	%
@@ -449,9 +483,42 @@
 	% b anchors
 	%
 	
+	\anchor{ba1}{
+		\northwest
+		\pgf@y=0.6\pgf@y
+	}
+	\anchor{ba2}{
+		\northwest
+		\pgf@y=0pt
+	}
+	\anchor{ba3}{
+		\northwest
+		\pgf@y=-0.3\pgf@y
+	}
+	\anchor{bwd3}{
+		\northwest
+		\pgf@y=-0.6\pgf@y
+	}
+	
+	\anchor{brd1}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=0.6\pgf@y
+	}
+	\anchor{brd2}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=0pt
+	}
+	
 	\anchor{bclk}{
 		\northwest
 		\pgf@x=0.5\pgf@x
+	}
+	
+	\anchor{bwe3}{
+		\northwest
+		\pgf@x=0pt
 	}
 
 	%
@@ -604,6 +671,32 @@
 		\pgf@x=\pgfmathresult pt
 		\pgf@y=0 pt
 	}
+	
+	%
+	% b anchors
+	%
+	
+	\anchor{bin}{
+		\northwest
+		\pgf@y=0 pt
+	}
+	
+	\anchor{bclk}{
+		\northwest
+		\pgf@x=0 pt
+	}
+	
+	\anchor{ben}{
+		\northwest
+		\pgf@x=0 pt
+		\pgf@y=-\pgf@y
+	}
+	
+	\anchor{bout}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=0 pt
+	}
 
 	%
 	% outline
@@ -724,6 +817,30 @@
 	}
 
 	\anchor{ctrl}{
+		\northwest
+		\pgfmathparse{\pgf@y +\pgf@x*tan(\slopeval)}
+		\pgf@y=\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+	
+	%
+	% b anchors
+	%
+	
+	\anchor{bin}{
+		\northwest
+		\pgfmathparse{\pgf@x*tan(\slopeval)}
+		\pgf@y=\pgfmathresult pt
+	}
+	
+	\anchor{bout}{
+		\northwest
+		\pgfmathparse{\pgf@x*tan(\slopeval)}
+		\pgf@y=\pgfmathresult pt
+		\pgf@x=-\pgf@x
+	}
+	
+	\anchor{bctrl}{
 		\northwest
 		\pgfmathparse{\pgf@y +\pgf@x*tan(\slopeval)}
 		\pgf@y=\pgfmathresult pt
@@ -883,11 +1000,41 @@
 		% b anchors
 		%
 		
+		\anchor{ba}{
+			\northwest
+			\pgfmathparse{0.75*\pgf@y + \cutinheight}
+			\pgf@y=\pgfmathresult pt
+		}
+		
 		\anchor{bb}{
 			\northwest
 			\pgfmathparse{0.75*\pgf@y + \cutinheight}
 			\pgf@y=-\pgfmathresult pt
 		}
+		
+		\ifnum#3=1
+		\anchor{bctrl}{
+			\northwest
+			\pgfmathparse{\pgf@y + \cutinheight}
+			\pgf@y=\pgfmathresult pt
+			\pgf@x=0 pt
+		}
+		\fi
+		
+		\anchor{bout}{
+			\northwest
+			\pgf@x=-\pgf@x
+			\pgf@y=0 pt
+		}
+		
+		\ifnum#2=1
+		\anchor{bzero}{
+			\northwest
+			\pgfmathparse{0.5*\pgf@y + \cutinheight}
+			\pgf@y=\pgfmathresult pt
+			\pgf@x=-\pgf@x
+		}
+		\fi
 
 		%
 		% outline
@@ -1076,6 +1223,35 @@
 		\pgfmathparse{-\pgf@x + \leadlen}
 		\pgf@x=\pgfmathresult pt
 	}
+	
+	%
+	% b anchors
+	%
+	
+	\anchor{bin0}{
+		\northwest
+		\pgfmathparse{0.5*(\pgf@y + \cutinheight)}
+		\pgf@y=\pgfmathresult pt
+	}
+	
+	\anchor{bin1}{
+		\northwest
+		\pgfmathparse{0.5*(\pgf@y + \cutinheight)}
+		\pgf@y=-\pgfmathresult pt
+	}
+	
+	\anchor{bsel}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+	
+	\anchor{bout}{
+		\northwest
+		\pgf@y=0pt
+		\pgf@x=-\pgf@x
+	}
 
 	%
 	% outline
@@ -1248,6 +1424,64 @@
 		\pgf@y=-0.75\pgf@y
 	}
 
+	%
+	% b anchors
+	%
+	
+	\anchor{bop}{
+		\northwest
+		\pgf@y=0pt
+	}
+	\anchor{bfunct3}{
+		\northwest
+		\pgf@y=-0.25\pgf@y
+	}
+	\anchor{bfunct7}{
+		\northwest
+		\pgf@y=-0.5\pgf@y
+	}
+	\anchor{bzero}{
+		\northwest
+		\pgf@y=-0.75\pgf@y
+	}
+	
+	
+	
+	\anchor{bpcsrc}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=0.75\pgf@y
+	}
+	\anchor{bresultsrc}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=0.5\pgf@y
+	}
+	\anchor{bmemwrite}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=0.25\pgf@y
+	}
+	\anchor{balucontrol}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=0 pt
+	}
+	\anchor{balusrc}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=-0.25\pgf@y
+	}
+	\anchor{bimmsrc}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=-0.5\pgf@y
+	}
+	\anchor{bregwrite}{
+		\northwest
+		\pgf@x=-\pgf@x
+		\pgf@y=-0.75\pgf@y
+	}
 
 	%
 	% outline
