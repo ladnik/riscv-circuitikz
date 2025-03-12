@@ -159,6 +159,7 @@
 	\anchor{brd}{
 		\northwest
 		\pgf@y=0.5\pgf@y
+		\pgf@x=-\pgf@x
 	}
 
 	%
@@ -258,7 +259,7 @@
 
 	\anchor{wd}{
 		\northwest
-		\pgf@y=-0.5\pgf@y
+		\pgf@y=-0.6\pgf@y
 		\pgfmathparse{\pgf@x - \leadlen}
 		\pgf@x = \pgfmathresult pt
 	}
@@ -295,7 +296,7 @@
 	
 	\anchor{bwd}{
 		\northwest
-		\pgf@y=-0.5\pgf@y
+		\pgf@y=-0.6\pgf@y
 	}
 	
 	\anchor{bclk}{
@@ -357,8 +358,8 @@
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.5\pgf@circ@res@up}}
 
 			% wd
-			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.5\pgf@circ@res@down}}
-			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.5\pgf@circ@res@down}}
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.6\pgf@circ@res@down}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.6\pgf@circ@res@down}}
 
 			% clk
 			\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up + \leadlen}}
@@ -383,7 +384,7 @@
 		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{A}
 		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{RD}
 		\pgftext[center,x=0.5\pgf@circ@res@right,y=0.85\pgf@circ@res@up]{WE}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@down]{WD}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{WD}
 		%\pgftext[center,x=0,y=0\pgf@circ@res@up]{\shortstack{Data\\Memory}}
 	}
 }
@@ -422,6 +423,13 @@
 	%
 
 	\defineorientationanchors
+	
+	\anchor{text}{
+		\northwest
+		\pgfmathparse{-.5ht\pgfnodeparttextbox+0.25*\pgf@y}
+		\pgf@y = \pgfmathresult pt
+		\pgf@x= -.5\wd\pgfnodeparttextbox
+	}
 
 	%
 	% pin anchors
@@ -973,7 +981,7 @@
 		\ifnum#3=1
 			\anchor{ctrl}{
 				\northwest
-				\pgfmathparse{\pgf@y + \cutinheight + \leadlen}
+				\pgfmathparse{\pgf@y + 2*\cutinheight + \leadlen}
 				\pgf@y=\pgfmathresult pt
 				\pgf@x=0 pt
 			}
@@ -1015,7 +1023,7 @@
 		\ifnum#3=1
 		\anchor{bctrl}{
 			\northwest
-			\pgfmathparse{\pgf@y + \cutinheight}
+			\pgfmathparse{\pgf@y + 2*\cutinheight}
 			\pgf@y=\pgfmathresult pt
 			\pgf@x=0 pt
 		}
