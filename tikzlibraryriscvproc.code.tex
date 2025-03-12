@@ -633,10 +633,10 @@
 	% define northwest as scaled endpoint
 	\savedanchor\northwest{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
-		\pgf@y=\ctikzvalof{processor/misc/smallheight}\pgf@circ@scaled@Rlen
+		\pgf@y=\ctikzvalof{\ctikzclass/misc/smallheight}\pgf@circ@scaled@Rlen
 		\pgfmathparse{0.5*\pgf@y*\ctikzvalof{\ctikzclass/reg/stacks}}
 		\pgf@y=\pgfmathresult pt
-		\pgf@x=-\ctikzvalof{processor/misc/smallwidth}\pgf@circ@scaled@Rlen
+		\pgf@x=-\ctikzvalof{\ctikzclass/misc/smallwidth}\pgf@circ@scaled@Rlen
 		\pgf@x=.5\pgf@x % take half width
 	}
 
@@ -644,6 +644,12 @@
 	{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
 		\pgf@x=\ctikzvalof{\ctikzclass/misc/leadlen}\pgf@circ@scaled@Rlen
+	}
+	
+	\saveddimen\stackheight
+	{
+		\pgf@x=\ctikzvalof{\ctikzclass/misc/smallheight}\pgf@circ@scaled@Rlen
+		\pgf@x=0.5\pgf@x
 	}
 
 	%
@@ -660,7 +666,8 @@
 		\northwest
 		\pgfmathparse{\pgf@x-\leadlen}
 		\pgf@x=\pgfmathresult pt
-		\pgf@y=0 pt
+		\pgfmathparse{\pgf@y-\stackheight}
+		\pgf@y=\pgfmathresult pt
 	}
 
 	\anchor{clk}{
@@ -678,7 +685,8 @@
 		\northwest
 		\pgfmathparse{-\pgf@x+\leadlen}
 		\pgf@x=\pgfmathresult pt
-		\pgf@y=0 pt
+		\pgfmathparse{\pgf@y-\stackheight}
+		\pgf@y=\pgfmathresult pt
 	}
 
 	%
@@ -687,7 +695,8 @@
 
 	\anchor{bin}{
 		\northwest
-		\pgf@y=0 pt
+		\pgfmathparse{\pgf@y-\stackheight}
+		\pgf@y=\pgfmathresult pt
 	}
 
 	\anchor{bclk}{
@@ -704,7 +713,8 @@
 	\anchor{bout}{
 		\northwest
 		\pgf@x=-\pgf@x
-		\pgf@y=0 pt
+		\pgfmathparse{\pgf@y-\stackheight}
+		\pgf@y=\pgfmathresult pt
 	}
 
 	%
@@ -745,22 +755,28 @@
 		\ifpgfcirc@draw@input@leads
 			%input leads
 			% in
-			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{0}}
-			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0}}
+			\northwest
+			\pgfmathparse{\pgf@y-\stackheight}
+			\pgf@circ@res@step=\pgfmathresult pt
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{\pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@step}}
 		\fi
 
 		\ifpgfcirc@draw@output@leads
 			%output leads
 			% out
-			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0}}
-			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right-\pgf@circ@res@other}{0}}
+			\northwest
+			\pgfmathparse{\pgf@y-\stackheight}
+			\pgf@circ@res@step=\pgfmathresult pt
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{\pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right-\pgf@circ@res@other}{\pgf@circ@res@step}}
 		\fi
 		\pgfusepath{draw}
 
 
 
 		\ifpgfcirc@draw@enable@input
-			\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+2pt]{EN}
+			\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+2pt]{\scriptsize EN}
 		\fi
 	}
 }
