@@ -1,7 +1,8 @@
 
-
-\usetikzlibrary{circuits}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                    TODO                                      %								
+%                                   HEADER                                     %								
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %
@@ -10,6 +11,9 @@
 \ctikzset{processor/.is family}
 \ctikzset{processor/scale/.initial=1}						% scale of all components
 \ctikzset{processor/thickness/.initial=2}					% line width of all components
+\def\customfont{\rmfamily}
+\ctikzset{processor/font/.store in=\customfont}				% set font for component labels
+
 
 \ctikzset{processor/memory/height/.initial=2}				% height of memory components
 \ctikzset{processor/memory/width/.initial=1.25}				% width of memory components extend unit
@@ -206,8 +210,8 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{A}
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{RD}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{\customfont A}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{\customfont RD}
 		%\pgftext[center,x=0,y=0\pgf@circ@res@up]{\shortstack{Instruction\\Memory}}
 	}
 }
@@ -382,10 +386,10 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{A}
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{RD}
-		\pgftext[center,x=0.5\pgf@circ@res@right,y=0.85\pgf@circ@res@up]{WE}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{WD}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{\customfont A}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{\customfont RD}
+		\pgftext[center,x=0.5\pgf@circ@res@right,y=0.85\pgf@circ@res@up]{\customfont WE}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{\customfont WD}
 		%\pgftext[center,x=0,y=0\pgf@circ@res@up]{\shortstack{Data\\Memory}}
 	}
 }
@@ -610,15 +614,15 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@up]{A1}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{A2}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.3\pgf@circ@res@down]{A3}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{WD3}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@up]{\customfont A1}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{\customfont A2}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.3\pgf@circ@res@down]{\customfont A3}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{\customfont WD3}
 
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.6\pgf@circ@res@up]{RD1}
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0pt]{RD2}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.6\pgf@circ@res@up]{\customfont RD1}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0pt]{\customfont RD2}
 
-		\pgftext[center,x=0,y=0.85\pgf@circ@res@up]{WE3}
+		\pgftext[center,x=0,y=0.85\pgf@circ@res@up]{\customfont WE3}
 	}
 }
 
@@ -776,7 +780,7 @@
 
 
 		\ifpgfcirc@draw@enable@input
-			\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+2pt]{\scriptsize EN}
+			\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+2pt]{\customfont \scriptsize EN}
 		\fi
 	}
 }
@@ -1136,7 +1140,7 @@
 
 			%draw text
 			\pgf@circ@text@strokecolor
-			\pgftext[center,x=0.25\pgf@circ@res@right,y=0pt]{\textbf{#4}}
+			\pgftext[center,x=0.25\pgf@circ@res@right,y=0pt]{\customfont \textbf{#4}}
 		}
 	}
 
@@ -1327,8 +1331,8 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[center,x=0pt,y=0.5\pgf@circ@res@up]{0}
-		\pgftext[center,x=0pt,y=0.5\pgf@circ@res@down]{1}
+		\pgftext[center,x=0pt,y=0.5\pgf@circ@res@up]{\customfont 0}
+		\pgftext[center,x=0pt,y=0.5\pgf@circ@res@down]{\customfont 1}
 	}
 }
 
@@ -1522,9 +1526,9 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[center,x=0pt,y=0.6\pgf@circ@res@up]{00}
-		\pgftext[center,x=0pt,y=0pt]{01}
-		\pgftext[center,x=0pt,y=0.6\pgf@circ@res@down]{10}
+		\pgftext[center,x=0pt,y=0.6\pgf@circ@res@up]{\customfont 00}
+		\pgftext[center,x=0pt,y=0pt]{\customfont 01}
+		\pgftext[center,x=0pt,y=0.6\pgf@circ@res@down]{\customfont 10}
 	}
 }
 
@@ -1984,10 +1988,10 @@
 
 			%draw text
 			\pgf@circ@text@strokecolor
-			\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{op}
-			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.25\pgf@circ@res@down]{funct3}
-			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@down]{funct7\textsubscript{5}}
-			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{zero}
+			\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{\customfont op}
+			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.25\pgf@circ@res@down]{\customfont funct3}
+			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@down]{\customfont funct7\textsubscript{5}}
+			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\customfont zero}
 		}
 	}
 }

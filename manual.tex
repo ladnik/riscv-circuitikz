@@ -12,8 +12,10 @@
 \usepackage{ragged2e}
 \usepackage{pdflscape}
 \usepackage{fancyhdr} 
-\usepackage{pgfkeys}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{lmodern}
+
+\renewcommand{\rmdefault}{lmss} % set font to sans serif
 
 \parindent=0pt
 \parskip=4pt plus 6pt minus 2pt
@@ -368,7 +370,7 @@
 	
 	\section{Multi-Cycle RISC-V Processor}
 	\begin{center}
-		\begin{circuitikz}
+		\begin{circuitikz}[font=\sffamily]
 			\tikzset{
 				label/.style={draw=none, inner sep=1pt, font=\small},
 				comp/.style={align=center, no leads},
