@@ -1,0 +1,349 @@
+\documentclass[.52pt,a4paper,titlepage]{article}
+
+\usepackage{a4wide}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usepackage{ctikzmanutils}
+\usepackage[]{csquotes}
+\usetikzlibrary{calc, positioning, automata, arrows.meta, riscvproc}
+
+\usepackage{caption}
+\usepackage{fancyhdr} 
+\usepackage{lmodern}
+\usepackage{showexpl}
+\usepackage{tabularx}
+\usepackage{xcolor}
+
+\hypersetup{
+	pdfauthor={Niklas Ladurner},
+	pdftitle={A RISC-V Processor Components \Circuitikz{} Library},
+	pdfsubject={},
+	pdfkeywords={riscv, processor, circuitikz},
+	pdfcreator={pdflatex},
+	colorlinks=false,
+}
+
+
+\renewcommand{\rmdefault}{lmss} % set font to sans serif
+
+\parindent=0pt
+\parskip=4pt plus 6pt minus 2pt
+
+\lstset{
+	gobble=6,
+	basicstyle=\ttfamily\small
+}
+
+\definecolor{modblue}{HTML}{288DCC}
+
+% modified https://github.com/circuitikz/circuitikz/blob/c94be92df781cfbcba21c6d9c5e95a98976917a5/doc/ctikzmanutils.sty#L108
+\newcommand{\widetwopartbox}[2]{%
+	\leavevmode\null\par\noindent\fbox{\parbox[c]{0.4\linewidth}{#1} \parbox[c]{0.6\linewidth}{\RaggedRight\hbadness=9500 #2}\par\noindent}%
+}
+\NewDocumentCommand{\widecircuitdesc}{s O{1} m m m d() d[]}
+{
+	\widetwopartbox{%
+		\centering
+		\begin{circuitikz}[]
+			\IfBooleanTF{#1}{%
+				\draw (0,0) node[#3,scale=#2, fill=fillcol](N){#5};
+			}{
+				% if it's non-fillable, red should not go through
+				\draw (0,0) node[#3,scale=#2,
+				% fill=red
+				](N){#5};
+			}
+			\IfValueT{#6}{%
+				\foreach \n/\a/\d in {#6} \path(N.\n) \showcoord(\n)<\a:\d>;
+			}
+			\IfValueT{#7}{%
+				\foreach \n/\a/\d in {#7} \path(N-\n) \showcoordb(N-\n)<\a:\d>;
+			}
+		\end{circuitikz}%
+	}{\sloppy
+		{#4, type: node\IfBooleanT{#1}{, fillable}%
+		} (\texttt{node[\detokenize{#3}]\IfValueT{#7}{(N)}\{\detokenize{#5}\}}). \index{#3}%
+		\checkclass{N}%
+	}%
+}
+
+\title{A RISC-V Processor Components \Circuitikz{} Library}
+\author{Niklas Ladurner}
+\date{\today}
+
+\begin{document}
+
+\begin{center}
+	\LARGE \textbf{\thetitle}
+
+	\normalsize \theauthor
+	
+	\normalsize \thedate
+\end{center}
+
+\tableofcontents
+
+\section{Introduction}
+\subsection{Motivation}
+This \Circuitikz{} library offers some components to efficiently draw RISC-V processors in \LaTeX. The library was designed with the goal of resembling the RISC-V processor schematics as presented in \enquote*{Digital Design and Computer Architecture: RISC-V Edition} by Sarah L. Harris and David Harris.
+\subsection{Usage}
+To use the predefined components, you must include the library \texttt{riscvproc}. Your preamble should look like this:
+\begin{verbatim}
+	...
+	\usepackage{tikz}
+	\usepackage{circuitikz}
+	\usetikzlibrary{riscvproc}
+	...
+\end{verbatim}
+
+Components are then availiable in \texttt{circuitikz} environments:
+\begin{center}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}
+			\node[instrmem, align=center] (comp) {Instruction\\Memory};
+			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
+			\draw[->, blue] (comp.rd) -- ++(.5, 0) node[right] {rd};
+		\end{circuitikz}
+	\end{LTXexample}
+\end{center}
+
+\newpage
+\section{Component List}
+\subsection{Memory Components}
+\widecircuitdesc*{instrmem}{Instruction memory}{}(a/180/0.2, rd/0/0.2, ba/135/0.2, brd/45/0.2)
+
+\widecircuitdesc*{datamem}{Data Memory}{}(a/180/0.2, wd/180/0.2, rd/0/0.2, clk/90/0.2,we/90/0.2, ba/135/0.2, bwd/225/0.2, brd/45/0.2, bclk/135/0.2,bwe/45/0.2)
+
+\widecircuitdesc*{regfile}{Register File}{}(
+a1/180/0.2,ba1/135/0.2,
+a2/180/0.2,ba2/135/0.05,
+a3/180/0.2,ba3/225/0.05,
+wd3/180/0.2,bwd3/225/0.2,
+rd1/0/0.2,brd1/45/0.2,
+rd2/0/0.2,brd2/-45/0.2,
+clk/90/0.2,bclk/135/0.2,
+we3/90/0.2,bwe3/45/0.2)
+
+\subsection{Arithmetic Components}
+\widecircuitdesc*{alu}{Arithmetic Logic Unit}{ALU}(
+a/180/0.2,ba/135/0.2,
+b/180/0.2,bb/225/0.2,
+out/0/0.2,bout/-45/0.2,
+zero/0/0.2,bzero/45/0.2,
+ctrl/90/0.2,bctrl/45/0.2)
+
+
+\widecircuitdesc*{adder}{Adder}{}(
+a/180/0.2,ba/135/0.2,
+b/180/0.2,bb/225/0.2,
+out/0/0.2,bout/45/0.2)
+
+
+\widecircuitdesc*{subtr}{Subtractor}{}(
+a/180/0.2,ba/135/0.2,
+b/180/0.2,bb/225/0.2,
+out/0/0.2,bout/45/0.2)
+
+\subsection{Multiplexers}
+\widecircuitdesc*{mux}{Multiplexer}{}(
+in0/180/0.2,bin0/135/0.2,
+in1/180/0.2,bin1/225/0.2,
+sel/90/0.2,bsel/45/0.2,
+out/0/0.2,bout/45/0.2)
+
+\widecircuitdesc*{3mux}{Multiplexer with 3 inputs}{}(
+in0/180/0.2,bin0/135/0.2,
+in1/180/0.2,bin1/225/0.025,
+in2/180/0.2,bin2/225/0.2,
+sel/90/0.2,bsel/45/0.2,
+out/0/0.2,bout/45/0.2)
+
+\widecircuitdesc*{4mux}{Multiplexer with 4 inputs}{}(
+in0/180/0.2,bin0/135/0.2,
+in1/180/0.2,bin1/135/0.025,
+in2/180/0.2,bin2/225/0.025,
+in3/180/0.2,bin3/225/0.2,
+sel/90/0.2,bsel/45/0.2,
+out/0/0.2,bout/45/0.2)
+
+\subsection{Control Units}
+\widecircuitdesc*{ctrlunitsc}{Single-Cycle Control Unit}{}(
+op/180/0.2,
+funct3/180/0.2,
+funct7/180/0.2,
+zero/180/0.2,
+pcsrc/0/0.2,
+resultsrc/0/0.2,
+memwrite/0/0.2,
+alucontrol/0/0.2,
+alusrc/0/0.2,
+immsrc/0/0.2,
+regwrite/0/0.2)
+
+\widecircuitdesc*{ctrlunitsc}{Single-Cycle Control Unit (b-Anchors)}{}(
+bop/180/0.2,
+bfunct3/180/0.2,
+bfunct7/180/0.2,
+bzero/180/0.2,
+bpcsrc/0/0.2,
+bresultsrc/0/0.2,
+bmemwrite/0/0.2,
+balucontrol/0/0.2,
+balusrc/0/0.2,
+bimmsrc/0/0.2,
+bregwrite/0/0.2)
+
+\widecircuitdesc*{ctrlunitmc}{Multi-Cycle Control Unit}{}(
+clk/90/0.2,
+op/180/0.2,
+funct3/180/0.2,
+funct7/180/0.2,
+zero/180/0.2,
+pcwrite/180/0.2,
+adrsrc/180/0.2,
+memwrite/180/0.2,
+irwrite/180/0.2,
+resultsrc/0/0.2,
+alucontrol/0/0.2,
+alusrca/0/0.2,
+alusrcb/0/0.2,
+immsrc/0/0.2,
+regwrite/0/0.2)
+
+\widecircuitdesc*{ctrlunitmc}{Multi-Cycle Control Unit (b-Anchors)}{}(
+bclk/90/0.2,
+bop/180/0.2,
+bfunct3/180/0.2,
+bfunct7/180/0.2,
+bzero/180/0.2,
+bpcwrite/180/0.2,
+badrsrc/180/0.2,
+bmemwrite/180/0.2,
+birwrite/180/0.2,
+bresultsrc/0/0.2,
+balucontrol/0/0.2,
+balusrca/0/0.2,
+balusrcb/0/0.2,
+bimmsrc/0/0.2,
+bregwrite/0/0.2)
+
+\subsection{Miscellaneous Components}
+\widecircuitdesc*{extend}{Extend Unit}{}(
+in/180/0.2,bin/135/0.2,
+out/0/0.2,bout/45/0.2,
+ctrl/90/0.2,bctrl/135/0.2)
+
+\widecircuitdesc*{reg}{Register}{}(
+in/180/0.2,bin/135/0.2,
+out/0/0.2,bout/45/0.2,
+clk/90/0.2,bclk/135/0.2)
+
+
+\section{Keys}
+\subsection{\Circuitikz{} keys}
+The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=value}|. E.g. if one whishes to set the line width of all components to 4, the line  \verb|\ctikzset{processor/thickness=4}| would have to be included in the specific circuitikz picture. A list of all \Circuitikz{} keys can be found in Table \ref{tab:keys}. A list of component families can be found in Table \ref{tab:families}.
+
+\begin{figure}[htbp]
+	\begin{tabularx}{\textwidth}{|lXr|}
+		\hline
+		Key                       & Description                                                           & Default value    \\
+		\hline
+		\texttt{scale}            & Sets scale for all processor components.                              & \texttt{1}       \\
+		\texttt{thickness}        & Sets line width for all processor components.                         & \texttt{2}       \\
+		\texttt{font}             & Sets font family for all labels of processor components.              & \verb|\rmfamily| \\
+		\texttt{memory/height}    & Sets height for all memory components.                                & \texttt{2}       \\
+		\texttt{memory/width}     & Sets width for all memory components except \texttt{regfile}.         & \texttt{1.25}    \\
+		\texttt{control/heightsc} & Sets height for \texttt{ctrlunitsc}.                                  & \texttt{2.5}     \\
+		\texttt{control/heightmc} & Sets height for \texttt{ctrlunitmc}.                                  & \texttt{3.5}     \\
+		\texttt{control/width}    & Sets width for control components.                                    & \texttt{0.9}     \\
+		\texttt{control/radius}   & Sets border radius for control components.                            & \texttt{5}       \\
+		\texttt{arith/height}     & Sets height for arithmetic components.                                & \texttt{0.9}     \\
+		\texttt{arith/width}      & Sets height for arithmetic components.                                & \texttt{0.7}     \\
+		\texttt{arith/slope}      & Sets slope for arithmetic components in degrees.                      & \texttt{15}      \\
+		\texttt{extend/height}    & Sets height for big side of extend components.                        & \texttt{0.6}     \\
+		\texttt{extend/width}     & Sets height for extend components.                                    & \texttt{2}       \\
+		\texttt{extend/slope}     & Sets slope for extend components in degrees.                          & \texttt{7}       \\
+		\texttt{mux/slope}        & Sets slope for multiplexers in degrees.                               & \texttt{15}      \\
+		\texttt{misc/smallheight} & Sets height for small components.                                     & \texttt{0.65}    \\
+		\texttt{misc/smallwidth}  & Sets width for small components. Also affects the CLK input triangle. & \texttt{0.3}     \\
+		\texttt{misc/leadlen}     & Sets length for input and output leads.                               & \texttt{0.25}    \\
+		\hline
+	\end{tabularx}
+	\captionof{table}{List of \Circuitikz{} keys}
+	\label{tab:keys}
+\end{figure}
+
+\begin{figure}[htbp]
+	\begin{tabularx}{\textwidth}{|lX|}
+		\hline
+		Component family      & Component list                                        \\
+		\hline
+		memory components     & \texttt{instrmem}, \texttt{datamem}, \texttt{regfile} \\
+		control components    & \texttt{ctrlunitsc}, \texttt{ctrlunitmc}              \\
+		arithmetic components & \texttt{alu}, \texttt{add}, \texttt{subtr}            \\
+		extend components     & \texttt{extend}                                       \\
+		small components      & \texttt{mux}, \texttt{reg}                            \\
+		\hline
+	\end{tabularx}
+	\captionof{table}{List of component families}
+	\label{tab:families}
+\end{figure}
+\subsection{Special node keys}
+Some keys are also defined as  Tikz keys and can therefore be directly passed to nodes likes shown in Figure \ref{ex:keys}. A list of all these keys can be found in Table \ref{tab:tikz_keys}.
+
+\begin{figure}[t!]
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}
+			\node[reg, align=center, stacks=2, no output leads, enable input] (comp) {};
+		\end{circuitikz}
+	\end{LTXexample}
+	\caption{Passing options to a node}
+	\label{ex:keys}
+\end{figure}
+\begin{figure}[t!]
+	\begin{tabularx}{\textwidth}{|lXr|}
+		\hline
+		Key                   & Description                                                                                                     & applicable to  \\
+		\hline
+		\texttt{input leads}  & Specifies wether to draw input leads.                                                                           & all components \\
+		\texttt{output leads} & Specifies wether to draw output leads.                                                                          & all components \\
+		\texttt{leads}        & Specifies wether to draw leads at all.                                                                          & all components \\
+		\texttt{stacks}       & Sets height of a register in multiples of the default height, allows for stretched registers.                   & \texttt{reg}   \\
+		\texttt{enable input} & Specifies wether to draw an enable input or not. This also gives two new anchors, \texttt{en} and \texttt{ben}. & \texttt{reg}   \\
+
+		\hline
+	\end{tabularx}
+	\captionof{table}{List special node keys}
+	\label{tab:tikz_keys}
+\end{figure}
+
+\vspace{\baselineskip}
+More keys might be added in future.
+
+\newpage
+\section{Examples}
+\subsection{Single-Cycle RISC-V Processor}
+\begin{center}
+	\resizebox*{\textwidth}{!}{
+		\input{figures/riscv_sc.tikz}
+	}
+\end{center}
+
+
+\subsection{Multi-Cycle RISC-V Processor}
+\begin{center}
+	\resizebox*{\textwidth}{!}{
+		\input{figures/riscv_mc.tikz}
+	}
+	\resizebox*{\textwidth}{!}{
+	\input{figures/riscv_mc_automaton.tikz}
+}
+\end{center}
+
+\end{document}
+
+\end{document}
+

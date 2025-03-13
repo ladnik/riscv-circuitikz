@@ -1,0 +1,113 @@
+\begin{circuitikz}
+	\tikzset{
+		label/.style={draw=none, inner sep=1pt, font=\small},
+		comp/.style={align=center, no leads},
+		custyle/.style={color=modblue},
+	}
+	
+	
+	% components
+	\node[regfile, comp] (rf) {Register\\File};
+	\node[instrmem, comp, left=2cm of rf] (im) {Instruction\\Memory};
+	\node[alu,comp, right=2.25cm of rf.rd1, anchor=a] (alu) {ALU};
+	\node[datamem,comp, right=6.25cm of rf] (dm) {Data\\Memory};
+	
+	\node[ctrlunitsc, comp, custyle, above=1cm of rf, xshift=-0.75cm] (cu) {Control\\Unit};
+	
+	\node[extend, comp, below=1cm of rf] (ext) {Extend};
+	\node[adder, comp, anchor=b] (addpctarget) at (ext.out -| alu.a) {};
+	\node[adder, comp, anchor=a] (addpcplus4) at (ext.in -| im.a) {};
+	
+	% TODO: align mux.out and alu.b
+	\node[mux, comp, right=0.9cm of rf.rd2, anchor=in0] (muxalusrc) {};
+	\node[reg, comp, left=0.3cm of im.a] (regpcnext) {};
+	\node[mux, comp, left=1.25cm of regpcnext] (muxpcnext) {};
+	\node[mux, comp, right=1cm of dm.rd, anchor=in1] (muxresult) {};
+	
+	% special nodes
+	% clks
+	\node[align=center, label, above=0.25cm of regpcnext.clk] (clk1) {CLK};
+	\draw[] (clk1) -- (regpcnext.clk);
+	\node[align=center, label, above=0.25cm of rf.bclk] (clkrf) {CLK};
+	\draw[] (clkrf) -- (rf.bclk);
+	\node[align=center, label, above=0.25cm of dm.bclk] (clkdm) {CLK};
+	\draw[] (clkdm) -- (dm.bclk);
+	
+	% constants
+	\node[align=right, label, left=0.25cm of addpcplus4.bb] (const4) {4};
+	\draw[] (const4) -- (addpcplus4.bb);
+	
+	% connections
+	% register file
+	\draw[] (rf.brd1) -- (alu.ba);
+	\draw[] (rf.brd2) -- (muxalusrc.bin0);
+	\draw[] (rf.brd2) -- ++(1, 0) |- (dm.bwd);
+	
+	% alu
+	\draw[] (muxalusrc.bout) |- (alu.bb);
+	\draw[] (alu.bout) -| (dm.ba);
+	\node[] (anchorzero) at ($(alu.bout) + (1,1.75)$) {};
+	\node[right=0.5cm of anchorzero] (anchoralures){};
+	\draw[] (alu.bzero) -| (anchorzero.center) -- ++(-8,0)  |- (cu.bzero);
+	\draw[] (alu.bout) -| (anchoralures.center)  -- ++(3.5,0) |- (muxresult.bin0);
+	
+	% data memory
+	\draw[] (dm.brd) -- (muxresult.bin1);
+	\draw[] (muxresult.bout) -- ++(0.25,0) -- ++(0,-5) -- ++(-14.3, 0) node[align=center,above,pos=0.05] {Result} |- (rf.bwd3);
+	
+	% extend unit
+	\draw[] (ext.bout) -- (addpctarget.bb);
+	\draw[] (ext.bout) ++(1.5, 0)|- (muxalusrc.bin1);
+	
+	% instruction memory
+	\draw[] (im.brd) -- ++(1.15, 0) |- (cu.bop);
+	\draw[] (im.brd) -- ++(1.15, 0) |- (cu.bfunct3);
+	\draw[] (im.brd) -- ++(1.15, 0) |- (cu.bfunct7);
+	\draw[] (im.brd) -- ++(1.15, 0) |- (rf.ba1);
+	\draw[] (im.brd) -- ++(1.15, 0) |- (rf.ba2);
+	\draw[] (im.brd) -- ++(1.15, 0) |- (rf.ba3);
+	\draw[] (im.brd) -- ++(1.15, 0) |- (ext.bin);
+	\draw[] (regpcnext.bout) -- (im.ba);
+	
+	% control unit
+	\draw[custyle] (cu.bregwrite) -| (rf.bwe3);
+	\draw[custyle] (cu.bimmsrc) -- ++(2, 0) -- ++(0, -5.5) -| (ext.bctrl);
+	\draw[custyle] (cu.balusrc) -| (muxalusrc.bsel);
+	\draw[custyle] (cu.balucontrol) -| (alu.bctrl);
+	\draw[custyle] (cu.bmemwrite) -| (dm.bwe);
+	\draw[custyle] (cu.bresultsrc) -| (muxresult.bsel);
+	\draw[custyle] (cu.bpcsrc) -- ++(1.25, 0) -- ++(0, 0.75)-| (muxpcnext.bsel);
+	
+	% additional connections
+	\draw[] (addpcplus4.bout) -- ++(0.25,0) -- ++(0, -1.25)  -- ++ (-4.5,0) |- (muxpcnext.bin0);
+	\draw[] (regpcnext.bout) -- ++(0.3, 0) |- (addpcplus4.ba);
+	\draw[] (regpcnext.bout) -- ++(0.3, 0) |- (addpctarget.ba);
+	\draw[] (addpctarget.bout) -- ++(0.25, 0) -- ++(0, -2.75) -- ++ (-14.5,0) |- (muxpcnext.bin1);
+	\draw[] (muxpcnext.bout) -- (regpcnext.bin) node[align=center, label, above, pos=0.5] {PCNext};
+	
+	% labels
+	\node[align=right, label, left=0.25em of alu.ba, yshift=0.5em] {SrcA};
+	\node[align=right, label, left=0.25em of alu.bb, yshift=0.5em] {SrcB};
+	\node[align=left, label, right=0.25em of alu.bout, yshift=0.5em] {ALUResult};
+	\node[align=left, label, right=0.25em of alu.bzero, yshift=0.5em] {Zero};
+	\node[align=left, label, right=0.25em of dm.brd, yshift=0.5em] {ReadData};
+	\node[align=left, label, right=0.25em of alu.bout, yshift=-1.15cm+0.5em] {WriteData};
+	\node[align=left, label, right=0.25em of ext.bout, yshift=0.5em] {ImmExt};
+	\node[align=right, label, left=0.25em of cu.bop, yshift=0.5em] {\scriptsize{6:0}};
+	\node[align=right, label, left=0.25em of cu.bfunct3, yshift=0.5em] {\scriptsize{14:12}};
+	\node[align=right, label, left=0.25em of cu.bfunct7, yshift=0.5em] {\scriptsize{30}};
+	\node[align=right, label, left=0.25em of rf.ba1, yshift=0.5em] {\scriptsize{19:15}};
+	\node[align=right, label, left=0.25em of rf.ba2, yshift=0.5em] {\scriptsize{24:20}};
+	\node[align=right, label, left=0.25em of rf.ba3, yshift=0.5em] {\scriptsize{11:7}};
+	\node[align=right, label, left=0.25em of ext.bin, yshift=0.5em] {\scriptsize{31:7}};
+	\node[align=left, label, custyle, right=0.25em of cu.bregwrite, yshift=0.5em] {RegWrite};
+	\node[align=left, label, custyle, right=0.25em of cu.bimmsrc, yshift=0.5em] {ImmSrc\textsubscript{1:0}};
+	\node[align=left, label, custyle, right=0.25em of cu.balusrc, yshift=0.5em] {ALUSrc};
+	\node[align=left, label, custyle, right=0.25em of cu.balucontrol, yshift=0.5em] {ALUControl\textsubscript{2:0}};
+	\node[align=left, label, custyle, right=0.25em of cu.bmemwrite, yshift=0.5em] {MemWrite};
+	\node[align=left, label, custyle, right=0.25em of cu.bresultsrc, yshift=0.5em] {ResultSrc};
+	\node[align=left, label, custyle, right=0.25em of cu.bpcsrc, yshift=0.5em] {PCSrc};
+	\node[align=left, label, right=0.25em of addpcplus4.bout, yshift=0.5em] {PCPlus4};
+	\node[align=left, label, right=0.25em of addpctarget.bout, yshift=0.5em] {PCTarget};
+	\node[align=left, label, right=0.25em of im.brd, yshift=0.5em] {Instr};
+\end{circuitikz}

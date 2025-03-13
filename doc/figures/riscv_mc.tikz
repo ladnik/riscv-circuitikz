@@ -1,0 +1,144 @@
+\begin{circuitikz}[]
+	\tikzset{
+		label/.style={draw=none, inner sep=1pt, font=\small},
+		comp/.style={align=center, no leads},
+		custyle/.style={color=modblue},
+	}
+	
+	%\node[anchor=center,inner sep=0, scale=1.1] at (0.6,2.25) {\includegraphics[width=1.5\textwidth]{/home/niklas/Pictures/Screenshots/mc.png}};
+	
+	
+	% components
+	\node[regfile, comp] (rf) {Register\\File};
+	\node[datamem, comp, left=4cm of rf] (dm) {Instr/Data\\Memory};
+	\node[alu,comp, right=3.75cm of rf.rd1, anchor=a] (alu) {ALU};
+	
+	\node[ctrlunitmc, comp, custyle, above=2.25cm of rf, xshift=-1.7cm] (cu) {Control\\Unit};
+	
+	\node[extend, comp, below=0.5cm of rf] (ext) {Extend};
+	
+	% TODO: regs with multiple inputs
+	\node[reg, comp, right=2cm of rf.north, anchor=north, stacks=2] (regrfread) {};
+	\node[3mux, comp, right=1.75cm of rf.brd1, anchor=bin2] (muxalusrca) {};
+	\node[3mux, comp, right=2.5cm of rf.brd2, anchor=bin0] (muxalusrcb) {};
+	\node[mux, comp, left=0.75cm of dm.ba, anchor=bout] (muxaddrnext) {};
+	\node[reg, comp, left=0.75cm of muxaddrnext.bin0, enable input, anchor=bout] (regpcnext) {};
+	\node[reg, comp, right=1.8cm of alu.bout, enable input, anchor=bin] (regaluresult) {};
+	\node[3mux, comp, right=1.5cm of regaluresult.bout, anchor=bin0] (muxresult) {};
+	\node[reg, comp, right=0.75cm of dm.brd, enable input, anchor=bin, yshift=1.5cm, stacks=2.5] (regreaddata) {};
+	\node[reg, comp, right=0.75cm of dm.brd, anchor=bin, yshift=-3.75cm,] (regreaddata2) {};
+	
+	% special nodes
+	% clks
+	\node[align=center, label, above=0.25cm of regpcnext.clk] (clk1) {CLK};
+	\draw[] (clk1) -- (regpcnext.clk);
+	\node[align=center, label, above=0.25cm of regreaddata.clk] (clk2) {CLK};
+	\draw[] (clk2) -- (regreaddata.clk);
+	\node[align=center, label, above=0.25cm of regreaddata2.clk] (clk3) {CLK};
+	\draw[] (clk3) -- (regreaddata2.clk);
+	\node[align=center, label, above=0.25cm of regaluresult.clk] (clk4) {CLK};
+	\draw[] (clk4) -- (regaluresult.clk);
+	\node[align=center, label, above=0.25cm of regrfread.clk] (clk5) {CLK};
+	\draw[] (clk5) -- (regrfread.clk);
+	\node[align=center, label, above=0.25cm of rf.bclk] (clkrf) {CLK};
+	\draw[] (clkrf) -- (rf.bclk);
+	\node[align=center, label, above=0.25cm of dm.bclk] (clkdm) {CLK};
+	\draw[] (clkdm) -- (dm.bclk);
+	\node[align=center, label, custyle, above=0.25cm of cu.bclk] (clkcu) {CLK};
+	\draw[custyle] (clkcu) -- (cu.bclk);
+	
+	% constants
+	\node[align=right, label, left=0.25cm of muxalusrcb.bin2] (const4) {4};
+	\draw[] (const4) -- (muxalusrcb.bin2);
+	
+	% connections
+	% register file
+	\draw[] (rf.brd1) -- (rf.brd1 -| regrfread.bin);
+	\draw[] (rf.brd2) -- (rf.brd2 -| regrfread.bin);
+	\draw[] (rf.brd2 -| regrfread.bout) -- ++(0.5, 0) -- ++(0, -1.75) -- ++(-10.25, 0) |- (dm.bwd);
+	\draw[] (rf.brd1 -| regrfread.bout) -- (muxalusrca.bin2);
+	\draw[] (rf.brd2 -| regrfread.bout) -- (muxalusrcb.bin0);
+	
+	% alu
+	\draw[] (muxalusrca.bout) --++(1, 0) |- (alu.ba);
+	\draw[] (muxalusrcb.bout) --++(0.25, 0) |- (alu.bb);
+	\draw[] (alu.bout) -- (regaluresult.bin);
+	\draw[] (alu.bzero) -- ++(1, 0) -- ++(0, 2.85)-- ++(-10.75,0)  |- (cu.bzero) ;
+	
+	% instruction/data memory
+	\draw[] (dm.brd) --++(0.3,0) |- (regreaddata2.bin);
+	\draw[] (dm.brd) --++(0.3,0) -- (dm.brd -| regreaddata.bin);
+	\draw[] (regreaddata2.bout) --++(14,0) |- (muxresult.bin1);
+	\draw[] (muxaddrnext.bout) -- (dm.ba);
+	
+	\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (cu.bop);
+	\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (cu.bfunct3);
+	\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (cu.bfunct7);
+	\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (rf.ba1);
+	\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (rf.ba2);
+	\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (rf.ba3);
+	\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (ext.bin);
+	
+	% extend unit
+	\draw[] (ext.bout) --++(1.75, 0) |- (muxalusrcb.bin1);
+	
+	% control unit
+	\draw[custyle] (cu.bregwrite) -| (rf.bwe3);
+	\draw[custyle] (cu.bimmsrc) -- ++(2.65, 0) -- ++(0, -6.125) -| (ext.bctrl);
+	\draw[custyle] (cu.balusrca) -| (muxalusrca.bsel);
+	\draw[custyle] (cu.balusrcb) -| (muxalusrcb.bsel);
+	\draw[custyle] (cu.balucontrol) -| (alu.bctrl);
+	\draw[custyle] (cu.bresultsrc) -| (muxresult.bsel);
+	\draw[custyle] (regreaddata.ben) -- ++(0, -0.25) -- ++(-0.4, 0) |- (cu.birwrite);
+	\draw[custyle] (cu.bmemwrite) -| (dm.bwe);
+	\draw[custyle] (cu.badrsrc) -| (muxaddrnext.bsel);
+	\draw[custyle] (regpcnext.ben) -- ++(0, -0.25) -- ++(-0.4, 0) |- (cu.bpcwrite);
+	
+	% additional connections
+	\draw[] (regpcnext.bout) -- (muxaddrnext.bin0);
+	\draw[] (muxresult.bout) -- ++(0.25, 0) -- ++(0, -3.5) -- ++ (-21.5,0) |- (regpcnext.bin);
+	\draw[] (muxresult.bout) -- ++(0.25, 0) -- ++(0, -3.5) -- ++ (-20,0) |- (muxaddrnext.bin1);
+	\draw[] (muxresult.bout) -- ++(0.25, 0) -- ++(0, -3.5) -- ++ (-13.5,0) |- (rf.bwd3);
+	% TODO: align with result signal
+	\draw[] (regpcnext.bout) -- ++(0.55, 0) -- ++(0, 2.4) -- ++ (11.25,0) |- (muxalusrca.bin0);
+	\draw[] (regpcnext.bout) -- ++(0.55, 0) |- (regreaddata.bin);
+	\draw[] (regreaddata.bout) -- ++(6.75, 0) |- (muxalusrca.bin1);
+	\draw[] (regaluresult.bout) -- (muxresult.bin0);
+	\draw[] (alu.bout) -- ++(1,0) |- (muxresult.bin2);
+	
+	% labels
+	\node[align=right, label, left=0.25em of alu.ba, yshift=0.5em] {SrcA};
+	\node[align=right, label, left=0.25em of alu.bb, yshift=0.5em] {SrcB};
+	\node[align=left, label, right=0.25em of alu.bout, yshift=0.5em] {ALUResult};
+	\node[align=left, label, right=0.25em of alu.bzero, yshift=0.5em] {Zero};
+	\node[align=left, label, anchor=south west, xshift=0.3cm, rotate=-90] at (rf.brd2 -| dm.brd) {ReadData};
+	\node[align=left, label, anchor=south west, xshift=0.5cm, rotate=-90] at (rf.brd2 -| regrfread.bout) {WriteData};
+	\node[align=left, label, anchor=west, yshift=0.5em] at (dm.brd -| regreaddata.bout) {Instr};
+	\node[align=left, label, right=0.25em of ext.bout, yshift=0.5em] {ImmExt};
+	
+	\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- cu.bop) {\scriptsize{6:0}};
+	\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- cu.bfunct3) {\scriptsize{14:12}};
+	\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- cu.bfunct7) {\scriptsize{30}};
+	\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- rf.ba1) {\scriptsize{19:15}};
+	\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- rf.ba2) {\scriptsize{24:20}};
+	\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- rf.ba3) {\scriptsize{11:7}};
+	\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- ext.bin) {\scriptsize{31:7}};
+	
+	\node[align=left, label, custyle, right=0.25em of cu.bregwrite, yshift=0.5em] {RegWrite};
+	\node[align=left, label, custyle, right=0.25em of cu.bimmsrc, yshift=0.5em] {ImmSrc\textsubscript{1:0}};
+	\node[align=left, label, custyle, right=0.25em of cu.balusrca, yshift=0.5em] {ALUSrcA\textsubscript{1:0}};
+	\node[align=left, label, custyle, right=0.25em of cu.balusrcb, yshift=0.5em] {ALUSrcB\textsubscript{1:0}};
+	\node[align=left, label, custyle, right=0.25em of cu.balucontrol, yshift=0.5em] {ALUControl\textsubscript{2:0}};
+	\node[align=left, label, custyle, right=0.25em of cu.bresultsrc, yshift=0.5em] {ResultSrc\textsubscript{1:0}};
+	\node[align=right, label, custyle, left=0.25em of cu.birwrite, yshift=0.5em] {IRWrite};
+	\node[align=right, label, custyle, left=0.25em of cu.bmemwrite, yshift=0.5em] {MemWrite};
+	\node[align=right, label, custyle, left=0.25em of cu.badrsrc, yshift=0.5em] {AdrSrc};
+	\node[align=right, label, custyle, left=0.25em of cu.bpcwrite, yshift=0.5em] {PCWrite};
+	\node[align=right, label, left=0.25cm of regpcnext.bin, yshift=0.5em] {PCNext};
+	\node[align=left, label, right=0.25em of muxaddrnext.bout, yshift=0.5em] {Adr};
+	\node[align=left, label, right=0em of regpcnext.bout, yshift=0.5em] {PC};
+	\node[align=left, label, right=0em of regreaddata.bout, yshift=0.5em] {OldPC};
+	\node[align=left, label, right=0em of regreaddata2.bout, yshift=0.5em] {Data};
+	\node[align=left, label, right=0em of regaluresult.bout, yshift=0.5em] {ALUOut};
+	\node[align=left, label, left=0.5cm of muxalusrca.bin2, yshift=0.5em] {A};
+\end{circuitikz}

@@ -1,0 +1,50 @@
+\def\bblue#1{\textbf{\textcolor{modblue}{#1}}}
+\begin{tikzpicture}
+	\tikzset{
+		every node/.style={},
+		line/.style={thick, line cap=round},
+		arrow/.style={line, ->},
+		mod/.style={font=\small, inner sep=-3pt, align=center, minimum size=3.35cm},
+		label/.style={font=\ttfamily\small\linespread{0.5}\selectfont, align=center},
+	}
+	\node[state, mod] (s0) {\bblue{S0: Fetch}\\AdrSrc = 0\\IRWrite\\ALUSrcA = 00\\ALUSrcB = 10\\ALUOp = 00\\ResultSrc = 10\\PCUpdate};
+	\node[state, mod, right=1cm of s0] (s1) {\bblue{S1: Decode}\\ALUSrcA = 01\\ALUSrcB = 01\\ALUOp = 00};
+	\node[state, mod, below=1.5cm of s1, xshift=2.5cm] (s8) {\bblue{S8: ExecuteI}\\ALUSrcA = 10\\ALUSrcB = 01\\ALUOp = 10};
+	\node[state, mod, left=1cm of s8] (s6) {\bblue{S6: ExecuteR}\\ALUSrcA = 10\\ALUSrcB = 00\\ALUOp = 10};
+	\node[state, mod, right=1cm of s8] (s9) {\bblue{S9: JAL}\\ALUSrcA = 01\\ALUSrcB = 10\\ALUOp = 00\\ResultSrc = 00\\PCUpdate};
+	\node[state, mod, below=1cm of s8] (s7) {\bblue{S7: ALUWB}\\ResultSrc = 00\\RegWrite};
+	\node[state, mod, right=1cm of s9] (s10) {\bblue{S10: BEQ}\\ALUSrcA = 10\\ALUSrcB = 00\\ALUOp = 01\\ResultSrc = 00\\Branch};
+	\node[state, mod, left=1cm of s6] (s2) {\bblue{S2: MemAddr}\\ALUSrcA = 10\\ALUSrcB = 01\\ALUOp = 00};
+	\node[state, mod, below=1cm of s2] (s3) {\bblue{S3: MemRead}\\ResultSrc = 00\\AdrSrc = 1};
+	\node[state, mod, right=1cm of s3] (s5) {\bblue{S5: MemWrite}\\ResultSrc = 00\\AdrSrc = 1\\MemWrite};
+	\node[state, mod, below=1cm of s3] (s4) {\bblue{S4: MemWB}\\ResultSrc = 01\\RegWrite};
+	
+	\node[] (res) at ($(s0.north west) + (-.5, .5)$) {Reset};
+	\draw[arrow] (res.south) -- (s0);
+	
+	\draw[arrow] (s0) -- (s1);
+	\draw[arrow] (s1) -- (s2) node[left, pos=0.5, label] {op = 0000011 (lw) or\\op = 0100011 (sw)};
+	\draw[arrow] (s1) -- (s6) node[left, pos=0.5, label] {op =\\0110011\\(R-Type)};
+	\draw[arrow] (s1) -- (s8) node[right, pos=0.5, label] {op = \\0010011\\(I-Type ALU)};
+	\draw[arrow] (s1) -- (s9) node[right, pos=0.5, label] {op = 1101111\\(jal)};
+	\draw[arrow] (s1) -- (s10.north west) node[right, pos=0.5, label] {op = 1100011\\(beq)};
+	
+	\draw[arrow] (s2) -- (s3) node[left, pos=0.5, label] {op =\\0000011\\(lw)};
+	\draw[arrow] (s2) -- (s5) node[left, pos=0.5, label] {op =\\0100011\\(sw)};
+	\draw[arrow] (s3) -- (s4);
+	
+	\draw[arrow] (s6) -- (s7);
+	\draw[arrow] (s8) -- (s7);
+	\draw[arrow] (s9) -- (s7);
+	
+	\node[right=18.5 of s4] (anchorSE) {};
+	\node[above=15.5cm of anchorSE] (anchorNE) {};
+	
+	\draw[line] (s4) -- (anchorSE.center);
+	\draw[line] (s5) |- (anchorSE.center);
+	\draw[line] (s7) |- (anchorSE.center);
+	\draw[line] (s10) |- (anchorSE.center);
+	\draw[line] (anchorSE.center) |- (anchorNE.center);
+	\draw[arrow] (anchorNE.center) -| (s0.north);
+	
+\end{tikzpicture}
