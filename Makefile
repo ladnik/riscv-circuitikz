@@ -7,8 +7,8 @@ TEXS := manual.tex
 
 # compile a specific .tex file to PDF and clean auxiliary files
 %.pdf: %.tex #$(FORCE)
-	TEXINPUTS=../beamer//: pdflatex -interaction=nonstopmode -shell-escape $<
-
+	pdflatex -interaction=nonstopmode -shell-escape $<
+	
 # compile all .tex files
 all: $(TEXS:.tex=.pdf)
 

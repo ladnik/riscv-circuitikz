@@ -39,3 +39,4 @@ _minted*
 ### Other Stuff ###
 *.log
 *.DS_Store
+*.tmp

@@ -3,27 +3,31 @@
 \usepackage{a4wide}
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
+
 \usepackage{tikz}
 \usepackage{circuitikz}
 \usepackage{ctikzmanutils}
-\usetikzlibrary{calc, positioning, fit, decorations, decorations.pathmorphing, riscvproc}
+\usepackage[]{csquotes}
+\usetikzlibrary{calc, positioning, riscvproc}
 
-\usepackage{showexpl}
-\usepackage{fancyhdr} 
-\usepackage[dvipsnames]{xcolor}
-\usepackage{lmodern}
-\usepackage{tabularx}
 \usepackage{caption}
-
-\renewcommand{\rmdefault}{lmss} % set font to sans serif
+\usepackage{fancyhdr} 
+\usepackage{lmodern}
+\usepackage{showexpl}
+\usepackage{tabularx}
+\usepackage{xcolor}
 
 \hypersetup{
 	pdfauthor={Niklas Ladurner},
-	pdftitle={RISC-V Processor \Circuitikz{} Library},
+	pdftitle={A RISC-V Processor Components \Circuitikz{} Library},
 	pdfsubject={},
 	pdfkeywords={riscv, processor, circuitikz},
-	pdfcreator={pdflatex}
+	pdfcreator={pdflatex},
+	colorlinks=false,
 }
+
+
+\renewcommand{\rmdefault}{lmss} % set font to sans serif
 
 \parindent=0pt
 \parskip=4pt plus 6pt minus 2pt
@@ -35,7 +39,7 @@
 
 \definecolor{modblue}{HTML}{288DCC}
 
-% https://github.com/circuitikz/circuitikz/blob/c94be92df781cfbcba21c6d9c5e95a98976917a5/doc/ctikzmanutils.sty#L108
+% modified https://github.com/circuitikz/circuitikz/blob/c94be92df781cfbcba21c6d9c5e95a98976917a5/doc/ctikzmanutils.sty#L108
 \newcommand{\widetwopartbox}[2]{%
 	\leavevmode\null\par\noindent\fbox{\parbox[c]{0.4\linewidth}{#1} \parbox[c]{0.6\linewidth}{\RaggedRight\hbadness=9500 #2}\par\noindent}%
 }
@@ -66,7 +70,6 @@
 	}%
 }
 
-
 \title{A RISC-V Processor Components \Circuitikz{} Library}
 \author{Niklas Ladurner}
 \date{\today}
@@ -83,7 +86,27 @@
 
 \section{Introduction}
 \subsection{Motivation}
+This \Circuitikz{} library offers some components to efficiently draw RISC-V processors in \LaTeX. The library was designed with the goal of resembling the RISC-V processor schematics as presented in \enquote*{Digital Design and Computer Architecture: RISC-V Edition} by Sarah L. Harris and David Harris.
 \subsection{Usage}
+To use the predefined components, you must include the library \texttt{riscvproc}. Your preamble should look like this:
+\begin{verbatim}
+	...
+	\usepackage{tikz}
+	\usepackage{circuitikz}
+	\usetikzlibrary{riscvproc}
+	...
+\end{verbatim}
+
+Components are then availiable in \texttt{circuitikz} environments:
+\begin{center}
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}
+			\node[instrmem, align=center] (comp) {Instruction\\Memory};
+			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
+			\draw[->, blue] (comp.rd) -- ++(.5, 0) node[right] {rd};
+		\end{circuitikz}
+	\end{LTXexample}
+\end{center}
 
 \newpage
 \section{Component List}
@@ -101,17 +124,6 @@ rd1/0/0.2,brd1/45/0.2,
 rd2/0/0.2,brd2/-45/0.2,
 clk/90/0.2,bclk/135/0.2,
 we3/90/0.2,bwe3/45/0.2)
-
-\subsection{Miscellaneous Components}
-\widecircuitdesc*{extend}{Extend Unit}{}(
-in/180/0.2,bin/135/0.2,
-out/0/0.2,bout/45/0.2,
-ctrl/90/0.2,bctrl/135/0.2)
-
-\widecircuitdesc*{reg}{Register}{}(
-in/180/0.2,bin/135/0.2,
-out/0/0.2,bout/45/0.2,
-clk/90/0.2,bclk/135/0.2)
 
 \subsection{Arithmetic Components}
 \widecircuitdesc*{alu}{Arithmetic Logic Unit}{ALU}(
@@ -147,37 +159,85 @@ in2/180/0.2,bin2/225/0.2,
 sel/90/0.2,bsel/45/0.2,
 out/0/0.2,bout/45/0.2)
 
+\widecircuitdesc*{4mux}{Multiplexer with 4 inputs}{}(
+in0/180/0.2,bin0/135/0.2,
+in1/180/0.2,bin1/135/0.025,
+in2/180/0.2,bin2/225/0.025,
+in3/180/0.2,bin3/225/0.2,
+sel/90/0.2,bsel/45/0.2,
+out/0/0.2,bout/45/0.2)
+
 \subsection{Control Units}
 \widecircuitdesc*{ctrlunitsc}{Single-Cycle Control Unit}{}(
-op/180/0.5,bop/135/0.025,
-funct3/180/0.5,bfunct3/135/0.025,
-funct7/180/0.5,bfunct7/135/0.025,
-zero/180/0.5,bzero/135/0.025,
-pcsrc/0/0.5,bpcsrc/45/0.025,
-resultsrc/0/0.5,bresultsrc/45/0.025,
-memwrite/0/0.5,bmemwrite/45/0.025,
-alucontrol/0/0.5,balucontrol/45/0.025,
-alusrc/0/0.5,balusrc/45/0.025,
-immsrc/0/0.5,bimmsrc/45/0.025,
-regwrite/0/0.5,bregwrite/45/0.025)
+op/180/0.2,
+funct3/180/0.2,
+funct7/180/0.2,
+zero/180/0.2,
+pcsrc/0/0.2,
+resultsrc/0/0.2,
+memwrite/0/0.2,
+alucontrol/0/0.2,
+alusrc/0/0.2,
+immsrc/0/0.2,
+regwrite/0/0.2)
+
+\widecircuitdesc*{ctrlunitsc}{Single-Cycle Control Unit (b-Anchors)}{}(
+bop/180/0.2,
+bfunct3/180/0.2,
+bfunct7/180/0.2,
+bzero/180/0.2,
+bpcsrc/0/0.2,
+bresultsrc/0/0.2,
+bmemwrite/0/0.2,
+balucontrol/0/0.2,
+balusrc/0/0.2,
+bimmsrc/0/0.2,
+bregwrite/0/0.2)
 
 \widecircuitdesc*{ctrlunitmc}{Multi-Cycle Control Unit}{}(
-clk/90/0.2,bclk/135/0.2,
-op/180/0.5,bop/135/0.025,
-funct3/180/0.5,bfunct3/135/0.025,
-funct7/180/0.5,bfunct7/135/0.025,
-zero/180/0.5,bzero/135/0.025,
-pcwrite/180/0.5,bpcwrite/135/0.025,
-pcwrite/180/0.5,bpcwrite/135/0.025,
-adrsrc/180/0.5,badrsrc/135/0.025,
-memwrite/180/0.5,bmemwrite/135/0.025,
-irwrite/180/0.5,birwrite/135/0.025,
-resultsrc/0/0.5,bresultsrc/45/0.025,
-alucontrol/0/0.5,balucontrol/45/0.025,
-alusrca/0/0.5,balusrca/45/0.025,
-alusrcb/0/0.5,balusrcb/45/0.025,
-immsrc/0/0.5,bimmsrc/45/0.025,
-regwrite/0/0.5,bregwrite/45/0.025)
+clk/90/0.2,
+op/180/0.2,
+funct3/180/0.2,
+funct7/180/0.2,
+zero/180/0.2,
+pcwrite/180/0.2,
+adrsrc/180/0.2,
+memwrite/180/0.2,
+irwrite/180/0.2,
+resultsrc/0/0.2,
+alucontrol/0/0.2,
+alusrca/0/0.2,
+alusrcb/0/0.2,
+immsrc/0/0.2,
+regwrite/0/0.2)
+
+\widecircuitdesc*{ctrlunitmc}{Multi-Cycle Control Unit (b-Anchors)}{}(
+bclk/90/0.2,
+bop/180/0.2,
+bfunct3/180/0.2,
+bfunct7/180/0.2,
+bzero/180/0.2,
+bpcwrite/180/0.2,
+badrsrc/180/0.2,
+bmemwrite/180/0.2,
+birwrite/180/0.2,
+bresultsrc/0/0.2,
+balucontrol/0/0.2,
+balusrca/0/0.2,
+balusrcb/0/0.2,
+bimmsrc/0/0.2,
+bregwrite/0/0.2)
+
+\subsection{Miscellaneous Components}
+\widecircuitdesc*{extend}{Extend Unit}{}(
+in/180/0.2,bin/135/0.2,
+out/0/0.2,bout/45/0.2,
+ctrl/90/0.2,bctrl/135/0.2)
+
+\widecircuitdesc*{reg}{Register}{}(
+in/180/0.2,bin/135/0.2,
+out/0/0.2,bout/45/0.2,
+clk/90/0.2,bclk/135/0.2)
 
 
 \section{Keys}
@@ -221,7 +281,7 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 		\hline
 		memory components     & \texttt{instrmem}, \texttt{datamem}, \texttt{regfile} \\
 		control components    & \texttt{ctrlunitsc}, \texttt{ctrlunitmc}              \\
-		arithmetic components & \texttt{alu}, \texttt{add}, \texttt{sub}              \\
+		arithmetic components & \texttt{alu}, \texttt{add}, \texttt{subtr}            \\
 		extend components     & \texttt{extend}                                       \\
 		small components      & \texttt{mux}, \texttt{reg}                            \\
 		\hline
@@ -230,6 +290,36 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 	\captionof{table}{List of component families}
 \end{figure}
 \subsection{Special node keys}
+Some keys are also defined as  Tikz keys and can therefore be directly passed to nodes likes shown in Figure \ref{ex:keys}. A list of all these keys can be found in Table \ref{tab:tikz_keys}.
+
+\begin{figure}[t!]
+	\begin{LTXexample}[varwidth, rframe=]
+		\begin{circuitikz}
+			\node[reg, align=center, stacks=2, no output leads, enable input] (comp) {};
+		\end{circuitikz}
+	\end{LTXexample}
+	\label{ex:keys}
+	\caption{Passing options to a node}
+\end{figure}
+\begin{figure}[t!]
+	\begin{tabularx}{\textwidth}{|lXr|}
+		\hline
+		Key                   & Description                                                                                                     & applicable to  \\
+		\hline
+		\texttt{input leads}  & Specifies wether to draw input leads.                                                                           & all components \\
+		\texttt{output leads} & Specifies wether to draw output leads.                                                                          & all components \\
+		\texttt{leads}        & Specifies wether to draw leads at all.                                                                          & all components \\
+		\texttt{stacks}       & Sets height of a register in multiples of the default height, allows for stretched registers.                   & \texttt{reg}   \\
+		\texttt{enable input} & Specifies wether to draw an enable input or not. This also gives two new anchors, \texttt{en} and \texttt{ben}. & \texttt{reg}   \\
+
+		\hline
+	\end{tabularx}
+	\label{tab:tikz_keys}
+	\captionof{table}{List special node keys}
+\end{figure}
+
+\vspace{\baselineskip}
+More keys might be added in future.
 
 \newpage
 \section{Examples}

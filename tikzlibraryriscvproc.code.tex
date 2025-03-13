@@ -1,9 +1,16 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                    TODO                                      %								
-%                                   HEADER                                     %								
+%                                  riscvproc                                   %
+%                A RISC-V Processor Components CircuiTikZ Library              %
+%            Copyright (C) 2025 Niklas Ladurner - All Rights Reserved          %
+%                                                                              %
+%            You may use, distribute and modify this code under the			   %
+%                   terms of the GNU General Public License.                   %
+%                                                                              %
+%           You should have received a copy of the GNU General Public          %
+%                 License  with this file. If not, please visit                %
+%                      www.gnu.org/licenses/gpl-3.0.html					   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 %
 % Define keys
@@ -1153,6 +1160,8 @@
 \pgfcirc@declare@arith{adder}{0}{0}{+}
 \pgfcirc@declare@arith{subtr}{0}{0}{-}
 
+% TODO: dynamic number of mux inputs
+
 \pgfdeclareshape{mux}{
 	%
 	% setup
@@ -1535,6 +1544,219 @@
 	}
 }
 
+\pgfdeclareshape{4mux}{
+	%
+	% setup
+	%
+	
+	\savedmacro{\ctikzclass}{\edef\ctikzclass{processor}}
+	\saveddimen{\scaledRlen}{\pgfmathsetlength{\pgf@x}{\ctikzvalof{\ctikzclass/scale}\pgf@circ@Rlen}}
+	
+	% define northwest as scaled endpoint
+	\savedanchor\northwest{
+		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
+		\pgf@x=-\ctikzvalof{processor/misc/smallwidth}\pgf@circ@scaled@Rlen
+		\pgf@x=.75\pgf@x
+		\pgf@y=\ctikzvalof{processor/misc/smallheight}\pgf@circ@scaled@Rlen
+		\pgfmathsetmacro\slopeval{\ctikzvalof{processor/mux/slope}}
+		\pgfmathparse{(.5*\pgf@y+2*\pgf@x*tan(\slopeval))*2.5}
+		\pgf@y=\pgfmathresult pt
+	}
+	
+	\saveddimen\leadlen
+	{
+		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
+		\pgf@x=\ctikzvalof{\ctikzclass/misc/leadlen}\pgf@circ@scaled@Rlen
+	}
+	
+	\saveddimen\slopeval
+	{
+		\pgf@x=\ctikzvalof{processor/mux/slope} pt
+	}
+	
+	\saveddimen\cutinheight
+	{
+		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
+		\pgfmathsetmacro\slopeval{\ctikzvalof{processor/mux/slope}}
+		\pgfmathparse{1.5*\ctikzvalof{processor/misc/smallwidth}*\pgf@circ@scaled@Rlen*tan(\slopeval)}
+		\pgf@x=\pgfmathresult pt
+	}
+	
+	\saveddimen\inputs
+	{
+		\pgf@x=\ctikzvalof{processor/mux/inputs} pt
+	}
+	
+	%
+	% anchors
+	%
+	
+	\defineorientationanchors
+	
+	\anchor{text}{
+		\northwest
+		\pgfmathparse{-.5\wd\pgfnodeparttextbox - .25\pgf@x}
+		\pgf@x=\pgfmathresult pt
+		\pgf@y=-.5\ht\pgfnodeparttextbox
+	}
+	
+	%
+	% pin anchors
+	%
+	
+	\anchor{in0}{
+		\northwest
+		\pgfmathparse{0.75*(\pgf@y + \cutinheight)}
+		\pgf@y=\pgfmathresult pt
+		\pgfmathparse{\pgf@x-\leadlen}
+		\pgf@x=\pgfmathresult pt
+	}
+	
+	\anchor{in1}{
+		\northwest
+		\pgfmathparse{0.25*(\pgf@y + \cutinheight)}
+		\pgf@y=\pgfmathresult pt
+		\pgfmathparse{\pgf@x-\leadlen}
+		\pgf@x=\pgfmathresult pt
+	}
+	
+	\anchor{in2}{
+		\northwest
+		\pgfmathparse{0.25*(\pgf@y + \cutinheight)}
+		\pgf@y=-\pgfmathresult pt
+		\pgfmathparse{\pgf@x-\leadlen}
+		\pgf@x=\pgfmathresult pt
+	}
+	
+	\anchor{in3}{
+		\northwest
+		\pgfmathparse{0.75*(\pgf@y + \cutinheight)}
+		\pgf@y=-\pgfmathresult pt
+		\pgfmathparse{\pgf@x-\leadlen}
+		\pgf@x=\pgfmathresult pt
+	}
+	
+	\anchor{sel}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+	
+	\anchor{out}{
+		\northwest
+		\pgf@y=0pt
+		\pgfmathparse{-\pgf@x + \leadlen}
+		\pgf@x=\pgfmathresult pt
+	}
+	
+	%
+	% b anchors
+	%
+	
+	\anchor{bin0}{
+		\northwest
+		\pgfmathparse{0.75*(\pgf@y + \cutinheight)}
+		\pgf@y=\pgfmathresult pt
+	}
+	
+	\anchor{bin1}{
+		\northwest
+		\pgfmathparse{0.25*(\pgf@y + \cutinheight)}
+		\pgf@y=\pgfmathresult pt
+	}
+	
+	\anchor{bin2}{
+		\northwest
+		\pgfmathparse{0.25*(\pgf@y + \cutinheight)}
+		\pgf@y=-\pgfmathresult pt
+	}
+	
+	\anchor{bin3}{
+		\northwest
+		\pgfmathparse{0.75*(\pgf@y + \cutinheight)}
+		\pgf@y=-\pgfmathresult ptt
+	}
+	
+	\anchor{bsel}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+	
+	\anchor{bout}{
+		\northwest
+		\pgf@y=0pt
+		\pgf@x=-\pgf@x
+	}
+	
+	%
+	% outline
+	%
+	
+	\pgf@circ@draw@component{
+		\pgf@circ@scaled@Rlen=\scaledRlen
+		\pgf@circ@setcolor
+		
+		% set up vars
+		\northwest
+		\pgf@circ@res@up = \pgf@y
+		\pgf@circ@res@down = -\pgf@y
+		\pgf@circ@res@right = -\pgf@x
+		\pgf@circ@res@left = \pgf@x
+		
+		% draw shape
+		\pgfscope
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		
+		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down - \cutinheight}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up + \cutinheight}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@down}}
+		\pgfpathclose
+		
+		\pgf@circ@draworfill
+		\endpgfscope
+		
+		\ifpgfcirc@draw@input@leads
+		%input leads
+		% in0
+		\pgfmathparse{0.25*(\pgf@circ@res@up + \cutinheight)}
+		\pgf@circ@res@step=\pgfmathresult pt
+		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{3\pgf@circ@res@step}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{3\pgf@circ@res@step}}
+		
+		% in1
+		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{\pgf@circ@res@step}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@step}}
+		
+		% in2
+		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{-\pgf@circ@res@step}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{-\pgf@circ@res@step}}
+		
+		% in3
+		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{-3\pgf@circ@res@step}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{-3\pgf@circ@res@step}}
+		\fi
+		
+		
+		\ifpgfcirc@draw@output@leads
+		%output leads
+		% out
+		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0pt}}
+		\fi
+		\pgfusepath{draw}
+		
+		%draw text
+		\pgf@circ@text@strokecolor
+		\pgftext[center,x=0pt,y=0.75\pgf@circ@res@up]{\customfont 00}
+		\pgftext[center,x=0pt,y=0.25\pgf@circ@res@up]{\customfont 01}
+		\pgftext[center,x=0pt,y=0.25\pgf@circ@res@down]{\customfont 10}
+		\pgftext[center,x=0pt,y=0.75\pgf@circ@res@down]{\customfont 11}
+	}
+}
 
 \long\def\pgfcirc@declare@ctrlunit#1#2{% #1 name, #2 sc (0) vs mc (1)
 	\pgfdeclareshape{#1}{
