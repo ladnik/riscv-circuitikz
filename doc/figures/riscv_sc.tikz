@@ -5,7 +5,6 @@
 		custyle/.style={color=modblue},
 	}
 	
-	
 	% components
 	\node[regfile, comp] (rf) {Register\\File};
 	\node[instrmem, comp, left=2cm of rf] (im) {Instruction\\Memory};
