@@ -23,8 +23,8 @@
 
 \ctikzset{processor/control/heightsc/.initial=2.5}			% height of sc control unit
 \ctikzset{processor/control/heightmc/.initial=3.5}			% height of mc control unit
-\ctikzset{processor/control/width/.initial=0.9}				% width of sc control unit
-\ctikzset{processor/control/radius/.initial=5}				% border radius fo control unit
+\ctikzset{processor/control/width/.initial=0.9}				% width of control units
+\ctikzset{processor/control/radius/.initial=5}				% border radius fo control units
 
 \ctikzset{processor/arith/height/.initial=0.9}				% height of arith components
 \ctikzset{processor/arith/width/.initial=0.7}				% width of arith components
@@ -1151,7 +1151,7 @@
 
 \pgfcirc@declare@arith{alu}{1}{1}{}
 \pgfcirc@declare@arith{adder}{0}{0}{+}
-\pgfcirc@declare@arith{sub}{0}{0}{-}
+\pgfcirc@declare@arith{subtr}{0}{0}{-}
 
 \pgfdeclareshape{mux}{
 	%

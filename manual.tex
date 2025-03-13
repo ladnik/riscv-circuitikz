@@ -5,16 +5,15 @@
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{circuitikz}
-\usetikzlibrary{calc, riscvproc, positioning, fit, decorations, decorations.pathmorphing}
 \usepackage{ctikzmanutils}
-\usepackage{ifthen}
-\usepackage{xparse}
+\usetikzlibrary{calc, positioning, fit, decorations, decorations.pathmorphing, riscvproc}
+
 \usepackage{showexpl}
-\usepackage{ragged2e}
-\usepackage{pdflscape}
 \usepackage{fancyhdr} 
 \usepackage[dvipsnames]{xcolor}
 \usepackage{lmodern}
+\usepackage{tabularx}
+\usepackage{caption}
 
 \renewcommand{\rmdefault}{lmss} % set font to sans serif
 
@@ -29,22 +28,46 @@
 \parindent=0pt
 \parskip=4pt plus 6pt minus 2pt
 
-% https://tex.stackexchange.com/a/453038
-\fancypagestyle{mylandscape}{
-	\fancyhf{} %Clears the header/footer
-	\fancyfoot{% Footer
-		\makebox[\textwidth][r]{% Right
-			\rlap{\hspace{.75cm}% Push out of margin by \footskip
-				\smash{% Remove vertical height
-					\raisebox{4.87in}{% Raise vertically
-						\rotatebox{90}{\thepage}}}}}}% Rotate counter-clockwise
-	\renewcommand{\headrulewidth}{0pt}% No header rule
-	\renewcommand{\footrulewidth}{0pt}% No footer rule
+\lstset{
+	gobble=6,
+	basicstyle=\ttfamily\small
 }
 
 \definecolor{modblue}{HTML}{288DCC}
 
-\title{RISC-V Processor \Circuitikz{} Library}
+% https://github.com/circuitikz/circuitikz/blob/c94be92df781cfbcba21c6d9c5e95a98976917a5/doc/ctikzmanutils.sty#L108
+\newcommand{\widetwopartbox}[2]{%
+	\leavevmode\null\par\noindent\fbox{\parbox[c]{0.4\linewidth}{#1} \parbox[c]{0.6\linewidth}{\RaggedRight\hbadness=9500 #2}\par\noindent}%
+}
+\NewDocumentCommand{\widecircuitdesc}{s O{1} m m m d() d[]}
+{
+	\widetwopartbox{%
+		\centering
+		\begin{circuitikz}[]
+			\IfBooleanTF{#1}{%
+				\draw (0,0) node[#3,scale=#2, fill=fillcol](N){#5};
+			}{
+				% if it's non-fillable, red should not go through
+				\draw (0,0) node[#3,scale=#2,
+				% fill=red
+				](N){#5};
+			}
+			\IfValueT{#6}{%
+				\foreach \n/\a/\d in {#6} \path(N.\n) \showcoord(\n)<\a:\d>;
+			}
+			\IfValueT{#7}{%
+				\foreach \n/\a/\d in {#7} \path(N-\n) \showcoordb(N-\n)<\a:\d>;
+			}
+		\end{circuitikz}%
+	}{\sloppy
+		{#4, type: node\IfBooleanT{#1}{, fillable}%
+		} (\texttt{node[\detokenize{#3}]\IfValueT{#7}{(N)}\{\detokenize{#5}\}}). \index{#3}%
+		\checkclass{N}%
+	}%
+}
+
+
+\title{A RISC-V Processor Components \Circuitikz{} Library}
 \author{Niklas Ladurner}
 \date{\today}
 
@@ -56,14 +79,19 @@
 	\normalsize \thedate
 \end{center}
 
+\section{Introduction}
+\subsection{Motivation}
+\subsection{Usage}
+
+\newpage
 \section{Component List}
 
 \subsection{Instruction Memory}
 \begin{center}
+	\widecircuitdesc*{instrmem}{Instruction memory}{}(a/180/0.2, rd/0/0.2, ba/135/0.2, brd/45/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}
 			\node[instrmem, align=center] (comp) {Instruction\\Memory};
-
 			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
 			\draw[->, blue] (comp.rd) -- ++(.5, 0) node[right] {rd};
 		\end{circuitikz}
@@ -74,6 +102,7 @@
 
 \subsection{Data Memory}
 \begin{center}
+	\widecircuitdesc*{datamem}{Data Memory}{}(a/180/0.2, wd/180/0.2, rd/0/0.2, clk/90/0.2,we/90/0.2, ba/135/0.2, bwd/225/0.2, brd/45/0.2, bclk/135/0.2,bwe/45/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[datamem, align=center] (comp) {Data\\Memory};
@@ -88,6 +117,15 @@
 
 \subsection{Register File}
 \begin{center}
+	\widecircuitdesc*{regfile}{Register File}{}(
+	a1/180/0.2,ba1/135/0.2,
+	a2/180/0.2,ba2/135/0.05,
+	a3/180/0.2,ba3/225/0.05,
+	wd3/180/0.2,bwd3/225/0.2,
+	rd1/0/0.2,brd1/45/0.2,
+	rd2/0/0.2,brd2/-45/0.2,
+	clk/90/0.2,bclk/135/0.2,
+	we3/90/0.2,bwe3/45/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[regfile, align=center] (comp) {Register\\File};
@@ -95,7 +133,6 @@
 			\draw[->, red] (comp.a2) -- ++(-.5, 0) node[left] {a2};
 			\draw[->, red] (comp.a3) -- ++(-.5, 0) node[left] {a3};
 			\draw[->, red] (comp.wd3) -- ++(-.5, 0) node[left] {wd3};
-
 			\draw[->, red] (comp.clk) -- ++(0, .5) node[above] {clk};
 			\draw[->, red] (comp.we3) -- ++(0, .5) node[above] {we3};
 			\draw[->, blue] (comp.rd1) -- ++(.5, 0) node[right] {rd1};
@@ -106,6 +143,10 @@
 
 \subsection{Extend Unit}
 \begin{center}
+	\widecircuitdesc*{extend}{Extend Unit}{}(
+	in/180/0.2,bin/135/0.2,
+	out/0/0.2,bout/45/0.2,
+	ctrl/90/0.2,bctrl/135/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[extend, align=center] (comp) {Extend};
@@ -118,6 +159,12 @@
 
 \subsection{Arithmetic Logic Unit}
 \begin{center}
+	\widecircuitdesc*{alu}{Arithmetic Logic Unit}{ALU}(
+	a/180/0.2,ba/135/0.2,
+	b/180/0.2,bb/225/0.2,
+	out/0/0.2,bout/-45/0.2,
+	zero/0/0.2,bzero/45/0.2,
+	ctrl/90/0.2,bctrl/45/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[alu, align=center] (comp) {ALU};
@@ -132,6 +179,10 @@
 
 \subsection{Register}
 \begin{center}
+	\widecircuitdesc*{reg}{Register}{}(
+	in/180/0.2,bin/135/0.2,
+	out/0/0.2,bout/45/0.2,
+	clk/90/0.2,bclk/135/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[reg, align=center] (comp) {};
@@ -145,6 +196,10 @@
 
 \subsection{Adder}
 \begin{center}
+	\widecircuitdesc*{adder}{Adder}{}(
+	a/180/0.2,ba/135/0.2,
+	b/180/0.2,bb/225/0.2,
+	out/0/0.2,bout/45/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[adder, align=center] (comp) {};
@@ -157,9 +212,13 @@
 
 \subsection{Subtractor}
 \begin{center}
+	\widecircuitdesc*{subtr}{Subtractor}{}(
+	a/180/0.2,ba/135/0.2,
+	b/180/0.2,bb/225/0.2,
+	out/0/0.2,bout/45/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
-			\node[sub, align=center] (comp) {};
+			\node[subtr, align=center] (comp) {};
 			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
 			\draw[->, red] (comp.b) -- ++(-.5, 0) node[left] {b};
 			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
@@ -169,6 +228,11 @@
 
 \subsection{Multiplexer}
 \begin{center}
+	\widecircuitdesc*{mux}{Multiplexer}{}(
+	in0/180/0.2,bin0/135/0.2,
+	in1/180/0.2,bin1/225/0.2,
+	sel/90/0.2,bsel/45/0.2,
+	out/0/0.2,bout/45/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[mux, align=center] (comp) {};
@@ -182,6 +246,12 @@
 
 \subsection{Multiplexer with 3 inputs}
 \begin{center}
+	\widecircuitdesc*{3mux}{Multiplexer with 3 inputs}{}(
+	in0/180/0.2,bin0/135/0.2,
+	in1/180/0.2,bin1/225/0.025,
+	in2/180/0.2,bin2/225/0.2,
+	sel/90/0.2,bsel/45/0.2,
+	out/0/0.2,bout/45/0.2)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[3mux, align=center] (comp) {};
@@ -196,6 +266,18 @@
 
 \subsection{Single-Cycle Control Unit}
 \begin{center}
+	\widecircuitdesc*{ctrlunitsc}{Single-Cycle Control Unit}{}(
+	op/180/0.5,bop/135/0.025,
+	funct3/180/0.5,bfunct3/135/0.025,
+	funct7/180/0.5,bfunct7/135/0.025,
+	zero/180/0.5,bzero/135/0.025,
+	pcsrc/0/0.5,bpcsrc/45/0.025,
+	resultsrc/0/0.5,bresultsrc/45/0.025,
+	memwrite/0/0.5,bmemwrite/45/0.025,
+	alucontrol/0/0.5,balucontrol/45/0.025,
+	alusrc/0/0.5,balusrc/45/0.025,
+	immsrc/0/0.5,bimmsrc/45/0.025,
+	regwrite/0/0.5,bregwrite/45/0.025)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[ctrlunitsc, align=center] (comp) {Control\\Unit};
@@ -217,6 +299,23 @@
 
 \subsection{Multi-Cycle Control Unit}
 \begin{center}
+		\widecircuitdesc*{ctrlunitmc}{Multi-Cycle Control Unit}{}(
+	clk/90/0.2,bclk/135/0.2,
+	op/180/0.5,bop/135/0.025,
+	funct3/180/0.5,bfunct3/135/0.025,
+	funct7/180/0.5,bfunct7/135/0.025,
+	zero/180/0.5,bzero/135/0.025,
+	pcwrite/180/0.5,bpcwrite/135/0.025,
+	pcwrite/180/0.5,bpcwrite/135/0.025,
+	adrsrc/180/0.5,badrsrc/135/0.025,
+	memwrite/180/0.5,bmemwrite/135/0.025,
+	irwrite/180/0.5,birwrite/135/0.025,
+	resultsrc/0/0.5,bresultsrc/45/0.025,
+	alucontrol/0/0.5,balucontrol/45/0.025,
+	alusrca/0/0.5,balusrca/45/0.025,
+	alusrcb/0/0.5,balusrcb/45/0.025,
+	immsrc/0/0.5,bimmsrc/45/0.025,
+	regwrite/0/0.5,bregwrite/45/0.025)
 	\begin{LTXexample}[varwidth, rframe=]
 		\begin{circuitikz}[]
 			\node[ctrlunitmc, align=center] (comp) {Control\\Unit};
@@ -225,7 +324,7 @@
 			\draw[->, red] (comp.funct7) -- ++(-.5, 0) node[left] {funct7};
 			\draw[->, red] (comp.zero) -- ++(-.5, 0) node[left] {zero};
 			\draw[->, red] (comp.clk) -- ++(0,.5) node[above] {clk};
-			
+
 			\draw[->, blue] (comp.resultsrc) -- ++(.5, 0) node[right] {resultsrc};
 			\draw[->, blue] (comp.memwrite) -- ++(-.5, 0) node[left] {memwrite};
 			\draw[->, blue] (comp.alucontrol) -- ++(.5, 0) node[right] {alucontrol};
@@ -241,52 +340,61 @@
 \end{center}
 
 \section{Keys}
-The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=value}|. E.g. if one whishes to set the line width of all components to 4, the line  \verb|\ctikzset{processor/thickness=4}| would have to be included in the specific circuitikz picture.
+\subsection{\Circuitikz{} keys}
+The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=value}|. E.g. if one whishes to set the line width of all components to 4, the line  \verb|\ctikzset{processor/thickness=4}| would have to be included in the specific circuitikz picture. A list of all \Circuitikz{} keys can be found in Table \ref{tab:keys}. A list of component families can be found in Table \ref{tab:families}.
 
-\begin{figure}[htpb]
-	\begin{tabular}{|llr|}
+\begin{figure}[htbp]
+	\begin{tabularx}{\textwidth}{|lXr|}
 		\hline
-		Key & Description & Default value\\
+		Key                       & Description                                                           & Default value    \\
 		\hline
-		\texttt{scale} & Sets scale for all processor components. & \texttt{1}\\
-		\texttt{thickness} & Sets line width for all processor components. & \texttt{2}\\
-		\texttt{font} & Sets font family for all labels of processor components. & \verb|\rmfamily|\\
-		\texttt{memory/height} & Sets height for all memory components.& \texttt{2}\\
-		\texttt{memory/width} & Sets width for all memory components except \texttt{regfile}. & \texttt{1.25}\\
-		\texttt{control/heightsc} & Sets height for \texttt{ctrlunitsc}. & \texttt{2.5}\\
-		\texttt{control/heightmc} & Sets height for \texttt{ctrlunitmc}. & \texttt{3.5}\\
-		\texttt{control/width} & Sets height for control components. & \texttt{3.5}\\
-		\texttt{control/radius} & Sets the border radius for control components. & \texttt{5}\\
-		\texttt{arith/height} & Sets height for arithmetic components. & \texttt{0.9}\\
-		\texttt{arith/width} & Sets height for arithmetic components. & \texttt{0.7}\\
-		\texttt{arith/slope} & Sets slope for arithmetic components in degrees. & \texttt{15}\\
-		\texttt{extend/height} & Sets height of the big side of the extend unit. & \texttt{0.6}\\
-		\texttt{extend/width} & Sets height of the extend unit. & \texttt{2}\\
-		\texttt{extend/slope} & Sets slope of the extend unit in degrees. & \texttt{7}\\
-		\texttt{mux/slope} & Sets slope of the multiplexers in degrees. & \texttt{15}\\
-		\texttt{misc/smallheight} & Sets height for small components & \texttt{0.65}\\
-		\texttt{misc/smallwidth} & Sets width for small components. Also affects the CLK input triangle. & \texttt{0.3}\\
-		\texttt{misc/leadlen} & Sets length of input and output leads. & \texttt{0.25}\\
+		\texttt{scale}            & Sets scale for all processor components.                              & \texttt{1}       \\
+		\texttt{thickness}        & Sets line width for all processor components.                         & \texttt{2}       \\
+		\texttt{font}             & Sets font family for all labels of processor components.              & \verb|\rmfamily| \\
+		\texttt{memory/height}    & Sets height for all memory components.                                & \texttt{2}       \\
+		\texttt{memory/width}     & Sets width for all memory components except \texttt{regfile}.         & \texttt{1.25}    \\
+		\texttt{control/heightsc} & Sets height for \texttt{ctrlunitsc}.                                  & \texttt{2.5}     \\
+		\texttt{control/heightmc} & Sets height for \texttt{ctrlunitmc}.                                  & \texttt{3.5}     \\
+		\texttt{control/width}    & Sets width for control components.                                    & \texttt{0.9}     \\
+		\texttt{control/radius}   & Sets border radius for control components.                            & \texttt{5}       \\
+		\texttt{arith/height}     & Sets height for arithmetic components.                                & \texttt{0.9}     \\
+		\texttt{arith/width}      & Sets height for arithmetic components.                                & \texttt{0.7}     \\
+		\texttt{arith/slope}      & Sets slope for arithmetic components in degrees.                      & \texttt{15}      \\
+		\texttt{extend/height}    & Sets height for big side of extend components.                        & \texttt{0.6}     \\
+		\texttt{extend/width}     & Sets height for extend components.                                    & \texttt{2}       \\
+		\texttt{extend/slope}     & Sets slope for extend components in degrees.                          & \texttt{7}       \\
+		\texttt{mux/slope}        & Sets slope for multiplexers in degrees.                               & \texttt{15}      \\
+		\texttt{misc/smallheight} & Sets height for small components.                                     & \texttt{0.65}    \\
+		\texttt{misc/smallwidth}  & Sets width for small components. Also affects the CLK input triangle. & \texttt{0.3}     \\
+		\texttt{misc/leadlen}     & Sets length for input and output leads.                               & \texttt{0.25}    \\
 		\hline
-	\end{tabular}
+	\end{tabularx}
+	\label{tab:keys}
+	\captionof{table}{List of \Circuitikz{} keys}
 \end{figure}
 
-\begin{figure}[htpb]
-	\begin{tabular}{|ll|}
+\begin{figure}[htbp]
+	\begin{tabularx}{\textwidth}{|lX|}
 		\hline
-		Component family & Component list\\
+		Component family      & Component list                                        \\
 		\hline
-		memory components &  \texttt{instrmem}, \texttt{datamem}, \texttt{regfile}\\
-		control components &  \texttt{ctrlunitsc}, \texttt{ctrlunitmc}\\
-		arithmetic components &  \texttt{alu}, \texttt{add}, \texttt{sub}\\
-		small components &  \texttt{mux}, \texttt{reg}\\
+		memory components     & \texttt{instrmem}, \texttt{datamem}, \texttt{regfile} \\
+		control components    & \texttt{ctrlunitsc}, \texttt{ctrlunitmc}              \\
+		arithmetic components & \texttt{alu}, \texttt{add}, \texttt{sub}              \\
+		extend components     & \texttt{extend}                                       \\
+		small components      & \texttt{mux}, \texttt{reg}                            \\
 		\hline
-	\end{tabular}
+	\end{tabularx}
+	\label{tab:families}
+	\captionof{table}{List of component families}
 \end{figure}
-\begin{landscape}
-	\thispagestyle{mylandscape}
-	\section{Single-Cycle RISC-V Processor}
-	\begin{center}
+\subsection{Special node keys}
+
+\newpage
+\section{Examples}
+\subsection{Single-Cycle RISC-V Processor}
+\begin{center}
+	\resizebox*{\textwidth}{!}{
 		\begin{circuitikz}
 			\tikzset{
 				label/.style={draw=none, inner sep=1pt, font=\small},
@@ -354,7 +462,7 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\draw[] (im.brd) -- ++(1.15, 0) |- (rf.ba3);
 			\draw[] (im.brd) -- ++(1.15, 0) |- (ext.bin);
 			\draw[] (regpcnext.bout) -- (im.ba);
-			
+
 			% control unit
 			\draw[custyle] (cu.bregwrite) -| (rf.bwe3);
 			\draw[custyle] (cu.bimmsrc) -- ++(2, 0) -- ++(0, -5.5) -| (ext.bctrl);
@@ -395,32 +503,34 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\node[align=left, label, custyle, right=0.25em of cu.bpcsrc, yshift=0.5em] {PCSrc};
 			\node[align=left, label, right=0.25em of addpcplus4.bout, yshift=0.5em] {PCPlus4};
 			\node[align=left, label, right=0.25em of addpctarget.bout, yshift=0.5em] {PCTarget};
-			\node[align=left, label, right=0.25em of im.brd, yshift=0.5em] {Instr};	
+			\node[align=left, label, right=0.25em of im.brd, yshift=0.5em] {Instr};
 		\end{circuitikz}
-	\end{center}
-	
-	
-	\section{Multi-Cycle RISC-V Processor}
-	\begin{center}
+	}
+\end{center}
+
+
+\subsection{Multi-Cycle RISC-V Processor}
+\begin{center}
+	\resizebox*{\textwidth}{!}{
 		\begin{circuitikz}[font=\sffamily]
 			\tikzset{
 				label/.style={draw=none, inner sep=1pt, font=\small},
 				comp/.style={align=center, no leads},
 				custyle/.style={color=modblue},
 			}
-			
+
 			%\node[anchor=center,inner sep=0, scale=1.1] at (0.6,2.25) {\includegraphics[width=1.5\textwidth]{/home/niklas/Pictures/Screenshots/mc.png}};
-			
-			
+
+
 			% components
 			\node[regfile, comp] (rf) {Register\\File};
 			\node[datamem, comp, left=4cm of rf] (dm) {Instr/Data\\Memory};
 			\node[alu,comp, right=3.75cm of rf.rd1, anchor=a] (alu) {ALU};
 
 			\node[ctrlunitmc, comp, custyle, above=2.25cm of rf, xshift=-1.7cm] (cu) {Control\\Unit};
-			
+
 			\node[extend, comp, below=0.5cm of rf] (ext) {Extend};
-			
+
 			% TODO: regs with multiple inputs
 			\node[reg, comp, right=2cm of rf.north, anchor=north, stacks=2] (regrfread) {};
 			\node[3mux, comp, right=1.75cm of rf.brd1, anchor=bin2] (muxalusrca) {};
@@ -431,7 +541,7 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\node[3mux, comp, right=1.5cm of regaluresult.bout, anchor=bin0] (muxresult) {};
 			\node[reg, comp, right=0.75cm of dm.brd, enable input, anchor=bin, yshift=1.5cm, stacks=2.5] (regreaddata) {};
 			\node[reg, comp, right=0.75cm of dm.brd, anchor=bin, yshift=-3.75cm,] (regreaddata2) {};
-			
+
 			% special nodes
 			% clks
 			\node[align=center, label, above=0.25cm of regpcnext.clk] (clk1) {CLK};
@@ -450,11 +560,11 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\draw[] (clkdm) -- (dm.bclk);
 			\node[align=center, label, custyle, above=0.25cm of cu.bclk] (clkcu) {CLK};
 			\draw[custyle] (clkcu) -- (cu.bclk);
-			
+
 			% constants
 			\node[align=right, label, left=0.25cm of muxalusrcb.bin2] (const4) {4};
 			\draw[] (const4) -- (muxalusrcb.bin2);
-			
+
 			% connections
 			% register file
 			\draw[] (rf.brd1) -- (rf.brd1 -| regrfread.bin);
@@ -462,19 +572,19 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\draw[] (rf.brd2 -| regrfread.bout) -- ++(0.5, 0) -- ++(0, -1.75) -- ++(-10.25, 0) |- (dm.bwd);
 			\draw[] (rf.brd1 -| regrfread.bout) -- (muxalusrca.bin2);
 			\draw[] (rf.brd2 -| regrfread.bout) -- (muxalusrcb.bin0);
-			
+
 			% alu
 			\draw[] (muxalusrca.bout) --++(1, 0) |- (alu.ba);
 			\draw[] (muxalusrcb.bout) --++(0.25, 0) |- (alu.bb);
 			\draw[] (alu.bout) -- (regaluresult.bin);
 			\draw[] (alu.bzero) -- ++(1, 0) -- ++(0, 2.85)-- ++(-10.75,0)  |- (cu.bzero) ;
-			
+
 			% instruction/data memory
 			\draw[] (dm.brd) --++(0.3,0) |- (regreaddata2.bin);
 			\draw[] (dm.brd) --++(0.3,0) -- (dm.brd -| regreaddata.bin);
 			\draw[] (regreaddata2.bout) --++(14,0) |- (muxresult.bin1);
 			\draw[] (muxaddrnext.bout) -- (dm.ba);
-			
+
 			\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (cu.bop);
 			\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (cu.bfunct3);
 			\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (cu.bfunct7);
@@ -482,10 +592,10 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (rf.ba2);
 			\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (rf.ba3);
 			\draw[] (dm.brd -| regreaddata.bout) -- ++(1.1, 0) |- (ext.bin);
-			
+
 			% extend unit
 			\draw[] (ext.bout) --++(1.75, 0) |- (muxalusrcb.bin1);
-			
+
 			% control unit
 			\draw[custyle] (cu.bregwrite) -| (rf.bwe3);
 			\draw[custyle] (cu.bimmsrc) -- ++(2.65, 0) -- ++(0, -6.125) -| (ext.bctrl);
@@ -497,7 +607,7 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\draw[custyle] (cu.bmemwrite) -| (dm.bwe);
 			\draw[custyle] (cu.badrsrc) -| (muxaddrnext.bsel);
 			\draw[custyle] (regpcnext.ben) -- ++(0, -0.25) -- ++(-0.4, 0) |- (cu.bpcwrite);
-			
+
 			% additional connections
 			\draw[] (regpcnext.bout) -- (muxaddrnext.bin0);
 			\draw[] (muxresult.bout) -- ++(0.25, 0) -- ++(0, -3.5) -- ++ (-21.5,0) |- (regpcnext.bin);
@@ -509,7 +619,7 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\draw[] (regreaddata.bout) -- ++(6.75, 0) |- (muxalusrca.bin1);
 			\draw[] (regaluresult.bout) -- (muxresult.bin0);
 			\draw[] (alu.bout) -- ++(1,0) |- (muxresult.bin2);
-			
+
 			% labels
 			\node[align=right, label, left=0.25em of alu.ba, yshift=0.5em] {SrcA};
 			\node[align=right, label, left=0.25em of alu.bb, yshift=0.5em] {SrcB};
@@ -519,7 +629,7 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\node[align=left, label, anchor=south west, xshift=0.5cm, rotate=-90] at (rf.brd2 -| regrfread.bout) {WriteData};
 			\node[align=left, label, anchor=west, yshift=0.5em] at (dm.brd -| regreaddata.bout) {Instr};
 			\node[align=left, label, right=0.25em of ext.bout, yshift=0.5em] {ImmExt};
-			
+
 			\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- cu.bop) {\scriptsize{6:0}};
 			\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- cu.bfunct3) {\scriptsize{14:12}};
 			\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- cu.bfunct7) {\scriptsize{30}};
@@ -527,7 +637,7 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- rf.ba2) {\scriptsize{24:20}};
 			\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- rf.ba3) {\scriptsize{11:7}};
 			\node[align=left, label, anchor=west, xshift=1.1cm, yshift=0.5em] at (regreaddata.bout |- ext.bin) {\scriptsize{31:7}};
-			
+
 			\node[align=left, label, custyle, right=0.25em of cu.bregwrite, yshift=0.5em] {RegWrite};
 			\node[align=left, label, custyle, right=0.25em of cu.bimmsrc, yshift=0.5em] {ImmSrc\textsubscript{1:0}};
 			\node[align=left, label, custyle, right=0.25em of cu.balusrca, yshift=0.5em] {ALUSrcA\textsubscript{1:0}};
@@ -537,7 +647,7 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\node[align=right, label, custyle, left=0.25em of cu.birwrite, yshift=0.5em] {IRWrite};
 			\node[align=right, label, custyle, left=0.25em of cu.bmemwrite, yshift=0.5em] {MemWrite};
 			\node[align=right, label, custyle, left=0.25em of cu.badrsrc, yshift=0.5em] {AdrSrc};
-			\node[align=right, label, custyle, left=0.25em of cu.pcwrite, yshift=0.5em] {PCWrite};
+			\node[align=right, label, custyle, left=0.25em of cu.bpcwrite, yshift=0.5em] {PCWrite};
 			\node[align=right, label, left=0.25cm of regpcnext.bin, yshift=0.5em] {PCNext};
 			\node[align=left, label, right=0.25em of muxaddrnext.bout, yshift=0.5em] {Adr};
 			\node[align=left, label, right=0em of regpcnext.bout, yshift=0.5em] {PC};
@@ -546,9 +656,9 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 			\node[align=left, label, right=0em of regaluresult.bout, yshift=0.5em] {ALUOut};
 			\node[align=left, label, left=0.5cm of muxalusrca.bin2, yshift=0.5em] {A};
 		\end{circuitikz}
-	\end{center}
+	}
+\end{center}
 
-\end{landscape}
 \end{document}
 
 \end{document}
