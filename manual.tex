@@ -79,265 +79,106 @@
 	\normalsize \thedate
 \end{center}
 
+\tableofcontents
+
 \section{Introduction}
 \subsection{Motivation}
 \subsection{Usage}
 
 \newpage
 \section{Component List}
+\subsection{Memory Components}
+\widecircuitdesc*{instrmem}{Instruction memory}{}(a/180/0.2, rd/0/0.2, ba/135/0.2, brd/45/0.2)
 
-\subsection{Instruction Memory}
-\begin{center}
-	\widecircuitdesc*{instrmem}{Instruction memory}{}(a/180/0.2, rd/0/0.2, ba/135/0.2, brd/45/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}
-			\node[instrmem, align=center] (comp) {Instruction\\Memory};
-			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
-			\draw[->, blue] (comp.rd) -- ++(.5, 0) node[right] {rd};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
+\widecircuitdesc*{datamem}{Data Memory}{}(a/180/0.2, wd/180/0.2, rd/0/0.2, clk/90/0.2,we/90/0.2, ba/135/0.2, bwd/225/0.2, brd/45/0.2, bclk/135/0.2,bwe/45/0.2)
+
+\widecircuitdesc*{regfile}{Register File}{}(
+a1/180/0.2,ba1/135/0.2,
+a2/180/0.2,ba2/135/0.05,
+a3/180/0.2,ba3/225/0.05,
+wd3/180/0.2,bwd3/225/0.2,
+rd1/0/0.2,brd1/45/0.2,
+rd2/0/0.2,brd2/-45/0.2,
+clk/90/0.2,bclk/135/0.2,
+we3/90/0.2,bwe3/45/0.2)
+
+\subsection{Miscellaneous Components}
+\widecircuitdesc*{extend}{Extend Unit}{}(
+in/180/0.2,bin/135/0.2,
+out/0/0.2,bout/45/0.2,
+ctrl/90/0.2,bctrl/135/0.2)
+
+\widecircuitdesc*{reg}{Register}{}(
+in/180/0.2,bin/135/0.2,
+out/0/0.2,bout/45/0.2,
+clk/90/0.2,bclk/135/0.2)
+
+\subsection{Arithmetic Components}
+\widecircuitdesc*{alu}{Arithmetic Logic Unit}{ALU}(
+a/180/0.2,ba/135/0.2,
+b/180/0.2,bb/225/0.2,
+out/0/0.2,bout/-45/0.2,
+zero/0/0.2,bzero/45/0.2,
+ctrl/90/0.2,bctrl/45/0.2)
 
 
+\widecircuitdesc*{adder}{Adder}{}(
+a/180/0.2,ba/135/0.2,
+b/180/0.2,bb/225/0.2,
+out/0/0.2,bout/45/0.2)
 
-\subsection{Data Memory}
-\begin{center}
-	\widecircuitdesc*{datamem}{Data Memory}{}(a/180/0.2, wd/180/0.2, rd/0/0.2, clk/90/0.2,we/90/0.2, ba/135/0.2, bwd/225/0.2, brd/45/0.2, bclk/135/0.2,bwe/45/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[datamem, align=center] (comp) {Data\\Memory};
-			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
-			\draw[->, red] (comp.wd) -- ++(-.5, 0) node[left] {wd};
-			\draw[->, red] (comp.clk) -- ++(0, .5) node[above] {clk};
-			\draw[->, red] (comp.we) -- ++(0, .5) node[above] {we};
-			\draw[->, blue] (comp.rd) -- ++(.5, 0) node[right] {rd};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
 
-\subsection{Register File}
-\begin{center}
-	\widecircuitdesc*{regfile}{Register File}{}(
-	a1/180/0.2,ba1/135/0.2,
-	a2/180/0.2,ba2/135/0.05,
-	a3/180/0.2,ba3/225/0.05,
-	wd3/180/0.2,bwd3/225/0.2,
-	rd1/0/0.2,brd1/45/0.2,
-	rd2/0/0.2,brd2/-45/0.2,
-	clk/90/0.2,bclk/135/0.2,
-	we3/90/0.2,bwe3/45/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[regfile, align=center] (comp) {Register\\File};
-			\draw[->, red] (comp.a1) -- ++(-.5, 0) node[left] {a1};
-			\draw[->, red] (comp.a2) -- ++(-.5, 0) node[left] {a2};
-			\draw[->, red] (comp.a3) -- ++(-.5, 0) node[left] {a3};
-			\draw[->, red] (comp.wd3) -- ++(-.5, 0) node[left] {wd3};
-			\draw[->, red] (comp.clk) -- ++(0, .5) node[above] {clk};
-			\draw[->, red] (comp.we3) -- ++(0, .5) node[above] {we3};
-			\draw[->, blue] (comp.rd1) -- ++(.5, 0) node[right] {rd1};
-			\draw[->, blue] (comp.rd2) -- ++(.5, 0) node[right] {rd2};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
+\widecircuitdesc*{subtr}{Subtractor}{}(
+a/180/0.2,ba/135/0.2,
+b/180/0.2,bb/225/0.2,
+out/0/0.2,bout/45/0.2)
 
-\subsection{Extend Unit}
-\begin{center}
-	\widecircuitdesc*{extend}{Extend Unit}{}(
-	in/180/0.2,bin/135/0.2,
-	out/0/0.2,bout/45/0.2,
-	ctrl/90/0.2,bctrl/135/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[extend, align=center] (comp) {Extend};
-			\draw[->, red] (comp.in) -- ++(-.5, 0) node[left] {in};
-			\draw[->, red] (comp.ctrl) -- ++(0, .5) node[above] {ctrl};
-			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
+\subsection{Multiplexers}
+\widecircuitdesc*{mux}{Multiplexer}{}(
+in0/180/0.2,bin0/135/0.2,
+in1/180/0.2,bin1/225/0.2,
+sel/90/0.2,bsel/45/0.2,
+out/0/0.2,bout/45/0.2)
 
-\subsection{Arithmetic Logic Unit}
-\begin{center}
-	\widecircuitdesc*{alu}{Arithmetic Logic Unit}{ALU}(
-	a/180/0.2,ba/135/0.2,
-	b/180/0.2,bb/225/0.2,
-	out/0/0.2,bout/-45/0.2,
-	zero/0/0.2,bzero/45/0.2,
-	ctrl/90/0.2,bctrl/45/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[alu, align=center] (comp) {ALU};
-			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
-			\draw[->, red] (comp.b) -- ++(-.5, 0) node[left] {b};
-			\draw[->, red] (comp.ctrl) -- ++(0, .5) node[above] {ctrl};
-			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
-			\draw[->, blue] (comp.zero) -- ++(.5, 0) node[right] {zero};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
+\widecircuitdesc*{3mux}{Multiplexer with 3 inputs}{}(
+in0/180/0.2,bin0/135/0.2,
+in1/180/0.2,bin1/225/0.025,
+in2/180/0.2,bin2/225/0.2,
+sel/90/0.2,bsel/45/0.2,
+out/0/0.2,bout/45/0.2)
 
-\subsection{Register}
-\begin{center}
-	\widecircuitdesc*{reg}{Register}{}(
-	in/180/0.2,bin/135/0.2,
-	out/0/0.2,bout/45/0.2,
-	clk/90/0.2,bclk/135/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[reg, align=center] (comp) {};
-			\draw[->, red] (comp.in) -- ++(-.5, 0) node[left] {in};
-			\draw[->, red] (comp.clk) -- ++(0, .5) node[above] {clk};
-			%\draw[->, red] (comp.en) -- ++(0, -.5) node[below] {en};
-			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
+\subsection{Control Units}
+\widecircuitdesc*{ctrlunitsc}{Single-Cycle Control Unit}{}(
+op/180/0.5,bop/135/0.025,
+funct3/180/0.5,bfunct3/135/0.025,
+funct7/180/0.5,bfunct7/135/0.025,
+zero/180/0.5,bzero/135/0.025,
+pcsrc/0/0.5,bpcsrc/45/0.025,
+resultsrc/0/0.5,bresultsrc/45/0.025,
+memwrite/0/0.5,bmemwrite/45/0.025,
+alucontrol/0/0.5,balucontrol/45/0.025,
+alusrc/0/0.5,balusrc/45/0.025,
+immsrc/0/0.5,bimmsrc/45/0.025,
+regwrite/0/0.5,bregwrite/45/0.025)
 
-\subsection{Adder}
-\begin{center}
-	\widecircuitdesc*{adder}{Adder}{}(
-	a/180/0.2,ba/135/0.2,
-	b/180/0.2,bb/225/0.2,
-	out/0/0.2,bout/45/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[adder, align=center] (comp) {};
-			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
-			\draw[->, red] (comp.b) -- ++(-.5, 0) node[left] {b};
-			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
+\widecircuitdesc*{ctrlunitmc}{Multi-Cycle Control Unit}{}(
+clk/90/0.2,bclk/135/0.2,
+op/180/0.5,bop/135/0.025,
+funct3/180/0.5,bfunct3/135/0.025,
+funct7/180/0.5,bfunct7/135/0.025,
+zero/180/0.5,bzero/135/0.025,
+pcwrite/180/0.5,bpcwrite/135/0.025,
+pcwrite/180/0.5,bpcwrite/135/0.025,
+adrsrc/180/0.5,badrsrc/135/0.025,
+memwrite/180/0.5,bmemwrite/135/0.025,
+irwrite/180/0.5,birwrite/135/0.025,
+resultsrc/0/0.5,bresultsrc/45/0.025,
+alucontrol/0/0.5,balucontrol/45/0.025,
+alusrca/0/0.5,balusrca/45/0.025,
+alusrcb/0/0.5,balusrcb/45/0.025,
+immsrc/0/0.5,bimmsrc/45/0.025,
+regwrite/0/0.5,bregwrite/45/0.025)
 
-\subsection{Subtractor}
-\begin{center}
-	\widecircuitdesc*{subtr}{Subtractor}{}(
-	a/180/0.2,ba/135/0.2,
-	b/180/0.2,bb/225/0.2,
-	out/0/0.2,bout/45/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[subtr, align=center] (comp) {};
-			\draw[->, red] (comp.a) -- ++(-.5, 0) node[left] {a};
-			\draw[->, red] (comp.b) -- ++(-.5, 0) node[left] {b};
-			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
-
-\subsection{Multiplexer}
-\begin{center}
-	\widecircuitdesc*{mux}{Multiplexer}{}(
-	in0/180/0.2,bin0/135/0.2,
-	in1/180/0.2,bin1/225/0.2,
-	sel/90/0.2,bsel/45/0.2,
-	out/0/0.2,bout/45/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[mux, align=center] (comp) {};
-			\draw[->, red] (comp.in0) -- ++(-.5, 0) node[left] {in0};
-			\draw[->, red] (comp.in1) -- ++(-.5, 0) node[left] {in1};
-			\draw[->, red] (comp.sel) -- ++(0, .5) node[above] {sel};
-			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
-
-\subsection{Multiplexer with 3 inputs}
-\begin{center}
-	\widecircuitdesc*{3mux}{Multiplexer with 3 inputs}{}(
-	in0/180/0.2,bin0/135/0.2,
-	in1/180/0.2,bin1/225/0.025,
-	in2/180/0.2,bin2/225/0.2,
-	sel/90/0.2,bsel/45/0.2,
-	out/0/0.2,bout/45/0.2)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[3mux, align=center] (comp) {};
-			\draw[->, red] (comp.in0) -- ++(-.5, 0) node[left] {in0};
-			\draw[->, red] (comp.in1) -- ++(-.5, 0) node[left] {in1};
-			\draw[->, red] (comp.in2) -- ++(-.5, 0) node[left] {in2};
-			\draw[->, red] (comp.sel) -- ++(0, .5) node[above] {sel};
-			\draw[->, blue] (comp.out) -- ++(.5, 0) node[right] {out};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
-
-\subsection{Single-Cycle Control Unit}
-\begin{center}
-	\widecircuitdesc*{ctrlunitsc}{Single-Cycle Control Unit}{}(
-	op/180/0.5,bop/135/0.025,
-	funct3/180/0.5,bfunct3/135/0.025,
-	funct7/180/0.5,bfunct7/135/0.025,
-	zero/180/0.5,bzero/135/0.025,
-	pcsrc/0/0.5,bpcsrc/45/0.025,
-	resultsrc/0/0.5,bresultsrc/45/0.025,
-	memwrite/0/0.5,bmemwrite/45/0.025,
-	alucontrol/0/0.5,balucontrol/45/0.025,
-	alusrc/0/0.5,balusrc/45/0.025,
-	immsrc/0/0.5,bimmsrc/45/0.025,
-	regwrite/0/0.5,bregwrite/45/0.025)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[ctrlunitsc, align=center] (comp) {Control\\Unit};
-			\draw[->, red] (comp.op) -- ++(-.5, 0) node[left] {op};
-			\draw[->, red] (comp.funct3) -- ++(-.5, 0) node[left] {funct3};
-			\draw[->, red] (comp.funct7) -- ++(-.5, 0) node[left] {funct7};
-			\draw[->, red] (comp.zero) -- ++(-.5, 0) node[left] {zero};
-
-			\draw[->, blue] (comp.pcsrc) -- ++(.5, 0) node[right] {pcsrc};
-			\draw[->, blue] (comp.resultsrc) -- ++(.5, 0) node[right] {resultsrc};
-			\draw[->, blue] (comp.memwrite) -- ++(.5, 0) node[right] {memwrite};
-			\draw[->, blue] (comp.alucontrol) -- ++(.5, 0) node[right] {alucontrol};
-			\draw[->, blue] (comp.alusrc) -- ++(.5, 0) node[right] {alusrc};
-			\draw[->, blue] (comp.immsrc) -- ++(.5, 0) node[right] {immsrc};
-			\draw[->, blue] (comp.regwrite) -- ++(.5, 0) node[right] {regwrite};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
-
-\subsection{Multi-Cycle Control Unit}
-\begin{center}
-		\widecircuitdesc*{ctrlunitmc}{Multi-Cycle Control Unit}{}(
-	clk/90/0.2,bclk/135/0.2,
-	op/180/0.5,bop/135/0.025,
-	funct3/180/0.5,bfunct3/135/0.025,
-	funct7/180/0.5,bfunct7/135/0.025,
-	zero/180/0.5,bzero/135/0.025,
-	pcwrite/180/0.5,bpcwrite/135/0.025,
-	pcwrite/180/0.5,bpcwrite/135/0.025,
-	adrsrc/180/0.5,badrsrc/135/0.025,
-	memwrite/180/0.5,bmemwrite/135/0.025,
-	irwrite/180/0.5,birwrite/135/0.025,
-	resultsrc/0/0.5,bresultsrc/45/0.025,
-	alucontrol/0/0.5,balucontrol/45/0.025,
-	alusrca/0/0.5,balusrca/45/0.025,
-	alusrcb/0/0.5,balusrcb/45/0.025,
-	immsrc/0/0.5,bimmsrc/45/0.025,
-	regwrite/0/0.5,bregwrite/45/0.025)
-	\begin{LTXexample}[varwidth, rframe=]
-		\begin{circuitikz}[]
-			\node[ctrlunitmc, align=center] (comp) {Control\\Unit};
-			\draw[->, red] (comp.op) -- ++(-.5, 0) node[left] {op};
-			\draw[->, red] (comp.funct3) -- ++(-.5, 0) node[left] {funct3};
-			\draw[->, red] (comp.funct7) -- ++(-.5, 0) node[left] {funct7};
-			\draw[->, red] (comp.zero) -- ++(-.5, 0) node[left] {zero};
-			\draw[->, red] (comp.clk) -- ++(0,.5) node[above] {clk};
-
-			\draw[->, blue] (comp.resultsrc) -- ++(.5, 0) node[right] {resultsrc};
-			\draw[->, blue] (comp.memwrite) -- ++(-.5, 0) node[left] {memwrite};
-			\draw[->, blue] (comp.alucontrol) -- ++(.5, 0) node[right] {alucontrol};
-			\draw[->, blue] (comp.alusrca) -- ++(.5, 0) node[right] {alusrca};
-			\draw[->, blue] (comp.alusrcb) -- ++(.5, 0) node[right] {alusrcb};
-			\draw[->, blue] (comp.immsrc) -- ++(.5, 0) node[right] {immsrc};
-			\draw[->, blue] (comp.regwrite) -- ++(.5, 0) node[right] {regwrite};
-			\draw[->, blue] (comp.irwrite) -- ++(-.5, 0) node[left] {irwrite};
-			\draw[->, blue] (comp.adrsrc) -- ++(-.5, 0) node[left] {adrsrc};
-			\draw[->, blue] (comp.pcwrite) -- ++(-.5, 0) node[left] {pcwrite};
-		\end{circuitikz}
-	\end{LTXexample}
-\end{center}
 
 \section{Keys}
 \subsection{\Circuitikz{} keys}

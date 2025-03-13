@@ -1,23 +1,23 @@
 # TEXS := $(wildcard *.tex)
 TEXS := manual.tex
 
-.PHONY: all clean distclean force
+.PHONY: all clean distclean #force
 
-FORCE := force
+#FORCE := force
 
 # compile a specific .tex file to PDF and clean auxiliary files
-%.pdf: %.tex $(FORCE)
+%.pdf: %.tex #$(FORCE)
 	TEXINPUTS=../beamer//: pdflatex -interaction=nonstopmode -shell-escape $<
 
 # compile all .tex files
 all: $(TEXS:.tex=.pdf)
 
-$(FORCE):
-	@touch $(FORCE)
+#$(FORCE):
+#	@touch $(FORCE)
 	
 # clean auxiliary files
 clean:
-	rm -f *.aux *.log *.out *.toc *.nav *.snm *.vrb *.synctex.gz *.fls *.fdb_latexmk
+	rm -f *.aux *.log *.out *.toc *.nav *.snm *.vrb *.synctex.gz *.fls *.fdb_latexmk *.bak* *.tmp
 
 # clean all output files
 distclean: clean
