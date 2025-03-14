@@ -8,7 +8,7 @@
 	% components
 	\node[regfile, comp] (rf) {Register\\File};
 	\node[instrmem, comp, left=2cm of rf] (im) {Instruction\\Memory};
-	\node[alu,comp, right=2.25cm of rf.rd1, anchor=a] (alu) {ALU};
+	\node[alu,comp, right=2.25cm of rf.rd1, anchor=a] (alu) {};
 	\node[datamem,comp, right=6.25cm of rf] (dm) {Data\\Memory};
 	
 	\node[ctrlunitsc, comp, custyle, above=1cm of rf, xshift=-0.75cm] (cu) {Control\\Unit};

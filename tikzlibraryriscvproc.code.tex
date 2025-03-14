@@ -1150,15 +1150,15 @@
 
 			%draw text
 			\pgf@circ@text@strokecolor
-			\pgftext[center,x=0.25\pgf@circ@res@right,y=0pt]{\customfont \textbf{#4}}
+			\pgftext[center,x=0.25\pgf@circ@res@right,y=0pt]{\customfont #4}
 		}
 	}
 
 }
 
-\pgfcirc@declare@arith{alu}{1}{1}{}
-\pgfcirc@declare@arith{adder}{0}{0}{+}
-\pgfcirc@declare@arith{subtr}{0}{0}{-}
+\pgfcirc@declare@arith{alu}{1}{1}{ALU}
+\pgfcirc@declare@arith{adder}{0}{0}{\textbf{+}}
+\pgfcirc@declare@arith{subtr}{0}{0}{\textbf{-}}
 
 % TODO: dynamic number of mux inputs
 

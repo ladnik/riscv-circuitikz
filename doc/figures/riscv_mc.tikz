@@ -8,7 +8,7 @@
 	% components
 	\node[regfile, comp] (rf) {Register\\File};
 	\node[datamem, comp, left=4cm of rf] (dm) {Instr/Data\\Memory};
-	\node[alu,comp, right=3.75cm of rf.rd1, anchor=a] (alu) {ALU};
+	\node[alu,comp, right=3.75cm of rf.rd1, anchor=a] (alu) {};
 	
 	\node[ctrlunitmc, comp, custyle, above=2.25cm of rf, xshift=-1.7cm] (cu) {Control\\Unit};
 	
@@ -140,4 +140,7 @@
 	\node[align=left, label, right=0em of regdmread2.bout, yshift=0.5em] {Data};
 	\node[align=left, label, right=0em of regaluresult.bout, yshift=0.5em] {ALUOut};
 	\node[align=left, label, left=0.5cm of muxalusrca.bin2, yshift=0.5em] {A};
+	\coordinate (resultlabel) at ($(muxresult.bout) + (0.25, -3.5)$);
+	\node[align=right, label, left=0.5em of resultlabel, yshift=0.5em] {Result};
+	
 \end{circuitikz}
