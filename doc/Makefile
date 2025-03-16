@@ -6,7 +6,7 @@ TEXS := manual.tex
 #FORCE := force
 
 # compile a specific .tex file to PDF and clean auxiliary files
-%.pdf: %.tex figures/*.tikz
+%.pdf: %.tex figures/*.tikz ../tikzlibraryriscvproc.code.tex
 	TEXINPUTS=../: pdflatex -interaction=nonstopmode -shell-escape $<
 	
 # compile all .tex files

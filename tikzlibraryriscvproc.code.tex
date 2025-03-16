@@ -54,7 +54,7 @@
 }
 
 
-\ctikzset{processor/reg/stacks/.initial = 1}					% default mux height is 1 * smallHeight
+\ctikzset{processor/reg/stacks/.initial = 1}				% default mux height is smallHeight
 \tikzset{
 	stacks/.style args={#1}{circuitikz/processor/reg/stacks=#1}
 }
@@ -659,7 +659,7 @@
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
 		\pgf@x=\ctikzvalof{\ctikzclass/misc/leadlen}\pgf@circ@scaled@Rlen
 	}
-	
+
 	\saveddimen\stackheight
 	{
 		\pgf@x=\ctikzvalof{\ctikzclass/misc/smallheight}\pgf@circ@scaled@Rlen
@@ -1548,10 +1548,10 @@
 	%
 	% setup
 	%
-	
+
 	\savedmacro{\ctikzclass}{\edef\ctikzclass{processor}}
 	\saveddimen{\scaledRlen}{\pgfmathsetlength{\pgf@x}{\ctikzvalof{\ctikzclass/scale}\pgf@circ@Rlen}}
-	
+
 	% define northwest as scaled endpoint
 	\savedanchor\northwest{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
@@ -1562,18 +1562,18 @@
 		\pgfmathparse{(.5*\pgf@y+2*\pgf@x*tan(\slopeval))*2.5}
 		\pgf@y=\pgfmathresult pt
 	}
-	
+
 	\saveddimen\leadlen
 	{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
 		\pgf@x=\ctikzvalof{\ctikzclass/misc/leadlen}\pgf@circ@scaled@Rlen
 	}
-	
+
 	\saveddimen\slopeval
 	{
 		\pgf@x=\ctikzvalof{processor/mux/slope} pt
 	}
-	
+
 	\saveddimen\cutinheight
 	{
 		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
@@ -1581,29 +1581,29 @@
 		\pgfmathparse{1.5*\ctikzvalof{processor/misc/smallwidth}*\pgf@circ@scaled@Rlen*tan(\slopeval)}
 		\pgf@x=\pgfmathresult pt
 	}
-	
+
 	\saveddimen\inputs
 	{
 		\pgf@x=\ctikzvalof{processor/mux/inputs} pt
 	}
-	
+
 	%
 	% anchors
 	%
-	
+
 	\defineorientationanchors
-	
+
 	\anchor{text}{
 		\northwest
 		\pgfmathparse{-.5\wd\pgfnodeparttextbox - .25\pgf@x}
 		\pgf@x=\pgfmathresult pt
 		\pgf@y=-.5\ht\pgfnodeparttextbox
 	}
-	
+
 	%
 	% pin anchors
 	%
-	
+
 	\anchor{in0}{
 		\northwest
 		\pgfmathparse{0.75*(\pgf@y + \cutinheight)}
@@ -1611,7 +1611,7 @@
 		\pgfmathparse{\pgf@x-\leadlen}
 		\pgf@x=\pgfmathresult pt
 	}
-	
+
 	\anchor{in1}{
 		\northwest
 		\pgfmathparse{0.25*(\pgf@y + \cutinheight)}
@@ -1619,7 +1619,7 @@
 		\pgfmathparse{\pgf@x-\leadlen}
 		\pgf@x=\pgfmathresult pt
 	}
-	
+
 	\anchor{in2}{
 		\northwest
 		\pgfmathparse{0.25*(\pgf@y + \cutinheight)}
@@ -1627,7 +1627,7 @@
 		\pgfmathparse{\pgf@x-\leadlen}
 		\pgf@x=\pgfmathresult pt
 	}
-	
+
 	\anchor{in3}{
 		\northwest
 		\pgfmathparse{0.75*(\pgf@y + \cutinheight)}
@@ -1635,120 +1635,120 @@
 		\pgfmathparse{\pgf@x-\leadlen}
 		\pgf@x=\pgfmathresult pt
 	}
-	
+
 	\anchor{sel}{
 		\northwest
 		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
 		\pgf@y=\pgfmathresult pt
 		\pgf@x=0 pt
 	}
-	
+
 	\anchor{out}{
 		\northwest
 		\pgf@y=0pt
 		\pgfmathparse{-\pgf@x + \leadlen}
 		\pgf@x=\pgfmathresult pt
 	}
-	
+
 	%
 	% b anchors
 	%
-	
+
 	\anchor{bin0}{
 		\northwest
 		\pgfmathparse{0.75*(\pgf@y + \cutinheight)}
 		\pgf@y=\pgfmathresult pt
 	}
-	
+
 	\anchor{bin1}{
 		\northwest
 		\pgfmathparse{0.25*(\pgf@y + \cutinheight)}
 		\pgf@y=\pgfmathresult pt
 	}
-	
+
 	\anchor{bin2}{
 		\northwest
 		\pgfmathparse{0.25*(\pgf@y + \cutinheight)}
 		\pgf@y=-\pgfmathresult pt
 	}
-	
+
 	\anchor{bin3}{
 		\northwest
 		\pgfmathparse{0.75*(\pgf@y + \cutinheight)}
 		\pgf@y=-\pgfmathresult ptt
 	}
-	
+
 	\anchor{bsel}{
 		\northwest
 		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
 		\pgf@y=\pgfmathresult pt
 		\pgf@x=0 pt
 	}
-	
+
 	\anchor{bout}{
 		\northwest
 		\pgf@y=0pt
 		\pgf@x=-\pgf@x
 	}
-	
+
 	%
 	% outline
 	%
-	
+
 	\pgf@circ@draw@component{
 		\pgf@circ@scaled@Rlen=\scaledRlen
 		\pgf@circ@setcolor
-		
+
 		% set up vars
 		\northwest
 		\pgf@circ@res@up = \pgf@y
 		\pgf@circ@res@down = -\pgf@y
 		\pgf@circ@res@right = -\pgf@x
 		\pgf@circ@res@left = \pgf@x
-		
+
 		% draw shape
 		\pgfscope
 		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
-		
+
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down - \cutinheight}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up + \cutinheight}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@down}}
 		\pgfpathclose
-		
+
 		\pgf@circ@draworfill
 		\endpgfscope
-		
+
 		\ifpgfcirc@draw@input@leads
-		%input leads
-		% in0
-		\pgfmathparse{0.25*(\pgf@circ@res@up + \cutinheight)}
-		\pgf@circ@res@step=\pgfmathresult pt
-		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{3\pgf@circ@res@step}}
-		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{3\pgf@circ@res@step}}
-		
-		% in1
-		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{\pgf@circ@res@step}}
-		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@step}}
-		
-		% in2
-		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{-\pgf@circ@res@step}}
-		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{-\pgf@circ@res@step}}
-		
-		% in3
-		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{-3\pgf@circ@res@step}}
-		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{-3\pgf@circ@res@step}}
+			%input leads
+			% in0
+			\pgfmathparse{0.25*(\pgf@circ@res@up + \cutinheight)}
+			\pgf@circ@res@step=\pgfmathresult pt
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{3\pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{3\pgf@circ@res@step}}
+
+			% in1
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{\pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@step}}
+
+			% in2
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{-\pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{-\pgf@circ@res@step}}
+
+			% in3
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{-3\pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{-3\pgf@circ@res@step}}
 		\fi
-		
-		
+
+
 		\ifpgfcirc@draw@output@leads
-		%output leads
-		% out
-		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
-		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0pt}}
+			%output leads
+			% out
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0pt}}
 		\fi
 		\pgfusepath{draw}
-		
+
 		%draw text
 		\pgf@circ@text@strokecolor
 		\pgftext[center,x=0pt,y=0.75\pgf@circ@res@up]{\customfont 00}
@@ -1758,7 +1758,7 @@
 	}
 }
 
-\long\def\pgfcirc@declare@ctrlunit#1#2{% #1 name, #2 sc (0) vs mc (1)
+\long\def\pgfcirc@declare@ctrlunit#1#2{% #1 name, #2 sc (0) vs mc (1) vs pl (2)
 	\pgfdeclareshape{#1}{
 		%
 		% setup
@@ -1795,10 +1795,10 @@
 
 		\saveddimen\realheight
 		{
-			\ifnum#2=0
-				\pgf@x=\ctikzvalof{\ctikzclass/control/heightsc}\pgf@circ@scaled@Rlen
-			\else
+			\ifnum#2=1
 				\pgf@x=\ctikzvalof{\ctikzclass/control/heightmc}\pgf@circ@scaled@Rlen
+			\else
+				\pgf@x=\ctikzvalof{\ctikzclass/control/heightsc}\pgf@circ@scaled@Rlen
 			\fi
 			\pgf@x=0.5\pgf@x
 		}
@@ -1812,9 +1812,9 @@
 		\anchor{text}{
 			\pgf@x=-.5\wd\pgfnodeparttextbox
 			\ifnum#2=0
-			\pgfmathparse{0.5*\realheight-0.5\ht\pgfnodeparttextbox}
+				\pgfmathparse{0.5*\realheight-0.5\ht\pgfnodeparttextbox}
 			\else
-			\pgfmathparse{0.75*\realheight-0.5\ht\pgfnodeparttextbox}
+				\pgfmathparse{0.75*\realheight-0.5\ht\pgfnodeparttextbox}
 			\fi
 			\pgf@y=\pgfmathresult pt
 		}
@@ -1842,10 +1842,14 @@
 			\pgf@y=-0.5\pgf@y
 		}
 		\anchor{zero}{
-			\northwest
-			\pgfmathparse{\pgf@x-\leadlen}
-			\pgf@x=\pgfmathresult pt
-			\pgf@y=-0.75\pgf@y
+			\ifnum#2<2
+				\northwest
+				\pgfmathparse{\pgf@x-\leadlen}
+				\pgf@x=\pgfmathresult pt
+				\pgf@y=-0.75\pgf@y
+			\else
+				\pgfpointtoorigin
+			\fi
 		}
 		\anchor{clk}{
 			\ifnum#2=1
@@ -1861,118 +1865,159 @@
 
 		\anchor{pcsrc}{
 			\ifnum#2=0
-			\northwest
-			\pgfmathparse{-\pgf@x+\leadlen}
-			\pgf@x=\pgfmathresult pt
-			\pgf@y=0.75\pgf@y
+				\northwest
+				\pgfmathparse{-\pgf@x+\leadlen}
+				\pgf@x=\pgfmathresult pt
+				\pgf@y=0.75\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{resultsrc}{
 			\northwest
 			\pgfmathparse{-\pgf@x+\leadlen}
 			\pgf@x=\pgfmathresult pt
-			\pgf@y=0.5\pgf@y
+			\ifnum#2<2
+				\pgf@y=0.5\pgf@y
+			\else
+				\pgf@y=0.625\pgf@y
+			\fi
 		}
 		\anchor{memwrite}{
-			\ifnum#2=0
 			\northwest
 			\pgfmathparse{-\pgf@x+\leadlen}
 			\pgf@x=\pgfmathresult pt
-			\pgf@y=0.25\pgf@y
+			\ifnum#2=0
+				\pgf@y=0.25\pgf@y
 			\else
-			\northwest
-			\pgfmathparse{\pgf@x-\leadlen}
-			\pgf@x=\pgfmathresult pt
-			\pgf@y=0.75\pgf@y
+				\ifnum#2=1
+				\pgf@x=-\pgfmathresult pt
+					\pgf@y=0.75\pgf@y
+				\else
+					\pgf@y=0.375\pgf@y
+				\fi
 			\fi
 		}
 		\anchor{alucontrol}{
-			\ifnum#2=0
 			\northwest
 			\pgfmathparse{-\pgf@x+\leadlen}
 			\pgf@x=\pgfmathresult pt
+			\ifnum#2=0
 			\pgf@y=0 pt
 			\else
-			\northwest
-			\pgfmathparse{-\pgf@x+\leadlen}
-			\pgf@x=\pgfmathresult pt
-			\pgf@y=0.25\pgf@y
+			\ifnum#2=1
+				\pgf@y=0.25\pgf@y
+			\else
+				\pgf@y=-0.375\pgf@y
+				\fi
 			\fi
 		}
 		\anchor{alusrc}{
-			\ifnum#2=0
 			\northwest
 			\pgfmathparse{-\pgf@x+\leadlen}
 			\pgf@x=\pgfmathresult pt
+			\ifnum#2=0
 			\pgf@y=-0.25\pgf@y
 			\else
-			\pgfpointtoorigin
+			\ifnum#2=1
+				\pgfpointtoorigin
+			\else
+				\pgf@y=-0.625\pgf@y
+			\fi
 			\fi
 		}
 		\anchor{alusrca}{
 			\ifnum#2=1
-			\northwest
-			\pgfmathparse{-\pgf@x+\leadlen}
-			\pgf@x=\pgfmathresult pt
-			\pgf@y=-0.25\pgf@y
+				\northwest
+				\pgfmathparse{-\pgf@x+\leadlen}
+				\pgf@x=\pgfmathresult pt
+				\pgf@y=-0.25\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{alusrcb}{
 			\ifnum#2=1
-			\northwest
-			\pgfmathparse{-\pgf@x+\leadlen}
-			\pgf@x=\pgfmathresult pt
-			\pgf@y=0 pt
+				\northwest
+				\pgfmathparse{-\pgf@x+\leadlen}
+				\pgf@x=\pgfmathresult pt
+				\pgf@y=0 pt
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{immsrc}{
 			\northwest
 			\pgfmathparse{-\pgf@x+\leadlen}
 			\pgf@x=\pgfmathresult pt
-			\pgf@y=-0.5\pgf@y
+			\ifnum#2<2
+				\pgf@y=-0.5\pgf@y
+			\else
+				\pgf@y=-0.875\pgf@y
+			\fi
 		}
 		\anchor{regwrite}{
 			\northwest
 			\pgfmathparse{-\pgf@x+\leadlen}
 			\pgf@x=\pgfmathresult pt
-			\pgf@y=-0.75\pgf@y
+			\ifnum#2<2
+				\pgf@y=-0.75\pgf@y
+			\else
+				\pgf@y=0.875\pgf@y
+			\fi
 		}
 		\anchor{irwrite}{
 			\ifnum#2=1
-			\northwest
-			\pgfmathparse{\pgf@x-\leadlen}
-			\pgf@x=\pgfmathresult pt
-			\pgf@y=0.5\pgf@y
+				\northwest
+				\pgfmathparse{\pgf@x-\leadlen}
+				\pgf@x=\pgfmathresult pt
+				\pgf@y=0.5\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{adrsrc}{
 			\ifnum#2=1
-			\northwest
-			\pgfmathparse{\pgf@x-\leadlen}
-			\pgf@x=\pgfmathresult pt
+				\northwest
+				\pgfmathparse{\pgf@x-\leadlen}
+				\pgf@x=\pgfmathresult pt
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{pcwrite}{
 			\ifnum#2=1
-			\northwest
-			\pgfmathparse{\pgf@x-\leadlen}
-			\pgf@x=\pgfmathresult pt
-			\pgf@y=1.25\pgf@y
+				\northwest
+				\pgfmathparse{\pgf@x-\leadlen}
+				\pgf@x=\pgfmathresult pt
+				\pgf@y=1.25\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
-		
+
+		\anchor{branch}{
+			\ifnum#2=2
+				\northwest
+				\pgfmathparse{\pgf@x-\leadlen}
+				\pgf@x=-\pgfmathresult pt
+				\pgf@y=-0.125\pgf@y
+			\else
+				\pgfpointtoorigin
+			\fi
+		}
+
+		\anchor{jump}{
+			\ifnum#2=2
+				\northwest
+				\pgfmathparse{\pgf@x-\leadlen}
+				\pgf@x=-\pgfmathresult pt
+				\pgf@y=0.125\pgf@y
+			\else
+				\pgfpointtoorigin
+			\fi
+		}
+
 		%
 		% b anchors
 		%
@@ -1990,8 +2035,12 @@
 			\pgf@y=-0.5\pgf@y
 		}
 		\anchor{bzero}{
+			\ifnum#2<2
 			\northwest
 			\pgf@y=-0.75\pgf@y
+			\else
+			\pgfpointtoorigin
+			\fi
 		}
 		\anchor{bclk}{
 			\ifnum#2=1
@@ -2016,43 +2065,57 @@
 		}
 		\anchor{bresultsrc}{
 			\northwest
-			\pgf@x=-\pgf@x
+\pgf@x=-\pgf@x
+			\ifnum#2<2
 			\pgf@y=0.5\pgf@y
+			\else
+			\pgf@y=0.625\pgf@y
+			\fi
 		}
 		\anchor{bmemwrite}{
-			\ifnum#2=0
 			\northwest
 			\pgf@x=-\pgf@x
+			\ifnum#2=0
 			\pgf@y=0.25\pgf@y
 			\else
-			\northwest
+			\ifnum#2=1
+			\pgf@x=-\pgf@x
 			\pgf@y=0.75\pgf@y
+			\else
+			\pgf@y=0.375\pgf@y
+			\fi
 			\fi
 		}
 		\anchor{balucontrol}{
-			\ifnum#2=0
 			\northwest
-\pgf@x=-\pgf@x
+			\pgf@x=-\pgf@x
+			\ifnum#2=0
 			\pgf@y=0 pt
 			\else
-			\northwest
-\pgf@x=-\pgf@x
+			\ifnum#2=1
 			\pgf@y=0.25\pgf@y
+			\else
+			\pgf@y=-0.375\pgf@y
+			\fi
 			\fi
 		}
 		\anchor{balusrc}{
-			\ifnum#2=0
 			\northwest
-\pgf@x=-\pgf@x
+			\pgf@x=-\pgf@x
+			\ifnum#2=0
 			\pgf@y=-0.25\pgf@y
 			\else
+			\ifnum#2=1
 			\pgfpointtoorigin
+			\else
+			\pgf@y=-0.625\pgf@y
+			\fi
 			\fi
 		}
 		\anchor{balusrca}{
 			\ifnum#2=1
 			\northwest
-\pgf@x=-\pgf@x
+			\pgf@x=-\pgf@x
 			\pgf@y=-0.25\pgf@y
 			\else
 			\pgfpointtoorigin
@@ -2061,7 +2124,7 @@
 		\anchor{balusrcb}{
 			\ifnum#2=1
 			\northwest
-\pgf@x=-\pgf@x
+			\pgf@x=-\pgf@x
 			\pgf@y=0 pt
 			\else
 			\pgfpointtoorigin
@@ -2069,13 +2132,21 @@
 		}
 		\anchor{bimmsrc}{
 			\northwest
-\pgf@x=-\pgf@x
+			\pgf@x=-\pgf@x
+			\ifnum#2<2
 			\pgf@y=-0.5\pgf@y
+			\else
+			\pgf@y=-0.875\pgf@y
+			\fi
 		}
 		\anchor{bregwrite}{
 			\northwest
-\pgf@x=-\pgf@x
+			\pgf@x=-\pgf@x
+			\ifnum#2<2
 			\pgf@y=-0.75\pgf@y
+			\else
+			\pgf@y=0.875\pgf@y
+			\fi
 		}
 		\anchor{birwrite}{
 			\ifnum#2=1
@@ -2100,6 +2171,27 @@
 			\pgfpointtoorigin
 			\fi
 		}
+		
+		\anchor{bbranch}{
+			\ifnum#2=2
+			\northwest
+			\pgf@x=-\pgf@x
+			\pgf@y=-0.125\pgf@y
+			\else
+			\pgfpointtoorigin
+			\fi
+		}
+		
+		\anchor{bjump}{
+			\ifnum#2=2
+			\northwest
+			\pgf@x=-\pgf@x
+			\pgf@y=0.125\pgf@y
+			\else
+			\pgfpointtoorigin
+			\fi
+		}
+		
 		%
 		% outline
 		%
@@ -2131,7 +2223,7 @@
 			\pgfpathclose
 
 			\pgf@circ@draworfill
-			
+
 			\pgfsetcornersarced{\pgfpoint{0pt}{0pt}}
 			\ifnum#2=1
 				% draw CLK input
@@ -2153,7 +2245,7 @@
 			\pgf@circ@res@left = \pgf@x
 
 			\ifpgfcirc@draw@input@leads
-				%input leads
+				%input leads	
 				% op
 				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left - \leadlen}{0pt}}
 				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0pt}}
@@ -2163,8 +2255,11 @@
 				% funct7
 				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.5\pgf@circ@res@down}}
 				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.5\pgf@circ@res@down}}
-				% zero
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.75\pgf@circ@res@down}}
+
+				\ifnum#2<2
+					% zero
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.75\pgf@circ@res@down}}
+				\fi
 				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.75\pgf@circ@res@down}}
 			\fi
 
@@ -2172,41 +2267,71 @@
 				%output leads
 				% pcsrc
 				\ifnum#2=0
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.75\pgf@circ@res@up}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.75\pgf@circ@res@up}}
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.75\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.75\pgf@circ@res@up}}
 				\fi
-				% resultsrc
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.5\pgf@circ@res@up}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.5\pgf@circ@res@up}}
-				% memwrite
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.25\pgf@circ@res@up}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.25\pgf@circ@res@up}}
-				% alucontrol
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0pt}}
-				% alusrc
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.25\pgf@circ@res@down}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.25\pgf@circ@res@down}}
-				% immsrc
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.5\pgf@circ@res@down}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.5\pgf@circ@res@down}}
-				% regwrite
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.75\pgf@circ@res@down}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.75\pgf@circ@res@down}}
-				
+
+				\ifnum#2<2
+					% resultsrc
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.5\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.5\pgf@circ@res@up}}
+					% memwrite
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.25\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.25\pgf@circ@res@up}}
+					% alucontrol
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0pt}}
+					% alusrc
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.25\pgf@circ@res@down}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.25\pgf@circ@res@down}}
+					% immsrc
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.5\pgf@circ@res@down}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.5\pgf@circ@res@down}}
+					% regwrite
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.75\pgf@circ@res@down}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.75\pgf@circ@res@down}}
+				\fi
+
 				\ifnum#2=1
-				% irwrite
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.5\pgf@circ@res@up}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.5\pgf@circ@res@up}}
-				% memwrite
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.75\pgf@circ@res@up}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.75\pgf@circ@res@up}}
-				% adrsrc
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{\pgf@circ@res@up}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
-				% pcwrite
-				\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{1.25\pgf@circ@res@up}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{1.25\pgf@circ@res@up}}
+					% irwrite
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.5\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.5\pgf@circ@res@up}}
+					% memwrite
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.75\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.75\pgf@circ@res@up}}
+					% adrsrc
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
+					% pcwrite
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{1.25\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{1.25\pgf@circ@res@up}}
+				\fi
+
+				\ifnum#2=2
+					% regwrite
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.875\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.875\pgf@circ@res@up}}
+					% resultsrc
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.625\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.625\pgf@circ@res@up}}
+					% memwrite
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.375\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.375\pgf@circ@res@up}}
+					% jump
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.125\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.125\pgf@circ@res@up}}
+					% branch
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.125\pgf@circ@res@down}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.125\pgf@circ@res@down}}
+					% alucontrol
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.375\pgf@circ@res@down}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.375\pgf@circ@res@down}}
+					% alusrc
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.625\pgf@circ@res@down}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.625\pgf@circ@res@down}}
+					% immsrc
+					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.875\pgf@circ@res@down}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.875\pgf@circ@res@down}}
 				\fi
 			\fi
 			\pgfusepath{draw}
@@ -2216,13 +2341,17 @@
 			\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{\customfont op}
 			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.25\pgf@circ@res@down]{\customfont funct3}
 			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@down]{\customfont funct7\textsubscript{5}}
-			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\customfont zero}
+
+			\ifnum#2<2
+				\pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\customfont zero}
+			\fi
 		}
 	}
 }
 
 \pgfcirc@declare@ctrlunit{ctrlunitsc}{0}
 \pgfcirc@declare@ctrlunit{ctrlunitmc}{1}
+\pgfcirc@declare@ctrlunit{ctrlunitpl}{2}
 
 
 \makeatother
