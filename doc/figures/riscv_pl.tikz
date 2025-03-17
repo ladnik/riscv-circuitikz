@@ -1,0 +1,213 @@
+\begin{circuitikz}
+	\tikzset{
+		label/.style={draw=none, inner sep=1pt, font=\small},
+		comp/.style={align=center, no leads},
+		custyle/.style={color=modblue},
+	}
+
+	% components
+	\node[regfile, comp] (rf) at (-4.5, 0) {Register\\File};
+	\node[instrmem, comp, left=2.5cm of rf] (im) {Instruction\\Memory};
+	\node[alu,comp, right=6cm of rf.rd1, anchor=a] (alu) {};
+	\node[datamem,comp, right=11cm of rf] (dm) {Data\\Memory};
+
+	\node[ctrlunitpl, comp, custyle, above=1cm of rf, xshift=-0.75cm] (cu) {Control\\Unit};
+
+	\node[extend, comp, below=1.5cm of rf] (ext) {Extend};
+
+	% TODO: align mux.out and alu.b
+	\node[mux, comp, right=4.5cm of rf.rd2, anchor=in0] (muxalusrc) {};
+	\node[reg, comp, left=0.3cm of im.a] (regpcnext) {};
+	\node[mux, comp, left=1.25cm of regpcnext] (muxpcnext) {};
+	\node[3mux, comp, right=1.75cm of dm.rd, anchor=in1] (muxresult) {};
+
+	\node[adder, comp, anchor=b] (addpctarget) at (ext.out -| muxalusrc.bout) {};
+	\node[adder, comp, anchor=a] (addpcplus4) at (ext.in -| im.a) {};
+
+	% register
+	\node[reg, comp, stacks=6.5, right=0.25cm of im.north east, anchor=north west] (regfetch) {};
+	\node[reg, comp, no clock, stacks=6.5, right=2.75cm of rf.north east, anchor=north west] (regdecode) {};
+	\node[reg, comp, no clock, stacks=6.5, right=8cm of rf.north east, anchor=north west] (regexecute) {};
+	\node[reg, comp, no clock, stacks=8, right=4.5cm of regexecute.south east, anchor=south west] (regmem) {};
+
+	\node[reg, comp, custyle, stacks=5, above=0cm of regdecode.north, anchor=south] (regdecodecu) {};
+	\node[reg, comp, custyle, stacks=5, above=0cm of regexecute.north, anchor=south] (regexecutecu) {};
+	\node[reg, comp, custyle, stacks=3.5, above=0cm of regmem.north, anchor=south] (regmemcu) {};
+
+	%special nodes
+	% clks
+	\node[align=center, label, above=0.25cm of regpcnext.clk] (clk1) {CLK};
+	\draw[] (clk1) -- (regpcnext.clk);
+	\node[align=center, label, above=0.25cm of regfetch.clk] (clk2) {CLK};
+	\draw[] (clk2) -- (regfetch.clk);
+	\node[align=center, label, custyle, above=0.25cm of regdecodecu.clk] (clk3) {CLK};
+	\draw[custyle] (clk3) -- (regdecodecu.clk);
+	\node[align=center, label, custyle, above=0.25cm of regexecutecu.clk] (clk4) {CLK};
+	\draw[custyle] (clk4) -- (regexecutecu.clk);
+	\node[align=center, label, custyle, above=0.25cm of regmemcu.clk] (clk5) {CLK};
+	\draw[custyle] (clk5) -- (regmemcu.clk);
+
+	\node[align=center, label, above=0.25cm of rf.bclk] (clkrf) {CLK};
+	\draw[] (clkrf) -- (rf.bclk);
+	\node[align=center, label, above=0.25cm of dm.bclk] (clkdm) {CLK};
+	\draw[] (clkdm) -- (dm.bclk);
+
+	% constants
+	\node[align=right, label, left=0.25cm of addpcplus4.bb] (const4) {4};
+	\draw[] (const4) -- (addpcplus4.bb);
+
+	% connections
+	% register file
+	\draw[] (rf.brd1) -- (rf.brd1 -| regdecode.bin);
+	\draw[] (regdecode.bout |- alu.ba) -- (alu.ba);
+	\draw[] (rf.brd2) -- (rf.brd2 -| regdecode.bin);
+	\draw[] (regdecode.bout |- muxalusrc.bin0) -- (muxalusrc.bin0);
+	\draw[] (muxalusrc.bin0) -- ++(-0.5, 0) |- (regexecute.bin |- dm.bwd);
+	\draw[] (regexecute.bout |- dm.bwd) -- (dm.bwd);
+
+	% alu
+	\draw[] (muxalusrc.bout) |- (alu.bb);
+	\draw[] (alu.bout) -| (regexecute.bin);
+	\draw[] (regexecute.bout |- alu.bout) -- ++(2, 0) |- (dm.ba);
+
+	\node[] (anchoraluresult) at ($(regexecute.bout |- alu.bout) + (2,2)$) {};
+	\draw[] (regexecute.bout |- alu.bout) -| (anchoraluresult.center) -| (regmem.bin);
+	\draw[] (anchoraluresult.center -| regmem.bout) -| ($(muxresult.bin0) + (-0.25, 0)$) -- (muxresult.bin0);
+
+	% data memory
+	\draw[] (dm.brd) -- (dm.brd-| regmem.bin);
+	\draw[] (regmem.bout) |- (muxresult.bin1);
+	\draw[] (muxresult.bout) -- ++(0.25,0) -- ++(0,-6) -| ($(rf.bwd3) + (-1.5, 0)$) node[align=center,above,pos=0.02] {ResultW} -- (rf.bwd3);
+
+	% extend unit
+	\draw[] (ext.bout) -- (ext.bout -| regdecode.bin);
+	\draw[] (regdecode.bout |- addpctarget.bb) -- (addpctarget.bb);
+	\draw[] (muxalusrc.bin1) -- ++(-0.25, 0)|- (addpctarget.bb);
+
+	% instruction memory
+	\draw[] (im.brd) -- (im.brd -| regfetch.bin);
+	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) |- (cu.bop);
+	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) |- (cu.bfunct3);
+	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) |- (cu.bfunct7);
+	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) |- (rf.ba1);
+	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) |- (rf.ba2);
+	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) |- (ext.bin);
+	\draw[] (regpcnext.bout) -- node[align=center, label, above, pos=0.5] {PCF} (im.ba);
+
+	\node[] (a3anchor) at ($(regfetch.bout) + (1, -2.75)$) {};
+	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) -- (a3anchor.center);
+	\draw[] (a3anchor.center) -- (a3anchor.center -| regdecode.bin);
+	\draw[] (a3anchor.center -| regdecode.bout) -- (a3anchor.center -| regexecute.bin);
+	\draw[] (a3anchor.center -| regexecute.bout) -- (a3anchor.center -| regmem.bin);
+	\draw[] (a3anchor.center -| regmem.bout) -- ++(0.5, 0)  -- ++(0, -3.25)  -| ($(rf.ba3) + (-1.25, 0)$) -- (rf.ba3);
+
+	% control unit
+	\draw[custyle] (cu.bregwrite) -| (regdecodecu.bin);
+	\draw[custyle] (cu.bresultsrc) -| (regdecodecu.bin);
+	\draw[custyle] (cu.bmemwrite) -| (regdecodecu.bin);
+	\draw[custyle] (cu.bjump) -| (regdecodecu.bin);
+	\draw[custyle] (cu.bbranch) -| (regdecodecu.bin);
+	\draw[custyle] (cu.balucontrol) -| (regdecodecu.bin);
+	\draw[custyle] (cu.balusrc) -| (regdecodecu.bin);
+	\draw[custyle] (cu.bimmsrc) -- ++(2,0) |- ($(ext.ctrl) + (0, 1.5)$) -- (ext.ctrl);
+
+	\node[or port, custyle, right=2cm of regdecodecu.north east, yshift=1cm, scale=0.5, rotate=180] (or1) {};
+	\node[and port, custyle, right=0cm of or1.in 2, anchor=bout, scale=0.5, rotate=180, no leads] (and1) {};
+
+	\draw[custyle] (cu.bregwrite -| regdecodecu.bout) -| (regexecutecu.bin);
+	\draw[custyle] (cu.bresultsrc -| regdecodecu.bout) -| (regexecutecu.bin);
+	\draw[custyle] (cu.bmemwrite -| regdecodecu.bout) -| (regexecutecu.bin);
+	\draw[custyle] (cu.bjump -| regdecodecu.bout) -| (or1.in 1);
+	\draw[custyle] (cu.bbranch -| regdecodecu.bout) -| ($(and1.bin 1) + (0.125, 0)$)-- (and1.bin 1);
+	\draw[custyle] (cu.balucontrol -| regdecodecu.bout) -| (alu.bctrl);
+	\draw[custyle] (cu.balusrc -| regdecodecu.bout) -| (muxalusrc.bsel);
+	\draw[custyle] (or1.out) -| (muxpcnext.bsel);
+	\draw[] (alu.bzero) -- ++(0.125, 0) |- node[label, align=right,below,pos=0.6] {ZeroE} (and1.bin 2);
+
+	\draw[custyle] (cu.bregwrite -| regexecutecu.bout) -| (regmemcu.bin);
+	\draw[custyle] (cu.bresultsrc -| regexecutecu.bout) -| (regmemcu.bin);
+	\draw[custyle] (cu.bmemwrite -| regexecutecu.bout) -| (dm.bwe);
+
+	\draw[custyle] (cu.bregwrite -| regmemcu.bout) -- (cu.bregwrite -| muxresult.bsel) -- ++(0, 2) -| (rf.bwe3);
+	\draw[custyle] (cu.bresultsrc -| regmemcu.bout) -| (muxresult.bsel);
+
+	% additional connections
+	\draw[] (addpcplus4.bout) -- ++(0.25,0) -- ++(0, -1.25)  -| node[align=right, label, above, pos=0.1] {PCPlus4F} ($(muxpcnext.bin0) + (-0.25, 0)$) -- (muxpcnext.bin0);
+	\draw[] (addpcplus4.bout) -- (addpcplus4.bout -| regfetch.bin);
+	\draw[] (addpcplus4.bout -| regfetch.bout) -- (addpcplus4.bout -| regdecode.bin);
+	\draw[] (addpcplus4.bout -| regdecode.bout) -- (addpcplus4.bout -| regexecute.bin);
+	\draw[] (addpcplus4.bout -| regexecute.bout) -- (addpcplus4.bout -| regmem.bin);
+	\draw[] (addpcplus4.bout -| regmem.bout) -| ($(muxresult.bin2) + (-0.25, 0)$) -- (muxresult.bin2);
+	\draw[] (regpcnext.bout) -- ++(0.3, 0) |- (addpcplus4.ba);
+	\draw[] (regpcnext.bout) -- ++(0.3, 0) |- (regfetch.bin |- addpctarget.ba);
+	\draw[] (regfetch.bout |- addpctarget.ba) -- (regdecode.bin |- addpctarget.ba);
+	\draw[] (regdecode.bout |- addpctarget.ba) -- (addpctarget.ba);
+	\draw[] (addpctarget.bout) -- ++(0.25, 0) -- ++(0, -2.75) -| node[align=right, label, above, pos=0.025] {PCTargetE}($(muxpcnext.bin1) + (-0.75, 0)$) -- (muxpcnext.bin1);
+	\draw[] (muxpcnext.bout) -- (regpcnext.bin) node[align=center, label, above, pos=0.5] {PCF'};
+
+	% labels
+	% fetch
+	% -
+
+	% decode
+	\node[label, align=left, anchor=west, yshift=0.5em] at (im.brd -| regfetch.bout) {InstrD};
+	\node[label, custyle, align=left, right=0.5em of cu.bregwrite, yshift=0.5em] {RegWriteD};
+	\node[label, custyle, align=left, right=0.5em of cu.bresultsrc, yshift=0.5em] {ResultSrcD\textsubscript{1:0}};
+	\node[label, custyle, align=left, right=0.5em of cu.bmemwrite, yshift=0.5em] {MemWriteD};
+	\node[label, custyle, align=left, right=0.5em of cu.bjump, yshift=0.5em] {JumpD};
+	\node[label, custyle, align=left, right=0.5em of cu.bbranch, yshift=0.5em] {BranchD};
+	\node[label, custyle, align=left, right=0.5em of cu.balucontrol, yshift=0.5em] {ALUControlD\textsubscript{2:0}};
+	\node[label, custyle, align=left, right=0.5em of cu.balusrc, yshift=0.5em] {ALUSrcD};
+	\node[label, custyle, align=left, right=0.5em of cu.bimmsrc, yshift=0.5em] {ImmSrcD\textsubscript{1:0}};
+
+	\node[align=right, anchor=east, label, yshift=0.5em] at ($(a3anchor.center -| regdecode.bin) + (-0.25em, 0)$) {RdD};
+	\node[align=right, anchor=east, label, yshift=0.5em] at ($(addpctarget.ba -| regdecode.bin) + (-0.25em, 0)$) {PCD};
+	\node[align=right, anchor=east, label, yshift=0.5em] at ($(ext.bout-| regdecode.bin) + (-0.25em, 0)$) {ImmExtD};
+	\node[align=right, anchor=east, label, yshift=0.5em] at ($(addpcplus4.bout-| regdecode.bin) + (-0.25em, 0)$) {PCPlus4D};
+
+	\node[align=right, label, left=0.25em of cu.bop, yshift=0.5em] {\scriptsize{6:0}};
+	\node[align=right, label, left=0.25em of cu.bfunct3, yshift=0.5em] {\scriptsize{14:12}};
+	\node[align=right, label, left=0.25em of cu.bfunct7, yshift=0.5em] {\scriptsize{30}};
+	\node[align=right, label, left=0.25em of rf.ba1, yshift=0.5em] {\scriptsize{19:15}};
+	\node[align=right, label, left=0.25em of rf.ba2, yshift=0.5em] {\scriptsize{24:20}};
+	\node[align=right, label, xshift=-0.25em, yshift=0.5em, anchor=east] at (ext.bin |- a3anchor.center) {\scriptsize{11:7}};
+	\node[align=right, label, left=0.25em of ext.bin, yshift=0.5em] {\scriptsize{31:7}};
+
+	% execute
+	\node[align=right, label, left=0.25em of alu.ba, yshift=0.5em] {SrcAE};
+	\node[align=right, label, left=0.25em of alu.bb, yshift=0.5em] {SrcBE};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bregwrite -| regdecodecu.bout) + (0.25em, 0)$) {RegWriteE};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bresultsrc -| regdecodecu.bout) + (0.25em, 0)$) {ResultSrcE\textsubscript{1:0}};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bmemwrite -| regdecodecu.bout) + (0.25em, 0)$) {MemWriteE};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bjump -| regdecodecu.bout) + (0.25em, 0)$) {JumpE};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bbranch -| regdecodecu.bout) + (0.25em, 0)$) {BranchE};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.balucontrol -| regdecodecu.bout) + (0.25em, 0)$) {ALUControlE\textsubscript{2:0}};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.balusrc -| regdecodecu.bout) + (0.25em, 0)$) {ALUSrcE};
+
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(rf.brd1 -| regdecode.bout) + (0.25em, 0)$) {RD1E};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(rf.brd2 -| regdecode.bout) + (0.25em, 0)$) {RD2E};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(a3anchor.center -| regdecode.bout) + (0.25em, 0)$) {RdE};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(addpctarget.ba -| regdecode.bout) + (0.25em, 0)$) {PCE};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(ext.bout-| regdecode.bout) + (0.25em, 0)$) {ImmExtE};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(addpcplus4.bout-| regdecode.bout) + (0.25em, 0)$) {PCPlus4E};
+	\node[label, custyle, align=right, anchor=east, yshift=0.5em] at ($(or1.out) + (0.25em, 0)$) {PCSrcE};
+
+	% memory
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bregwrite -| regexecutecu.bout) + (0.25em, 0)$) {RegWriteM};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bresultsrc -| regexecutecu.bout) + (0.25em, 0)$) {ResultSrcM\textsubscript{1:0}};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bmemwrite -| regexecutecu.bout) + (0.25em, 0)$) {MemWriteM};
+
+
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(alu.bout -| regexecute.bout) + (0.25em, 0)$) {ALUResultM};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(dm.bwd -| regexecute.bout) + (0.25em, 0)$) {WriteDataM};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(a3anchor.center -| regexecute.bout) + (0.25em, 0)$) {RdM};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(addpcplus4.bout-| regexecute.bout) + (0.25em, 0)$) {PCPlus4D};
+
+	% writeback
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bregwrite -| regmemcu.bout) + (0.25em, 0)$) {RegWriteW};
+	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bresultsrc -| regmemcu.bout) + (0.25em, 0)$) {ResultSrcW\textsubscript{1:0}};
+
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(dm.brd -| regmem.bout) + (0.25em, 0)$) {ReadDataW};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(a3anchor.center -| regmem.bout) + (0.25em, 0)$) {RdW};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(addpcplus4.bout-| regmem.bout) + (0.25em, 0)$) {PCPlus4W};
+\end{circuitikz}
