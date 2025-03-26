@@ -63,9 +63,16 @@
 \newif\ifpgfcirc@draw@enable@input\pgfcirc@draw@enable@inputfalse
 \ctikzset{processor draw enable input/.is choice}
 \ctikzset{processor draw enable input/true/.code={\pgfcirc@draw@enable@inputtrue}}
-\ctikzset{processor draw enable inputs/false/.code={\pgfcirc@draw@enable@inputfalse}}
+\ctikzset{processor draw enable input/false/.code={\pgfcirc@draw@enable@inputfalse}}
 \tikzset{enable input/.code={\pgfcirc@draw@enable@inputtrue}}
 \tikzset{no enable input/.code={\pgfcirc@draw@enable@inputfalse}}
+
+\newif\ifpgfcirc@draw@clock\pgfcirc@draw@clocktrue
+\ctikzset{processor draw clock/.is choice}
+\ctikzset{processor draw clock/true/.code={\pgfcirc@draw@clocktrue}}
+\ctikzset{processor draw clock/false/.code={\pgfcirc@draw@clockfalse}}
+\tikzset{clock/.code={\pgfcirc@draw@clocktrue}}
+\tikzset{no clock/.code={\pgfcirc@draw@clockfalse}}
 
 \newif\ifpgfcirc@draw@input@leads\pgfcirc@draw@input@leadstrue
 \ctikzset{processor draw input leads/.is choice}
@@ -358,13 +365,15 @@
 		\pgf@circ@draworfill
 		\endpgfscope
 
-		% draw CLK input
-		\pgfmathparse{0.5*\clkwidth}
-		\pgf@circ@res@step = \pgfmathresult pt
-		\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left - \pgf@circ@res@step}{\pgf@circ@res@up}}
-		\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up - \pgf@circ@res@step}}
-		\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left + \pgf@circ@res@step}{\pgf@circ@res@up}}
-		\pgfpathclose
+		\ifpgfcirc@draw@clock
+			% draw CLK input
+			\pgfmathparse{0.5*\clkwidth}
+			\pgf@circ@res@step = \pgfmathresult pt
+			\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left - \pgf@circ@res@step}{\pgf@circ@res@up}}
+			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up - \pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left + \pgf@circ@res@step}{\pgf@circ@res@up}}
+			\pgfpathclose
+		\fi
 
 		\ifpgfcirc@draw@input@leads
 			%input leads
@@ -376,9 +385,11 @@
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.6\pgf@circ@res@down}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.6\pgf@circ@res@down}}
 
-			% clk
-			\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up + \leadlen}}
-			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up}}
+			\ifpgfcirc@draw@clock
+				% clk
+				\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up + \leadlen}}
+				\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up}}
+			\fi
 
 			% we
 			\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@right}{\pgf@circ@res@up + \leadlen}}
@@ -572,13 +583,16 @@
 		\pgf@circ@draworfill
 		\endpgfscope
 
-		% draw CLK input
-		\pgfmathparse{0.5*\clkwidth}
-		\pgf@circ@res@step = \pgfmathresult pt
-		\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left - \pgf@circ@res@step}{\pgf@circ@res@up}}
-		\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up - \pgf@circ@res@step}}
-		\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left + \pgf@circ@res@step}{\pgf@circ@res@up}}
-		\pgfpathclose
+
+		\ifpgfcirc@draw@clock
+			% draw CLK input
+			\pgfmathparse{0.5*\clkwidth}
+			\pgf@circ@res@step = \pgfmathresult pt
+			\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left - \pgf@circ@res@step}{\pgf@circ@res@up}}
+			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up - \pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left + \pgf@circ@res@step}{\pgf@circ@res@up}}
+			\pgfpathclose
+		\fi
 
 
 		\ifpgfcirc@draw@input@leads
@@ -600,9 +614,11 @@
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.6\pgf@circ@res@down}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.6\pgf@circ@res@down}}
 
-			% clk
-			\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up +\leadlen}}
-			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up}}
+			\ifpgfcirc@draw@clock
+				% clk
+				\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up +\leadlen}}
+				\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up}}
+			\fi
 
 			% we3
 			\pgfpathmoveto{\pgfpoint{0}{\pgf@circ@res@up + \leadlen}}
@@ -759,12 +775,14 @@
 		\pgf@circ@draworfill
 		\endpgfscope
 
-		% draw clk input
-		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
-		\pgfmathparse{\pgf@circ@res@up - \pgf@circ@res@right}
-		\pgf@circ@res@step=\pgfmathresult pt
-		\pgfpathlineto{\pgfpoint{0pt}{\pgf@circ@res@step}}
-		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
+		\ifpgfcirc@draw@clock
+			% draw clk input
+			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
+			\pgfmathparse{\pgf@circ@res@up - \pgf@circ@res@right}
+			\pgf@circ@res@step=\pgfmathresult pt
+			\pgfpathlineto{\pgfpoint{0pt}{\pgf@circ@res@step}}
+			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
+		\fi
 
 		\ifpgfcirc@draw@input@leads
 			%input leads
@@ -1891,7 +1909,7 @@
 				\pgf@y=0.25\pgf@y
 			\else
 				\ifnum#2=1
-				\pgf@x=-\pgfmathresult pt
+					\pgf@x=-\pgfmathresult pt
 					\pgf@y=0.75\pgf@y
 				\else
 					\pgf@y=0.375\pgf@y
@@ -1903,12 +1921,12 @@
 			\pgfmathparse{-\pgf@x+\leadlen}
 			\pgf@x=\pgfmathresult pt
 			\ifnum#2=0
-			\pgf@y=0 pt
+				\pgf@y=0 pt
 			\else
-			\ifnum#2=1
-				\pgf@y=0.25\pgf@y
-			\else
-				\pgf@y=-0.375\pgf@y
+				\ifnum#2=1
+					\pgf@y=0.25\pgf@y
+				\else
+					\pgf@y=-0.375\pgf@y
 				\fi
 			\fi
 		}
@@ -1917,13 +1935,13 @@
 			\pgfmathparse{-\pgf@x+\leadlen}
 			\pgf@x=\pgfmathresult pt
 			\ifnum#2=0
-			\pgf@y=-0.25\pgf@y
+				\pgf@y=-0.25\pgf@y
 			\else
-			\ifnum#2=1
-				\pgfpointtoorigin
-			\else
-				\pgf@y=-0.625\pgf@y
-			\fi
+				\ifnum#2=1
+					\pgfpointtoorigin
+				\else
+					\pgf@y=-0.625\pgf@y
+				\fi
 			\fi
 		}
 		\anchor{alusrca}{
@@ -2036,162 +2054,162 @@
 		}
 		\anchor{bzero}{
 			\ifnum#2<2
-			\northwest
-			\pgf@y=-0.75\pgf@y
+				\northwest
+				\pgf@y=-0.75\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{bclk}{
 			\ifnum#2=1
-			\northwest
-			\pgfmathparse{2*\realheight-\pgf@y}
-			\pgf@y=\pgfmathresult pt
-			\pgf@x=0pt
+				\northwest
+				\pgfmathparse{2*\realheight-\pgf@y}
+				\pgf@y=\pgfmathresult pt
+				\pgf@x=0pt
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
-		
-		
+
+
 		\anchor{bpcsrc}{
 			\ifnum#2=0
-			\northwest
-			\pgf@x=-\pgf@x
-			\pgf@y=0.75\pgf@y
+				\northwest
+				\pgf@x=-\pgf@x
+				\pgf@y=0.75\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{bresultsrc}{
 			\northwest
-\pgf@x=-\pgf@x
+			\pgf@x=-\pgf@x
 			\ifnum#2<2
-			\pgf@y=0.5\pgf@y
+				\pgf@y=0.5\pgf@y
 			\else
-			\pgf@y=0.625\pgf@y
+				\pgf@y=0.625\pgf@y
 			\fi
 		}
 		\anchor{bmemwrite}{
 			\northwest
 			\pgf@x=-\pgf@x
 			\ifnum#2=0
-			\pgf@y=0.25\pgf@y
+				\pgf@y=0.25\pgf@y
 			\else
-			\ifnum#2=1
-			\pgf@x=-\pgf@x
-			\pgf@y=0.75\pgf@y
-			\else
-			\pgf@y=0.375\pgf@y
-			\fi
+				\ifnum#2=1
+					\pgf@x=-\pgf@x
+					\pgf@y=0.75\pgf@y
+				\else
+					\pgf@y=0.375\pgf@y
+				\fi
 			\fi
 		}
 		\anchor{balucontrol}{
 			\northwest
 			\pgf@x=-\pgf@x
 			\ifnum#2=0
-			\pgf@y=0 pt
+				\pgf@y=0 pt
 			\else
-			\ifnum#2=1
-			\pgf@y=0.25\pgf@y
-			\else
-			\pgf@y=-0.375\pgf@y
-			\fi
+				\ifnum#2=1
+					\pgf@y=0.25\pgf@y
+				\else
+					\pgf@y=-0.375\pgf@y
+				\fi
 			\fi
 		}
 		\anchor{balusrc}{
 			\northwest
 			\pgf@x=-\pgf@x
 			\ifnum#2=0
-			\pgf@y=-0.25\pgf@y
+				\pgf@y=-0.25\pgf@y
 			\else
-			\ifnum#2=1
-			\pgfpointtoorigin
-			\else
-			\pgf@y=-0.625\pgf@y
-			\fi
+				\ifnum#2=1
+					\pgfpointtoorigin
+				\else
+					\pgf@y=-0.625\pgf@y
+				\fi
 			\fi
 		}
 		\anchor{balusrca}{
 			\ifnum#2=1
-			\northwest
-			\pgf@x=-\pgf@x
-			\pgf@y=-0.25\pgf@y
+				\northwest
+				\pgf@x=-\pgf@x
+				\pgf@y=-0.25\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{balusrcb}{
 			\ifnum#2=1
-			\northwest
-			\pgf@x=-\pgf@x
-			\pgf@y=0 pt
+				\northwest
+				\pgf@x=-\pgf@x
+				\pgf@y=0 pt
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{bimmsrc}{
 			\northwest
 			\pgf@x=-\pgf@x
 			\ifnum#2<2
-			\pgf@y=-0.5\pgf@y
+				\pgf@y=-0.5\pgf@y
 			\else
-			\pgf@y=-0.875\pgf@y
+				\pgf@y=-0.875\pgf@y
 			\fi
 		}
 		\anchor{bregwrite}{
 			\northwest
 			\pgf@x=-\pgf@x
 			\ifnum#2<2
-			\pgf@y=-0.75\pgf@y
+				\pgf@y=-0.75\pgf@y
 			\else
-			\pgf@y=0.875\pgf@y
+				\pgf@y=0.875\pgf@y
 			\fi
 		}
 		\anchor{birwrite}{
 			\ifnum#2=1
-			\northwest
-			\pgf@y=0.5\pgf@y
+				\northwest
+				\pgf@y=0.5\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{badrsrc}{
 			\ifnum#2=1
-			\northwest
+				\northwest
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
 		\anchor{bpcwrite}{
 			\ifnum#2=1
-			\northwest
-			\pgf@y=1.25\pgf@y
+				\northwest
+				\pgf@y=1.25\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
-		
+
 		\anchor{bbranch}{
 			\ifnum#2=2
-			\northwest
-			\pgf@x=-\pgf@x
-			\pgf@y=-0.125\pgf@y
+				\northwest
+				\pgf@x=-\pgf@x
+				\pgf@y=-0.125\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
-		
+
 		\anchor{bjump}{
 			\ifnum#2=2
-			\northwest
-			\pgf@x=-\pgf@x
-			\pgf@y=0.125\pgf@y
+				\northwest
+				\pgf@x=-\pgf@x
+				\pgf@y=0.125\pgf@y
 			\else
-			\pgfpointtoorigin
+				\pgfpointtoorigin
 			\fi
 		}
-		
+
 		%
 		% outline
 		%
@@ -2226,13 +2244,15 @@
 
 			\pgfsetcornersarced{\pgfpoint{0pt}{0pt}}
 			\ifnum#2=1
-				% draw CLK input
-				\pgfmathparse{0.5*\clkwidth}
-				\pgf@circ@res@step = \pgfmathresult pt
-				\pgfpathmoveto{\pgfpoint{-\pgf@circ@res@step}{\pgf@circ@res@up}}
-				\pgfpathlineto{\pgfpoint{0pt}{\pgf@circ@res@up - \pgf@circ@res@step}}
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@step}{\pgf@circ@res@up}}
-				\pgfpathclose
+				\ifpgfcirc@draw@clock
+					% draw CLK input
+					\pgfmathparse{0.5*\clkwidth}
+					\pgf@circ@res@step = \pgfmathresult pt
+					\pgfpathmoveto{\pgfpoint{-\pgf@circ@res@step}{\pgf@circ@res@up}}
+					\pgfpathlineto{\pgfpoint{0pt}{\pgf@circ@res@up - \pgf@circ@res@step}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@step}{\pgf@circ@res@up}}
+					\pgfpathclose
+				\fi
 			\fi
 
 			\endpgfscope
