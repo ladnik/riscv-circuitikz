@@ -85,6 +85,13 @@
 \tikzset{clock/.code={\pgfcirc@draw@clocktrue}}
 \tikzset{no clock/.code={\pgfcirc@draw@clockfalse}}
 
+\newif\ifpgfcirc@draw@zero\pgfcirc@draw@zerotrue
+\ctikzset{processor draw zero/.is choice}
+\ctikzset{processor draw zero/true/.code={\pgfcirc@draw@zerotrue}}
+\ctikzset{processor draw zero/false/.code={\pgfcirc@draw@zerofalse}}
+\tikzset{zero/.code={\pgfcirc@draw@zerotrue}}
+\tikzset{no zero/.code={\pgfcirc@draw@zerofalse}}
+
 \newif\ifpgfcirc@draw@input@leads\pgfcirc@draw@input@leadstrue
 \ctikzset{processor draw input leads/.is choice}
 \ctikzset{processor draw input leads/true/.code={\pgfcirc@draw@input@leadstrue}}
@@ -2449,7 +2456,9 @@
 			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@down]{\customfont funct7\textsubscript{5}}
 
 			\ifnum#2<2
-				\pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\customfont zero}
+				\ifpgfcirc@draw@zero
+                    \pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\customfont zero}
+                \fi
 			\fi
 		}
 	}
