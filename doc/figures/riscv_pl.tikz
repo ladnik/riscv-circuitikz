@@ -119,8 +119,8 @@
 	\draw[custyle] (cu.balusrc) -| (regdecodecu.bin);
 	\draw[custyle] (cu.bimmsrc) -- ++(2,0) |- ($(ext.ctrl) + (0, 1.5)$) -- (ext.ctrl);
 
-	\node[or port, custyle, right=2cm of regdecodecu.north east, yshift=1cm, scale=0.5, rotate=180] (or1) {};
-	\node[and port, custyle, right=0cm of or1.in 2, anchor=bout, scale=0.5, rotate=180, no leads] (and1) {};
+	\node[ieeestd or port, custyle, right=2cm of regdecodecu.north east, yshift=1cm, scale=0.5, rotate=180] (or1) {};
+	\node[ieeestd and port, custyle, right=0cm of or1.in 2, anchor=bout, scale=0.5, rotate=180, no leads] (and1) {};
 
 	\draw[custyle] (cu.bregwrite -| regdecodecu.bout) -| (regexecutecu.bin);
 	\draw[custyle] (cu.bresultsrc -| regdecodecu.bout) -| (regexecutecu.bin);
