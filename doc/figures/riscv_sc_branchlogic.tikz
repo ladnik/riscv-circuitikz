@@ -24,8 +24,8 @@
 	\node[3mux, comp, right=1cm of dm.rd, anchor=in1] (muxresult) {};
 	
 	% low-level control
-	\node[ieeestd and port, anchor=in 2, yshift=3em, xshift=3em, scale=0.6, draw=modblue] at (cu.bpcsrc) (jumpand) {};
-    \node[ieeestd or port, anchor=in 1, scale=0.6, draw=modblue] at (jumpand.out) (jumpor) {};
+	\node[ieeestd and port, custyle, no leads, anchor=in 2, yshift=3em, xshift=3em, scale=0.6] at (cu.bpcsrc) (andjump) {};
+    \node[ieeestd or port, custyle, anchor=in 1, scale=0.6,] at (andjump.out) (orjump) {};
 	
 	% special nodes
 	% clks
@@ -51,7 +51,7 @@
 	\draw[] (alu.bout) -| (dm.ba);
 	\node[] (anchorzero) at ($(alu.bout) + (1,1.75)$) {};
 	\node[right=0.5cm of anchorzero] (anchoralures){};
-	\draw[] (alu.bzero) -| (anchorzero.center) -- ++(-9.5,0)  |- (jumpand.in 1);
+	\draw[] (alu.bzero) -| (anchorzero.center) -- ++(-9.5,0)  |- (andjump.bin 1);
 	\draw[] (alu.bout) -| (anchoralures.center)  -- ++(3.5,0) |- (muxresult.bin0);
 	
 	% data memory
@@ -80,9 +80,10 @@
 	\draw[custyle] (cu.bmemwrite) -| (dm.bwe);
 	\draw[custyle] (cu.bresultsrc) -| (muxresult.bsel);
 	
-    \draw[custyle] (cu.bpcsrc) ++(0,0.7em) -| ($(jumpand.in 2) - (0.25,0)$) -- (jumpand.in 2);
-    \draw[custyle] (cu.bpcsrc) ++(0,0.2em) -| ($(jumpor.in 2) - (0.25,0)$) -- (jumpor.in 2);
-    \draw[custyle] (jumpor.out) -- ++(0.5, 0) -- ++(0, 1)-| (muxpcnext.bsel);	
+    \draw[custyle] (cu.bpcsrc) ++(0,0.7em) -| ($(andjump.bin 2) - (0.25,0)$) -- (andjump.bin 2);
+    \draw[custyle] (cu.bpcsrc) ++(0,0.2em) -| ($(orjump.in 2) - (0.25,0)$) -- (orjump.in 2);
+    \draw[custyle] (andjump.bout) -- (orjump.in 1);
+    \draw[custyle] (orjump.out) -- ++(0.5, 0) -- ++(0, 1)-| (muxpcnext.bsel);	
 	
 	% additional connections
 	\draw[] (addpcplus4.bout) -| ($(muxresult.bin2) + (-0.5, 0)$) -- (muxresult.bin2);
@@ -113,8 +114,8 @@
 	\node[align=left, label, custyle, right=0.25em of cu.balucontrol, yshift=0.5em] {ALUControl\textsubscript{2:0}};
 	\node[align=left, label, custyle, right=0.25em of cu.bmemwrite, yshift=0.5em] {MemWrite};
 	\node[align=left, label, custyle, right=0.25em of cu.bresultsrc, yshift=0.5em] {ResultSrc\textsubscript{1:0}};
-	\node[align=left, label, custyle, left=0.75em of jumpand.in 2, yshift=-1em] {Branch};
-	\node[align=left, label, custyle, left=0.75em of jumpor.in 2, yshift=-1em] {Jump};
+	\node[align=left, label, custyle, left=0.75em of andjump.in 2, yshift=-1em] {Branch};
+	\node[align=left, label, custyle, left=0.75em of orjump.in 2, yshift=-1em] {Jump};
 	\node[align=left, label, right=0.25em of addpcplus4.bout, yshift=0.5em] {PCPlus4};
 	\node[align=left, label, right=0.25em of addpctarget.bout, yshift=0.5em] {PCTarget};
 	\node[align=left, label, right=0.25em of im.brd, yshift=0.5em] {Instr};
