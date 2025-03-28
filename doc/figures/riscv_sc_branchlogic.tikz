@@ -11,7 +11,7 @@
 	\node[alu,comp, right=2.25cm of rf.rd1, anchor=a] (alu) {};
 	\node[datamem,comp, right=6.25cm of rf] (dm) {Data\\Memory};
 	
-	\node[ctrlunitsc, comp, custyle, above=1cm of rf, xshift=-0.75cm] (cu) {Control\\Unit};
+	\node[ctrlunitsc, no zero, comp, custyle, above=1cm of rf, xshift=-0.75cm] (cu) {Control\\Unit};
 	
 	\node[extend, comp, below=1cm of rf] (ext) {Extend};
 	\node[adder, comp, anchor=b] (addpctarget) at (ext.out -| alu.a) {};
@@ -22,6 +22,10 @@
 	\node[reg, comp, left=0.3cm of im.a] (regpcnext) {};
 	\node[mux, comp, left=1.25cm of regpcnext] (muxpcnext) {};
 	\node[3mux, comp, right=1cm of dm.rd, anchor=in1] (muxresult) {};
+	
+	% low-level control
+	\node[ieeestd and port, anchor=in 2, yshift=3em, xshift=3em, scale=0.6, draw=modblue] at (cu.bpcsrc) (jumpand) {};
+    \node[ieeestd or port, anchor=in 1, scale=0.6, draw=modblue] at (jumpand.out) (jumpor) {};
 	
 	% special nodes
 	% clks
@@ -47,7 +51,7 @@
 	\draw[] (alu.bout) -| (dm.ba);
 	\node[] (anchorzero) at ($(alu.bout) + (1,1.75)$) {};
 	\node[right=0.5cm of anchorzero] (anchoralures){};
-	\draw[] (alu.bzero) -| (anchorzero.center) -- ++(-8,0)  |- (cu.bzero);
+	\draw[] (alu.bzero) -| (anchorzero.center) -- ++(-9.5,0)  |- (jumpand.in 1);
 	\draw[] (alu.bout) -| (anchoralures.center)  -- ++(3.5,0) |- (muxresult.bin0);
 	
 	% data memory
@@ -75,7 +79,10 @@
 	\draw[custyle] (cu.balucontrol) -| (alu.bctrl);
 	\draw[custyle] (cu.bmemwrite) -| (dm.bwe);
 	\draw[custyle] (cu.bresultsrc) -| (muxresult.bsel);
-	\draw[custyle] (cu.bpcsrc) -- ++(1.25, 0) -- ++(0, 0.75)-| (muxpcnext.bsel);
+	
+    \draw[custyle] (cu.bpcsrc) ++(0,0.7em) -| ($(jumpand.in 2) - (0.25,0)$) -- (jumpand.in 2);
+    \draw[custyle] (cu.bpcsrc) ++(0,0.2em) -| ($(jumpor.in 2) - (0.25,0)$) -- (jumpor.in 2);
+    \draw[custyle] (jumpor.out) -- ++(0.5, 0) -- ++(0, 1)-| (muxpcnext.bsel);	
 	
 	% additional connections
 	\draw[] (addpcplus4.bout) -| ($(muxresult.bin2) + (-0.5, 0)$) -- (muxresult.bin2);
@@ -106,7 +113,8 @@
 	\node[align=left, label, custyle, right=0.25em of cu.balucontrol, yshift=0.5em] {ALUControl\textsubscript{2:0}};
 	\node[align=left, label, custyle, right=0.25em of cu.bmemwrite, yshift=0.5em] {MemWrite};
 	\node[align=left, label, custyle, right=0.25em of cu.bresultsrc, yshift=0.5em] {ResultSrc\textsubscript{1:0}};
-	\node[align=left, label, custyle, right=0.25em of cu.bpcsrc, yshift=0.5em] {PCSrc};
+	\node[align=left, label, custyle, left=0.75em of jumpand.in 2, yshift=-1em] {Branch};
+	\node[align=left, label, custyle, left=0.75em of jumpor.in 2, yshift=-1em] {Jump};
 	\node[align=left, label, right=0.25em of addpcplus4.bout, yshift=0.5em] {PCPlus4};
 	\node[align=left, label, right=0.25em of addpctarget.bout, yshift=0.5em] {PCTarget};
 	\node[align=left, label, right=0.25em of im.brd, yshift=0.5em] {Instr};
