@@ -31,7 +31,7 @@
 \ctikzset{processor/control/heightsc/.initial=2.5}			% height of sc control unit
 \ctikzset{processor/control/heightmc/.initial=3.5}			% height of mc control unit
 \ctikzset{processor/control/width/.initial=0.9}				% width of control units
-\ctikzset{processor/control/radius/.initial=5}				% border radius fo control units
+\ctikzset{processor/control/radius/.initial=5}				% border radius for control units
 
 \ctikzset{processor/arith/height/.initial=0.9}				% height of arith components
 \ctikzset{processor/arith/width/.initial=0.7}				% width of arith components
@@ -46,6 +46,10 @@
 \ctikzset{processor/misc/smallheight/.initial=0.65}			% height for small components
 \ctikzset{processor/misc/smallwidth/.initial=0.3}			% width for small components (e.g. small reg/mux/clk input)
 \ctikzset{processor/misc/leadlen/.initial=.25}				% length of input and output leads (suggested ~ 0.15 * /memory/width)
+
+\ctikzset{processor/hazard/height/.initial=0.9}				% height of hazard unit
+\ctikzset{processor/hazard/width/.initial=19}				% width of hazard unit
+\ctikzset{processor/hazard/radius/.initial=5}				% border radius for hazard unit
 
 
 \ctikzset{processor/mux/inputs/.initial = 2}				% default number of mux inputs
@@ -66,6 +70,13 @@
 \ctikzset{processor draw enable input/false/.code={\pgfcirc@draw@enable@inputfalse}}
 \tikzset{enable input/.code={\pgfcirc@draw@enable@inputtrue}}
 \tikzset{no enable input/.code={\pgfcirc@draw@enable@inputfalse}}
+
+\newif\ifpgfcirc@draw@clear@input\pgfcirc@draw@clear@inputfalse
+\ctikzset{processor draw clear input/.is choice}
+\ctikzset{processor draw clear input/true/.code={\pgfcirc@draw@clear@inputtrue}}
+\ctikzset{processor draw clear input/false/.code={\pgfcirc@draw@clear@inputfalse}}
+\tikzset{clear input/.code={\pgfcirc@draw@clear@inputtrue}}
+\tikzset{no clear input/.code={\pgfcirc@draw@clear@inputfalse}}
 
 \newif\ifpgfcirc@draw@clock\pgfcirc@draw@clocktrue
 \ctikzset{processor draw clock/.is choice}
@@ -682,6 +693,7 @@
 		\pgf@x=0.5\pgf@x
 	}
 
+
 	%
 	% anchors
 	%
@@ -711,6 +723,18 @@
 		\pgf@y=-\pgf@y
 	}
 
+	\anchor{enl}{
+		\northwest
+		\pgf@x=0.5\pgf@x
+		\pgf@y=-\pgf@y
+	}
+
+	\anchor{clr}{
+		\northwest
+		\pgf@x=-0.5\pgf@x
+		\pgf@y=-\pgf@y
+	}
+
 	\anchor{out}{
 		\northwest
 		\pgfmathparse{-\pgf@x+\leadlen}
@@ -737,6 +761,18 @@
 	\anchor{ben}{
 		\northwest
 		\pgf@x=0 pt
+		\pgf@y=-\pgf@y
+	}
+
+	\anchor{benl}{
+		\northwest
+		\pgf@x=0.5\pgf@x
+		\pgf@y=-\pgf@y
+	}
+
+	\anchor{bclr}{
+		\northwest
+		\pgf@x=-0.5\pgf@x
 		\pgf@y=-\pgf@y
 	}
 
@@ -808,7 +844,15 @@
 
 
 		\ifpgfcirc@draw@enable@input
-			\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+2pt]{\customfont \scriptsize EN}
+			\ifpgfcirc@draw@clear@input
+				\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+5pt, rotate=90]{\customfont \scriptsize EN}
+			\else
+				\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+2pt]{\customfont \scriptsize EN}
+			\fi
+		\fi
+
+		\ifpgfcirc@draw@clear@input
+			\pgftext[bottom,x=5pt,y=\pgf@circ@res@down+7.25pt, rotate=90]{\customfont \scriptsize CLR}
 		\fi
 	}
 }
@@ -1274,6 +1318,13 @@
 		\pgf@x=0 pt
 	}
 
+	\anchor{fwd}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=-\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+
 	\anchor{out}{
 		\northwest
 		\pgf@y=0pt
@@ -1301,6 +1352,13 @@
 		\northwest
 		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
 		\pgf@y=\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+
+	\anchor{bfwd}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=-\pgfmathresult pt
 		\pgf@x=0 pt
 	}
 
@@ -1459,6 +1517,13 @@
 		\pgf@x=0 pt
 	}
 
+	\anchor{fwd}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=-\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+
 	\anchor{out}{
 		\northwest
 		\pgf@y=0pt
@@ -1491,6 +1556,13 @@
 		\northwest
 		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
 		\pgf@y=\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+
+	\anchor{bfwd}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=-\pgfmathresult pt
 		\pgf@x=0 pt
 	}
 
@@ -1661,6 +1733,13 @@
 		\pgf@x=0 pt
 	}
 
+	\anchor{fwd}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=-\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+
 	\anchor{out}{
 		\northwest
 		\pgf@y=0pt
@@ -1700,6 +1779,13 @@
 		\northwest
 		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
 		\pgf@y=\pgfmathresult pt
+		\pgf@x=0 pt
+	}
+
+	\anchor{bfwd}{
+		\northwest
+		\pgfmathparse{\pgf@y + 0.5*\cutinheight}
+		\pgf@y=-\pgfmathresult pt
 		\pgf@x=0 pt
 	}
 
@@ -1866,7 +1952,7 @@
 				\pgf@x=\pgfmathresult pt
 				\pgf@y=-0.75\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{clk}{
@@ -1876,7 +1962,7 @@
 				\pgf@y=\pgfmathresult pt
 				\pgf@x=0pt
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 
@@ -1888,7 +1974,7 @@
 				\pgf@x=\pgfmathresult pt
 				\pgf@y=0.75\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{resultsrc}{
@@ -1938,7 +2024,7 @@
 				\pgf@y=-0.25\pgf@y
 			\else
 				\ifnum#2=1
-					\pgfpointtoorigin
+					\pgfpointorigin
 				\else
 					\pgf@y=-0.625\pgf@y
 				\fi
@@ -1951,7 +2037,7 @@
 				\pgf@x=\pgfmathresult pt
 				\pgf@y=-0.25\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{alusrcb}{
@@ -1961,7 +2047,7 @@
 				\pgf@x=\pgfmathresult pt
 				\pgf@y=0 pt
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{immsrc}{
@@ -1991,7 +2077,7 @@
 				\pgf@x=\pgfmathresult pt
 				\pgf@y=0.5\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{adrsrc}{
@@ -2000,7 +2086,7 @@
 				\pgfmathparse{\pgf@x-\leadlen}
 				\pgf@x=\pgfmathresult pt
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{pcwrite}{
@@ -2010,7 +2096,7 @@
 				\pgf@x=\pgfmathresult pt
 				\pgf@y=1.25\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 
@@ -2021,7 +2107,7 @@
 				\pgf@x=-\pgfmathresult pt
 				\pgf@y=-0.125\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 
@@ -2032,7 +2118,7 @@
 				\pgf@x=-\pgfmathresult pt
 				\pgf@y=0.125\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 
@@ -2057,7 +2143,7 @@
 				\northwest
 				\pgf@y=-0.75\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{bclk}{
@@ -2067,7 +2153,7 @@
 				\pgf@y=\pgfmathresult pt
 				\pgf@x=0pt
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 
@@ -2078,7 +2164,7 @@
 				\pgf@x=-\pgf@x
 				\pgf@y=0.75\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{bresultsrc}{
@@ -2124,7 +2210,7 @@
 				\pgf@y=-0.25\pgf@y
 			\else
 				\ifnum#2=1
-					\pgfpointtoorigin
+					\pgfpointorigin
 				\else
 					\pgf@y=-0.625\pgf@y
 				\fi
@@ -2136,7 +2222,7 @@
 				\pgf@x=-\pgf@x
 				\pgf@y=-0.25\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{balusrcb}{
@@ -2145,7 +2231,7 @@
 				\pgf@x=-\pgf@x
 				\pgf@y=0 pt
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{bimmsrc}{
@@ -2171,14 +2257,14 @@
 				\northwest
 				\pgf@y=0.5\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{badrsrc}{
 			\ifnum#2=1
 				\northwest
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 		\anchor{bpcwrite}{
@@ -2186,7 +2272,7 @@
 				\northwest
 				\pgf@y=1.25\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 
@@ -2196,7 +2282,7 @@
 				\pgf@x=-\pgf@x
 				\pgf@y=-0.125\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 
@@ -2206,7 +2292,7 @@
 				\pgf@x=-\pgf@x
 				\pgf@y=0.125\pgf@y
 			\else
-				\pgfpointtoorigin
+				\pgfpointorigin
 			\fi
 		}
 
@@ -2372,6 +2458,106 @@
 \pgfcirc@declare@ctrlunit{ctrlunitsc}{0}
 \pgfcirc@declare@ctrlunit{ctrlunitmc}{1}
 \pgfcirc@declare@ctrlunit{ctrlunitpl}{2}
+
+\pgfdeclareshape{hazunit}{
+	%
+	% setup
+	%
+
+	\savedmacro{\ctikzclass}{\edef\ctikzclass{processor}}
+	\saveddimen{\scaledRlen}{\pgfmathsetlength{\pgf@x}{\ctikzvalof{\ctikzclass/scale}\pgf@circ@Rlen}}
+
+	% define northwest as scaled endpoint
+	\savedanchor\northwest{
+		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
+		\pgf@y=\ctikzvalof{\ctikzclass/hazard/height}\pgf@circ@scaled@Rlen
+		\pgf@y=.5\pgf@y % take half height
+		\pgf@x=-\ctikzvalof{\ctikzclass/hazard/width}\pgf@circ@scaled@Rlen
+		\pgf@x=.5\pgf@x % take half width
+	}
+
+	\saveddimen\leadlen
+	{
+		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
+		\pgf@x=\ctikzvalof{\ctikzclass/misc/leadlen}\pgf@circ@scaled@Rlen
+	}
+
+	\saveddimen\radius
+	{
+		\pgf@x=\ctikzvalof{\ctikzclass/hazard/radius} pt
+	}
+
+	\saveddimen\clkwidth
+	{
+		\pgfmathsetlength{\pgf@circ@scaled@Rlen}{\ctikzvalof{\ctikzclass/scale}*\pgf@circ@Rlen}
+		\pgf@x=\ctikzvalof{\ctikzclass/misc/smallwidth}\pgf@circ@scaled@Rlen
+	}
+
+	%
+	% anchors
+	%
+
+	\defineorientationanchors
+
+	\anchor{text}{
+		\pgf@x=-.5\wd\pgfnodeparttextbox
+		\pgf@y=-.5\ht\pgfnodeparttextbox
+	}
+
+	%
+	% pin anchors
+	%
+
+	% no pin anchors as connections should be aligned with drawing
+
+	%
+	% b anchors
+	%
+
+	% no b anchors as connections should be aligned with drawing
+
+	%
+	% outline
+	%
+
+	\pgf@circ@draw@component{
+		\pgf@circ@scaled@Rlen=\scaledRlen
+		\pgf@circ@setcolor
+
+		% draw shape
+		\pgfscope
+		\northwest
+
+		\northwest
+		\pgf@circ@res@up = \pgf@y
+		\pgf@circ@res@down = -\pgf@y
+		\pgf@circ@res@right = -\pgf@x
+		\pgf@circ@res@left = \pgf@x
+
+
+		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetcornersarced{\pgfpoint{\radius}{\radius}}
+
+		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
+		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@down}}
+		\pgfpathclose
+
+		\pgf@circ@draworfill
+		\endpgfscope
+
+		\northwest
+		\pgf@circ@res@up = \pgf@y
+		\pgf@circ@res@down = -\pgf@y
+		\pgf@circ@res@right = -\pgf@x
+		\pgf@circ@res@left = \pgf@x
+
+		% no leads to draw
+
+		% no text to draw
+	}
+}
 
 
 \makeatother

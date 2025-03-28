@@ -3,21 +3,28 @@
 		label/.style={draw=none, inner sep=1pt, font=\small},
 		comp/.style={align=center, no leads},
 		custyle/.style={color=modblue},
+		enstyle/.style={}, % dummy style
+		clrstyle/.style={}, % dummy style
 	}
 
+	\def\xspacing{0cm}
+	\def\yspacing{0cm}
+	\def\addstacks{0}
+
+	%<*circdef>
 	% components
 	\node[regfile, comp] (rf) at (-4.5, 0) {Register\\File};
 	\node[instrmem, comp, left=2.5cm of rf] (im) {Instruction\\Memory};
-	\node[alu,comp, right=6cm of rf.rd1, anchor=a] (alu) {};
-	\node[datamem,comp, right=11cm of rf] (dm) {Data\\Memory};
+	\node[alu,comp, right=6cm of rf.rd1, anchor=a, xshift=\xspacing] (alu) {};
+	\node[datamem,comp, right=11cm of rf, xshift=\xspacing] (dm) {Data\\Memory};
 
 	\node[ctrlunitpl, comp, custyle, above=1cm of rf, xshift=-0.75cm] (cu) {Control\\Unit};
 
-	\node[extend, comp, below=1.5cm of rf] (ext) {Extend};
+	\node[extend, comp, below=1.5cm of rf, yshift=\yspacing] (ext) {Extend};
 
 	% TODO: align mux.out and alu.b
-	\node[mux, comp, right=4.5cm of rf.rd2, anchor=in0] (muxalusrc) {};
-	\node[reg, comp, left=0.3cm of im.a] (regpcnext) {};
+	\node[mux, comp, right=4.5cm of rf.rd2, anchor=in0, xshift=\xspacing] (muxalusrc) {};
+	\node[reg, comp, enstyle, left=0.3cm of im.a] (regpcnext) {};
 	\node[mux, comp, left=1.25cm of regpcnext] (muxpcnext) {};
 	\node[3mux, comp, right=1.75cm of dm.rd, anchor=in1] (muxresult) {};
 
@@ -25,10 +32,10 @@
 	\node[adder, comp, anchor=a] (addpcplus4) at (ext.in -| im.a) {};
 
 	% register
-	\node[reg, comp, stacks=6.5, right=0.25cm of im.north east, anchor=north west] (regfetch) {};
-	\node[reg, comp, no clock, stacks=6.5, right=2.75cm of rf.north east, anchor=north west] (regdecode) {};
-	\node[reg, comp, no clock, stacks=6.5, right=8cm of rf.north east, anchor=north west] (regexecute) {};
-	\node[reg, comp, no clock, stacks=8, right=4.5cm of regexecute.south east, anchor=south west] (regmem) {};
+	\node[reg, comp, enstyle, clrstyle, stacks=\fpeval{6.5+\addstacks}, right=0.25cm of im.north east, anchor=north west] (regfetch) {};
+	\node[reg, comp, no clock, clrstyle, stacks=\fpeval{6.5+\addstacks}, right=2.75cm of rf.north east, anchor=north west] (regdecode) {};
+	\node[reg, comp, no clock, stacks=\fpeval{6.5+\addstacks}, right=8cm of rf.north east, anchor=north west, xshift=\xspacing] (regexecute) {};
+	\node[reg, comp, no clock, stacks=\fpeval{8+\addstacks}, right=4.5cm of regexecute.south east, anchor=south west] (regmem) {};
 
 	\node[reg, comp, custyle, stacks=5, above=0cm of regdecode.north, anchor=south] (regdecodecu) {};
 	\node[reg, comp, custyle, stacks=5, above=0cm of regexecute.north, anchor=south] (regexecutecu) {};
@@ -59,15 +66,15 @@
 	% connections
 	% register file
 	\draw[] (rf.brd1) -- (rf.brd1 -| regdecode.bin);
-	\draw[] (regdecode.bout |- alu.ba) -- (alu.ba);
 	\draw[] (rf.brd2) -- (rf.brd2 -| regdecode.bin);
-	\draw[] (regdecode.bout |- muxalusrc.bin0) -- (muxalusrc.bin0);
-	\draw[] (muxalusrc.bin0) -- ++(-0.5, 0) |- (regexecute.bin |- dm.bwd);
+	\node[draw=none, left=0.5cm of muxalusrc.bin0] (muxsrchelper) {};
+	\draw[] (muxsrchelper.center) -- (muxalusrc.bin0);
+	\draw[] (muxsrchelper.center) |- (regexecute.bin |- dm.bwd);
 	\draw[] (regexecute.bout |- dm.bwd) -- (dm.bwd);
 
 	% alu
 	\draw[] (muxalusrc.bout) |- (alu.bb);
-	\draw[] (alu.bout) -| (regexecute.bin);
+	\draw[] (alu.bout) -- (alu.bout -| regexecute.bin);
 	\draw[] (regexecute.bout |- alu.bout) -- ++(2, 0) |- (dm.ba);
 
 	\node[] (anchoraluresult) at ($(regexecute.bout |- alu.bout) + (2,2)$) {};
@@ -76,8 +83,9 @@
 
 	% data memory
 	\draw[] (dm.brd) -- (dm.brd-| regmem.bin);
-	\draw[] (regmem.bout) |- (muxresult.bin1);
-	\draw[] (muxresult.bout) -- ++(0.25,0) -- ++(0,-6) -| ($(rf.bwd3) + (-1.5, 0)$) node[align=center,above,pos=0.02] {ResultW} -- (rf.bwd3);
+	\draw[] (regmem.bout |- muxresult.bin1) -- (muxresult.bin1);
+	\node[draw=none, yshift=\yspacing] (resultwhelper) at ($(muxresult.bout) + (0.25, -6)$) {};
+	\draw[] (muxresult.bout) -| (resultwhelper.center) -| ($(rf.bwd3) + (-1.5, 0)$) node[align=center,above,pos=0.02] {ResultW} -- (rf.bwd3);
 
 	% extend unit
 	\draw[] (ext.bout) -- (ext.bout -| regdecode.bin);
@@ -94,7 +102,7 @@
 	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) |- (ext.bin);
 	\draw[] (regpcnext.bout) -- node[align=center, label, above, pos=0.5] {PCF} (im.ba);
 
-	\node[] (a3anchor) at ($(regfetch.bout) + (1, -2.75)$) {};
+	\node[yshift=\yspacing] (a3anchor) at ($(regfetch.bout) + (1, -2.75)$) {};
 	\draw[] (im.brd -| regfetch.bout) -- ++(1, 0) -- (a3anchor.center);
 	\draw[] (a3anchor.center) -- (a3anchor.center -| regdecode.bin);
 	\draw[] (a3anchor.center -| regdecode.bout) -- (a3anchor.center -| regexecute.bin);
@@ -124,8 +132,8 @@
 	\draw[custyle] (or1.out) -| (muxpcnext.bsel);
 	\draw[] (alu.bzero) -- ++(0.125, 0) |- node[label, align=right,below,pos=0.6] {ZeroE} (and1.bin 2);
 
-	\draw[custyle] (cu.bregwrite -| regexecutecu.bout) -| (regmemcu.bin);
-	\draw[custyle] (cu.bresultsrc -| regexecutecu.bout) -| (regmemcu.bin);
+	\draw[custyle] (cu.bregwrite -| regexecutecu.bout) -- (cu.bregwrite -| regmemcu.bin);
+	\draw[custyle] (cu.bresultsrc -| regexecutecu.bout) -- (cu.bresultsrc -|regmemcu.bin);
 	\draw[custyle] (cu.bmemwrite -| regexecutecu.bout) -| (dm.bwe);
 
 	\draw[custyle] (cu.bregwrite -| regmemcu.bout) -- (cu.bregwrite -| muxresult.bsel) -- ++(0, 2) -| (rf.bwe3);
@@ -210,4 +218,12 @@
 	\node[align=left, anchor=west, label, yshift=0.5em] at ($(dm.brd -| regmem.bout) + (0.25em, 0)$) {ReadDataW};
 	\node[align=left, anchor=west, label, yshift=0.5em] at ($(a3anchor.center -| regmem.bout) + (0.25em, 0)$) {RdW};
 	\node[align=left, anchor=west, label, yshift=0.5em] at ($(addpcplus4.bout-| regmem.bout) + (0.25em, 0)$) {PCPlus4W};
+	
+	
+	%</circdef>
+	
+	% some connections which are broken up when using a hazard unit
+	\draw[] (regdecode.bout |- alu.ba) -- (alu.ba);
+	\draw[] (regdecode.bout |- muxsrchelper.center) -- (muxsrchelper.center);
+	
 \end{circuitikz}

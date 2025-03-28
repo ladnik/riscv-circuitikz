@@ -1,0 +1,83 @@
+\begin{circuitikz}
+	\tikzset{
+		label/.style={draw=none, inner sep=1pt, font=\small},
+		comp/.style={align=center, no leads},
+		custyle/.style={color=modblue},
+		enstyle/.style={enable input},
+		clrstyle/.style={clear input},
+	}
+
+	\def\xspacing{2cm}
+	\def\yspacing{-1cm}
+%	\def\yspacing{0cm}
+	\def\addstacks{1}
+
+	% include riscv_pl code
+	\ExecuteMetaData[figures/riscv_pl.tikz]{circdef}
+	
+	% components
+	\node[hazunit, comp, custyle, below=2cm of regdecode.south, xshift=1cm, yshift=\yspacing] (hu) {Hazard Unit};
+	\node[3mux, comp, scale=0.5, right=5cm of rf.brd2, anchor=bin0, xshift=\xspacing] (muxhazardb) {};
+	\node[3mux, comp, scale=0.5, anchor=bin0, xshift=-1cm] at (muxhazardb |- rf.brd1) (muxhazarda) {};
+	
+	% named connections
+	\draw[custyle] (regpcnext.ben) -- (regpcnext.ben |- hu.north);
+	\draw[custyle] (regfetch.benl) -- (regfetch.benl |- hu.north);
+	\draw[custyle] (regfetch.bclr) -- (regfetch.bclr |- hu.north);
+	\draw[custyle] (regdecode.bclr) -- (regdecode.bclr |- hu.north);
+	\draw[custyle] (muxhazarda.bfwd) -- (muxhazarda.bfwd |- hu.north);
+	\draw[custyle] (muxhazardb.bfwd) -- (muxhazardb.bfwd |- hu.north);
+	
+	\node[] (rs1anchor) at ($(regfetch.bout) + (1, -2.5)$) {};
+	\node[] (rs2anchor) at ($(regfetch.bout) + (1, -3)$) {};
+	\draw[] (rs1anchor.center) -- (rs1anchor.center -| regdecode.bin);
+	\draw[] (rs2anchor.center) -- (rs2anchor.center -| regdecode.bin);
+	
+	% alu connections
+	\draw[] (regdecode.bout |- muxhazarda.bin0) -- (muxhazarda.bin0);
+	\draw[] (regdecode.bout |- muxhazardb.bin0) -- (muxhazardb.bin0);
+	\draw[] (muxhazardb.bout) -- (muxhazardb.bout  -| muxsrchelper.center);
+	\draw[] (muxhazarda.bout) -| ($(alu.ba) + (-1, 0)$)  -- (alu.ba);
+	
+	\draw[] (muxhazarda.bin1) -- ++(-0.5, 0) |- (resultwhelper.center);
+	\draw[] (muxhazarda.bin2) -- ++(-0.25, 0) -- ++(0, -5.25) -| ($(regexecute.bout |- alu.bout) + (2, 0)$) -- (regexecute.bout |- alu.bout);
+	\draw[] (muxhazardb.bin1) -- ($(muxhazarda.bin1 |- muxhazardb.bin1) + (-0.5, 0)$);
+	\draw[] (muxhazardb.bin2) -- ($(muxhazarda.bin2 |- muxhazardb.bin2) + (-0.25, 0)$);
+	
+	% remaining unnamed connections
+	\draw[custyle] (cu.bregwrite -| regmemcu.bout) -| ($(muxresult.bsel |- hu.north) + (-1,0)$ );
+	\draw[custyle] (cu.bregwrite -| regmemcu.bin) -| ($(regmemcu.bin |- hu.north) + (-2.2,0)$ );
+	\draw[custyle] (cu.bresultsrc -| regexecute.bin) -| ($(regexecute.bin |- hu.north) + (-2.15,0)$);
+	
+	\draw[custyle] (or1.out) -| (or1.out |- hu.north);
+	
+	\draw[custyle] ($(a3anchor.center -| regmem.bout) + (0.5, -3.25)$) |- (hu.north);
+	\draw[custyle] ($(a3anchor.center -| regmem.bin) + (-1, 0)$) |- (hu.north);
+	
+	\draw[custyle] ($(rs1anchor.center -| regdecode.bin) + (-2, 0)$) -| ($(regdecode.bin |- hu.north) + (-2, 0)$);
+	\draw[custyle] ($(rs2anchor.center -| regdecode.bin) + (-1.7, 0)$) -| ($(regdecode.bin |- hu.north) + (-1.7, 0)$);
+	\draw[custyle] (rs1anchor.center -| regdecode.bout) -| ($(regdecode.bout |- hu.north) + (1.8, 0)$);
+	\draw[custyle] (rs2anchor.center -| regdecode.bout) -| ($(regdecode.bout |- hu.north) + (1.6, 0)$);
+	\draw[custyle] ($(a3anchor.center -| regdecode.bout) + (1.4, 0) $) -| ($(regdecode.bout |- hu.north) + (1.4, 0)$);
+	
+	
+	% negations
+	\node[circle,draw=black,fill=white,inner sep=2pt,below=0cm of regpcnext.ben, anchor=north] {};
+	\node[circle,draw=black,fill=white,inner sep=2pt,below=0cm of regfetch.benl, anchor=north] {};
+	\node[circle,draw=black,fill=white,inner sep=2pt,above=0cm of rf.bclk, anchor=south] {};
+	
+	% labels
+	\node[label, custyle, align=left, anchor=west, xshift=-0.5em, rotate=90] at ($(regpcnext.ben |- hu.north)$) {StallF};
+	\node[label, custyle, align=left, anchor=west, xshift=-0.5em, rotate=90] at ($(regfetch.benl |- hu.north)$) {StallD};
+	\node[label, custyle, align=left, anchor=west, xshift=0.5em, rotate=90] at ($(regfetch.bclr |- hu.north)$) {FlushD};
+	\node[label, custyle, align=left, anchor=west, xshift=-0.5em, rotate=90] at ($(regdecode.bclr |- hu.north)$) {FlushE};
+	\node[label, custyle, align=left, anchor=west, xshift=-0.5em, rotate=90] at ($(muxhazarda.bfwd |- hu.north)$) {ForwardAE};
+	\node[label, custyle, align=left, anchor=west, xshift=-0.5em, rotate=90] at ($(muxhazardb.bfwd |- hu.north)$) {ForwardBE};
+	\node[label, custyle, align=left, anchor=west, yshift=-0.5em] at ($(cu.bresultsrc -| regexecute.bin) + (-2.15,0)$ ) {0};
+	
+	\node[align=right, anchor=east, label, yshift=0.5em] at ($(rs1anchor.center -| regdecode.bin) + (-0.25em, 0)$) {Rs1D};
+	\node[align=right, anchor=east, label, yshift=0.5em] at ($(rs2anchor.center -| regdecode.bin) + (-0.25em, 0)$) {Rs2D};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(rs1anchor.center -| regdecode.bout) + (0.25em, 0)$) {Rs1E};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(rs2anchor.center -| regdecode.bout) + (0.25em, 0)$) {Rs2E};
+	
+\end{circuitikz}

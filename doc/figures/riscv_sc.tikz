@@ -21,7 +21,7 @@
 	\node[mux, comp, right=0.9cm of rf.rd2, anchor=in0] (muxalusrc) {};
 	\node[reg, comp, left=0.3cm of im.a] (regpcnext) {};
 	\node[mux, comp, left=1.25cm of regpcnext] (muxpcnext) {};
-	\node[mux, comp, right=1cm of dm.rd, anchor=in1] (muxresult) {};
+	\node[3mux, comp, right=1cm of dm.rd, anchor=in1] (muxresult) {};
 	
 	% special nodes
 	% clks
@@ -52,7 +52,7 @@
 	
 	% data memory
 	\draw[] (dm.brd) -- (muxresult.bin1);
-	\draw[] (muxresult.bout) -- ++(0.25,0) -- ++(0,-5) -- ++(-14.3, 0) node[align=center,above,pos=0.05] {Result} |- (rf.bwd3);
+	\draw[] (muxresult.bout) -- ++(0.25,0) -- ++(0,-5) -|  node[align=center,above,pos=0.02] {Result} ($(rf.bwd3) + (-1.25,0)$) -- (rf.bwd3);
 	
 	% extend unit
 	\draw[] (ext.bout) -- (addpctarget.bb);
@@ -78,6 +78,7 @@
 	\draw[custyle] (cu.bpcsrc) -- ++(1.25, 0) -- ++(0, 0.75)-| (muxpcnext.bsel);
 	
 	% additional connections
+	\draw[] (addpcplus4.bout) -| ($(muxresult.bin2) + (-0.5, 0)$) -- (muxresult.bin2);
 	\draw[] (addpcplus4.bout) -- ++(0.25,0) -- ++(0, -1.25)  -- ++ (-4.5,0) |- (muxpcnext.bin0);
 	\draw[] (regpcnext.bout) -- ++(0.3, 0) |- (addpcplus4.ba);
 	\draw[] (regpcnext.bout) -- ++(0.3, 0) |- (addpctarget.ba);
@@ -104,9 +105,10 @@
 	\node[align=left, label, custyle, right=0.25em of cu.balusrc, yshift=0.5em] {ALUSrc};
 	\node[align=left, label, custyle, right=0.25em of cu.balucontrol, yshift=0.5em] {ALUControl\textsubscript{2:0}};
 	\node[align=left, label, custyle, right=0.25em of cu.bmemwrite, yshift=0.5em] {MemWrite};
-	\node[align=left, label, custyle, right=0.25em of cu.bresultsrc, yshift=0.5em] {ResultSrc};
+	\node[align=left, label, custyle, right=0.25em of cu.bresultsrc, yshift=0.5em] {ResultSrc\textsubscript{1:0}};
 	\node[align=left, label, custyle, right=0.25em of cu.bpcsrc, yshift=0.5em] {PCSrc};
 	\node[align=left, label, right=0.25em of addpcplus4.bout, yshift=0.5em] {PCPlus4};
 	\node[align=left, label, right=0.25em of addpctarget.bout, yshift=0.5em] {PCTarget};
 	\node[align=left, label, right=0.25em of im.brd, yshift=0.5em] {Instr};
+	\node[align=left, label, right=0.25em of regpcnext.bout, yshift=0.5em] {PC};
 \end{circuitikz}

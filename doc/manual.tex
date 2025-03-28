@@ -17,6 +17,8 @@
 \usepackage{tabularx}
 \usepackage{xcolor}
 
+\usepackage{catchfilebetweentags}
+
 \hypersetup{
 	pdfauthor={Niklas Ladurner},
 	pdftitle={A RISC-V Processor Components \Circuitikz{} Library},
@@ -152,6 +154,7 @@ out/0/0.2,bout/45/0.2)
 in0/180/0.2,bin0/135/0.2,
 in1/180/0.2,bin1/225/0.2,
 sel/90/0.2,bsel/45/0.2,
+fwd/270/0.2,bfwd/-45/0.2,
 out/0/0.2,bout/45/0.2)
 
 \widecircuitdesc*{3mux}{Multiplexer with 3 inputs}{}(
@@ -159,6 +162,7 @@ in0/180/0.2,bin0/135/0.2,
 in1/180/0.2,bin1/225/0.025,
 in2/180/0.2,bin2/225/0.2,
 sel/90/0.2,bsel/45/0.2,
+fwd/270/0.2,bfwd/-45/0.2,
 out/0/0.2,bout/45/0.2)
 
 \widecircuitdesc*{4mux}{Multiplexer with 4 inputs}{}(
@@ -167,6 +171,7 @@ in1/180/0.2,bin1/135/0.025,
 in2/180/0.2,bin2/225/0.025,
 in3/180/0.2,bin3/225/0.2,
 sel/90/0.2,bsel/45/0.2,
+fwd/270/0.2,bfwd/-45/0.2,
 out/0/0.2,bout/45/0.2)
 
 \subsection{Control Units}
@@ -263,9 +268,24 @@ out/0/0.2,bout/45/0.2,
 ctrl/90/0.2,bctrl/135/0.2)
 
 \widecircuitdesc*{reg}{Register}{}(
-in/180/0.2,bin/135/0.2,
-out/0/0.2,bout/45/0.2,
-clk/90/0.2,bclk/135/0.2)
+in/180/0.2,
+out/0/0.2,
+clk/90/0.2, 
+en/270/0.2,
+enl/225/0.2,
+clr/-45/0.2)
+
+\widecircuitdesc*{reg}{Register (b-Anchors)}{}(
+bin/180/0.2,
+bout/0/0.2,
+bclk/90/0.2, 
+ben/270/0.2,
+benl/225/0.2,
+bclr/-45/0.2)
+
+\ctikzset{processor/hazard/radius=1}
+\widecircuitdesc*{hazunit, scale=0.2}{Hazard Unit}{}()
+\ctikzset{processor/hazard/radius=5}
 
 
 \section{Keys}
@@ -296,6 +316,9 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 		\texttt{misc/smallheight} & Sets height for small components.                                     & \texttt{0.65}    \\
 		\texttt{misc/smallwidth}  & Sets width for small components. Also affects the CLK input triangle. & \texttt{0.3}     \\
 		\texttt{misc/leadlen}     & Sets length for input and output leads.                               & \texttt{0.25}    \\
+		\texttt{hazard/height}    & Sets height for \texttt{hazunit}.                                     & \texttt{0.9}     \\
+		\texttt{hazard/width}     & Sets width for  \texttt{hazunit}.                                     & \texttt{18}      \\
+		\texttt{hazard/radius}    & Sets border radius for \texttt{hazunit}.                              & \texttt{5}       \\
 		\hline
 	\end{tabularx}
 	\captionof{table}{List of \Circuitikz{} keys}
@@ -332,14 +355,15 @@ Some keys are also defined as  Tikz keys and can therefore be directly passed to
 \begin{figure}[t!]
 	\begin{tabularx}{\textwidth}{|lXr|}
 		\hline
-		Key                   & Description                                                                                                     & applicable to  \\
+		Key                   & Description                                                                                                                                                                                           & applicable to        \\
 		\hline
-		\texttt{input leads}  & Specifies wether to draw input leads.                                                                           & all components \\
-		\texttt{output leads} & Specifies wether to draw output leads.                                                                          & all components \\
-		\texttt{leads}        & Specifies wether to draw leads at all.                                                                          & all components \\
-		\texttt{stacks}       & Sets height of a register in multiples of the default height, allows for stretched registers.                   & \texttt{reg}   \\
-		\texttt{enable input} & Specifies wether to draw an enable input or not. This also gives two new anchors, \texttt{en} and \texttt{ben}. & \texttt{reg}   \\
-		\texttt{clock} & Specifies wether to draw a clk input on a component that supports it. & all timed components  \\
+		\texttt{input leads}  & Specifies wether to draw input leads.                                                                                                                                                                 & all components       \\
+		\texttt{output leads} & Specifies wether to draw output leads.                                                                                                                                                                & all components       \\
+		\texttt{leads}        & Specifies wether to draw leads at all.                                                                                                                                                                & all components       \\
+		\texttt{stacks}       & Sets height of a register in multiples of the default height, allows for stretched registers.                                                                                                         & \texttt{reg}         \\
+		\texttt{enable input} & Specifies wether to draw an enable input or not. This also gives two new anchors, \texttt{en} and \texttt{ben}.                                                                                       & \texttt{reg}         \\
+		\texttt{clear input}  & Specifies wether to draw a clear input or not. This also gives two new anchors, \texttt{clr} and \texttt{bclr}. For Usage of enable and clear inputs, use the \texttt{enl} and \texttt{benl} anchors. & \texttt{reg}         \\
+		\texttt{clock}        & Specifies wether to draw a clk input on a component that supports it.                                                                                                                                 & all timed components \\
 
 		\hline
 	\end{tabularx}
@@ -374,6 +398,13 @@ More keys might be added in future.
 \begin{center}
 	\resizebox*{\textwidth}{!}{
 		\input{figures/riscv_pl.tikz}
+	}
+\end{center}
+
+\subsection{Pipelined RISC-V Processor with Hazard Unit}
+\begin{center}
+	\resizebox*{\textwidth}{!}{
+		\input{figures/riscv_pl_haz.tikz}
 	}
 \end{center}
 
