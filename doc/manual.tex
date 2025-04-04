@@ -270,7 +270,7 @@ ctrl/90/0.2,bctrl/135/0.2)
 \widecircuitdesc*{reg}{Register}{}(
 in/180/0.2,
 out/0/0.2,
-clk/90/0.2, 
+clk/90/0.2,
 en/270/0.2,
 enl/225/0.2,
 clr/-45/0.2)
@@ -278,7 +278,7 @@ clr/-45/0.2)
 \widecircuitdesc*{reg}{Register (b-Anchors)}{}(
 bin/180/0.2,
 bout/0/0.2,
-bclk/90/0.2, 
+bclk/90/0.2,
 ben/270/0.2,
 benl/225/0.2,
 bclr/-45/0.2)
@@ -298,7 +298,8 @@ The desired \Circuitikz{} key can be set via \verb|\ctikzset{processor/<key>=val
 		Key                       & Description                                                           & Default value    \\
 		\hline
 		\texttt{scale}            & Sets scale for all processor components.                              & \texttt{1}       \\
-		\texttt{thickness}        & Sets line width for all processor components.                         & \texttt{2}       \\
+		\texttt{thickness}        & Sets line width for all processor components.                         & \texttt{1}       \\
+		\texttt{leadthickness}    & Sets line width for all leads.                                        & \texttt{1}       \\
 		\texttt{font}             & Sets font family for all labels of processor components.              & \verb|\rmfamily| \\
 		\texttt{memory/height}    & Sets height for all memory components.                                & \texttt{2}       \\
 		\texttt{memory/width}     & Sets width for all memory components except \texttt{regfile}.         & \texttt{1.25}    \\
@@ -380,6 +381,14 @@ More keys might be added in future.
 \begin{center}
 	\resizebox*{\textwidth}{!}{
 		\input{figures/riscv_sc.tikz}
+	}
+\end{center}
+
+
+\subsection{Single-Cycle RISC-V Processor (with Branch Logic)}
+\begin{center}
+	\resizebox*{\textwidth}{!}{
+		\input{figures/riscv_sc_branchlogic.tikz}
 	}
 \end{center}
 

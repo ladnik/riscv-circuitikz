@@ -17,7 +17,8 @@
 %
 \ctikzset{processor/.is family}
 \ctikzset{processor/scale/.initial=1}						% scale of all components
-\ctikzset{processor/thickness/.initial=2}					% line width of all components
+\ctikzset{processor/thickness/.initial=1}					% line width of all components
+\ctikzset{processor/leadthickness/.initial=1}				% line width of all leads
 \def\customfont{\rmfamily}
 \ctikzset{processor/font/.store in=\customfont}				% set font for component labels
 
@@ -84,6 +85,13 @@
 \ctikzset{processor draw clock/false/.code={\pgfcirc@draw@clockfalse}}
 \tikzset{clock/.code={\pgfcirc@draw@clocktrue}}
 \tikzset{no clock/.code={\pgfcirc@draw@clockfalse}}
+
+\newif\ifpgfcirc@draw@zero\pgfcirc@draw@zerotrue
+\ctikzset{processor draw zero/.is choice}
+\ctikzset{processor draw zero/true/.code={\pgfcirc@draw@zerotrue}}
+\ctikzset{processor draw zero/false/.code={\pgfcirc@draw@zerofalse}}
+\tikzset{zero/.code={\pgfcirc@draw@zerotrue}}
+\tikzset{no zero/.code={\pgfcirc@draw@zerofalse}}
 
 \newif\ifpgfcirc@draw@input@leads\pgfcirc@draw@input@leadstrue
 \ctikzset{processor draw input leads/.is choice}
@@ -212,7 +220,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
@@ -222,7 +230,9 @@
 
 		\pgf@circ@draworfill
 		\endpgfscope
-
+		
+		\pgfscope
+		\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 		\ifpgfcirc@draw@input@leads
 			%input leads
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.5\pgf@circ@res@up}}
@@ -240,7 +250,7 @@
 		\pgf@circ@text@strokecolor
 		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{\customfont A}
 		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{\customfont RD}
-		%\pgftext[center,x=0,y=0\pgf@circ@res@up]{\shortstack{Instruction\\Memory}}
+		\endpgfscope
 	}
 }
 
@@ -365,16 +375,13 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@down}}
 		\pgfpathclose
-
-		\pgf@circ@draworfill
-		\endpgfscope
 
 		\ifpgfcirc@draw@clock
 			% draw CLK input
@@ -385,7 +392,11 @@
 			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left + \pgf@circ@res@step}{\pgf@circ@res@up}}
 			\pgfpathclose
 		\fi
-
+		\pgf@circ@draworfill
+		\endpgfscope
+		
+		\pgfscope
+		\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 		\ifpgfcirc@draw@input@leads
 			%input leads
 			% a
@@ -413,7 +424,9 @@
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0.5\pgf@circ@res@up}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0.5\pgf@circ@res@up}}
 		\fi
-		\pgfusepath{draw}
+		%\pgfusepath{draw}
+		\pgf@circ@draworfill
+		\endpgfscope
 
 
 		%draw text
@@ -583,17 +596,13 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@down}}
 		\pgfpathclose
-
-		\pgf@circ@draworfill
-		\endpgfscope
-
 
 		\ifpgfcirc@draw@clock
 			% draw CLK input
@@ -602,10 +611,13 @@
 			\pgfpathmoveto{\pgfpoint{0.5\pgf@circ@res@left - \pgf@circ@res@step}{\pgf@circ@res@up}}
 			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left}{\pgf@circ@res@up - \pgf@circ@res@step}}
 			\pgfpathlineto{\pgfpoint{0.5\pgf@circ@res@left + \pgf@circ@res@step}{\pgf@circ@res@up}}
-			\pgfpathclose
+			\pgfpathclose	
 		\fi
+		\pgf@circ@draworfill
+		\endpgfscope
 
-
+		\pgfscope
+		\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 		\ifpgfcirc@draw@input@leads
 
 			%input leads
@@ -646,7 +658,8 @@
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right-\pgf@circ@res@other}{0pt}}
 		\fi
-		\pgfusepath{draw}
+		\pgf@circ@draworfill
+		\endpgfscope
 
 
 		%draw text
@@ -800,16 +813,13 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@down}}
 		\pgfpathclose
-
-		\pgf@circ@draworfill
-		\endpgfscope
 
 		\ifpgfcirc@draw@clock
 			% draw clk input
@@ -819,7 +829,12 @@
 			\pgfpathlineto{\pgfpoint{0pt}{\pgf@circ@res@step}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
 		\fi
+		
+		\pgf@circ@draworfill
+		\endpgfscope
 
+		\pgfscope
+		\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 		\ifpgfcirc@draw@input@leads
 			%input leads
 			% in
@@ -839,9 +854,8 @@
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{\pgf@circ@res@step}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right-\pgf@circ@res@other}{\pgf@circ@res@step}}
 		\fi
-		\pgfusepath{draw}
-
-
+		\pgf@circ@draworfill
+		\endpgfscope
 
 		\ifpgfcirc@draw@enable@input
 			\ifpgfcirc@draw@clear@input
@@ -965,7 +979,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 		\pgfmathparse{\pgf@y+2*\pgf@x*tan(\slopeval)}
 		\pgf@circ@res@step=\pgfmathresult pt
 
@@ -978,6 +992,8 @@
 		\pgf@circ@draworfill
 		\endpgfscope
 
+		\pgfscope
+		\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}	
 		\northwest
 		\pgfmathparse{\pgf@x*tan(\slopeval)}
 		\pgf@circ@res@step=\pgfmathresult pt
@@ -995,7 +1011,8 @@
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{\pgf@circ@res@step}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right-\pgf@circ@res@other}{\pgf@circ@res@step}}
 		\fi
-		\pgfusepath{draw}
+		\pgf@circ@draworfill
+		\endpgfscope
 
 		% no text to draw
 	}
@@ -1154,7 +1171,7 @@
 
 			% draw shape
 			\pgfscope
-			\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+			\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 
 			\pgfmathparse{2*\pgf@circ@res@right*tan(\slopeval)}
 			\pgf@circ@res@step=\pgfmathresult pt
@@ -1171,6 +1188,8 @@
 			\pgf@circ@draworfill
 			\endpgfscope
 
+			\pgfscope
+			\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 			\ifpgfcirc@draw@input@leads
 				%input leads
 				% a
@@ -1208,7 +1227,8 @@
 					\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@step}}
 				\fi
 			\fi
-			\pgfusepath{draw}
+			\pgf@circ@draworfill
+			\endpgfscope
 
 			%draw text
 			\pgf@circ@text@strokecolor
@@ -1228,8 +1248,6 @@
 	%
 	% setup
 	%
-
-	% TODO: Adjustable mux height
 
 	\savedmacro{\ctikzclass}{\edef\ctikzclass{processor}}
 	\saveddimen{\scaledRlen}{\pgfmathsetlength{\pgf@x}{\ctikzvalof{\ctikzclass/scale}\pgf@circ@Rlen}}
@@ -1385,7 +1403,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down - \cutinheight}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up + \cutinheight}}
@@ -1396,6 +1414,8 @@
 		\pgf@circ@draworfill
 		\endpgfscope
 
+		\pgfscope
+		\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 		\ifpgfcirc@draw@input@leads
 			%input leads
 			% in0
@@ -1414,8 +1434,9 @@
 			% out
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0pt}}
-		\fi
-		\pgfusepath{draw}
+		\fi	
+		\pgf@circ@draworfill
+		\endpgfscope
 
 		%draw text
 		\pgf@circ@text@strokecolor
@@ -1428,8 +1449,6 @@
 	%
 	% setup
 	%
-
-	% TODO: Adjustable mux height
 
 	\savedmacro{\ctikzclass}{\edef\ctikzclass{processor}}
 	\saveddimen{\scaledRlen}{\pgfmathsetlength{\pgf@x}{\ctikzvalof{\ctikzclass/scale}\pgf@circ@Rlen}}
@@ -1589,7 +1608,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down - \cutinheight}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up + \cutinheight}}
@@ -1600,6 +1619,8 @@
 		\pgf@circ@draworfill
 		\endpgfscope
 
+		\pgfscope
+		\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 		\ifpgfcirc@draw@input@leads
 			%input leads
 			% in0
@@ -1624,7 +1645,8 @@
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0pt}}
 		\fi
-		\pgfusepath{draw}
+		\pgf@circ@draworfill
+		\endpgfscope
 
 		%draw text
 		\pgf@circ@text@strokecolor
@@ -1812,7 +1834,7 @@
 
 		% draw shape
 		\pgfscope
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down - \cutinheight}}
 		\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up + \cutinheight}}
@@ -1823,6 +1845,8 @@
 		\pgf@circ@draworfill
 		\endpgfscope
 
+		\pgfscope
+		\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 		\ifpgfcirc@draw@input@leads
 			%input leads
 			% in0
@@ -1850,8 +1874,9 @@
 			% out
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@right+\leadlen}{0pt}}
 			\pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{0pt}}
-		\fi
-		\pgfusepath{draw}
+		\fi	
+		\pgf@circ@draworfill
+		\endpgfscope
 
 		%draw text
 		\pgf@circ@text@strokecolor
@@ -2317,7 +2342,7 @@
 			\pgf@circ@res@left = \pgf@x
 
 
-			\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+			\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 			\pgfsetcornersarced{\pgfpoint{\radius}{\radius}}
 
 			\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
@@ -2340,9 +2365,11 @@
 					\pgfpathclose
 				\fi
 			\fi
-
+			\pgf@circ@draworfill
 			\endpgfscope
 
+			\pgfscope
+			\pgfsetlinewidth{\ctikzvalof{processor/leadthickness}}
 			% set up vars for small height
 			\northwest
 			\pgf@circ@res@up = \pgf@y
@@ -2365,8 +2392,8 @@
 				\ifnum#2<2
 					% zero
 					\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\leadlen}{0.75\pgf@circ@res@down}}
+					\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.75\pgf@circ@res@down}}
 				\fi
-				\pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{0.75\pgf@circ@res@down}}
 			\fi
 
 			\ifpgfcirc@draw@output@leads
@@ -2441,7 +2468,15 @@
 				\fi
 			\fi
 			\pgfusepath{draw}
+			\pgf@circ@draworfill
+			\endpgfscope
 
+			\northwest
+			\pgf@circ@res@up = \pgf@y
+			\pgf@circ@res@down = -\pgf@y
+			\pgf@circ@res@right = -\pgf@x
+			\pgf@circ@res@left = \pgf@x
+			
 			%draw text
 			\pgf@circ@text@strokecolor
 			\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{\customfont op}
@@ -2449,7 +2484,9 @@
 			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@down]{\customfont funct7\textsubscript{5}}
 
 			\ifnum#2<2
-				\pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\customfont zero}
+				\ifpgfcirc@draw@zero
+                    \pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\customfont zero}
+                \fi
 			\fi
 		}
 	}
@@ -2535,7 +2572,7 @@
 		\pgf@circ@res@left = \pgf@x
 
 
-		\pgf@circ@setlinewidth{processor}{\pgflinewidth}
+		\pgfsetlinewidth{\ctikzvalof{processor/thickness}}
 		\pgfsetcornersarced{\pgfpoint{\radius}{\radius}}
 
 		\pgfpathmoveto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@down}}
