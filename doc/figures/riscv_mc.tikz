@@ -22,7 +22,7 @@
 	\node[mux, comp, left=0.75cm of dm.ba, anchor=bout] (muxaddrnext) {};
 	\node[reg, comp, left=0.75cm of muxaddrnext.bin0, enable input, anchor=bout] (regpcnext) {}; % reg to store pcnext
 	
-	\node[reg, comp, right=1.8cm of alu.bout, enable input, anchor=bin] (regaluresult) {};
+	\node[reg, comp, right=1.8cm of alu.bout, anchor=bin] (regaluresult) {};
 	\node[3mux, comp, right=1.5cm of regaluresult.bout, anchor=bin0] (muxresult) {};
 	
 	\node[reg, comp, right=0.75cm of dm.brd, enable input, anchor=bin, yshift=1.5cm, stacks=2.5] (regdmread) {}; % big reg next to dm
