@@ -1,11 +1,11 @@
-\def\bblue#1{\textbf{\textcolor{modblue}{#1}}}
+\def\bblue#1{\fontsize{10}{12}\selectfont\textbf{\textcolor{modblue}{#1}}}
 \begin{tikzpicture}
 	\tikzset{
 		every node/.style={},
 		line/.style={thick, line cap=round},
-		arrow/.style={line, ->},
-		mod/.style={font=\small, inner sep=-3pt, align=center, minimum size=3.35cm},
-		label/.style={font=\ttfamily\small\linespread{0.5}\selectfont, align=center},
+		arrow/.style={line, -Stealth},
+		mod/.style={font=\fontsize{9}{11}\selectfont, inner sep=-3pt, align=center, minimum size=3.4cm},
+		label/.style={font=\ttfamily\fontsize{9}{11}\selectfont\linespread{0.5}\selectfont, align=center},
 	}
 	\node[state, mod] (s0) {\bblue{S0: Fetch}\\AdrSrc = 0\\IRWrite\\ALUSrcA = 00\\ALUSrcB = 10\\ALUOp = 00\\ResultSrc = 10\\PCUpdate};
 	\node[state, mod, right=1cm of s0] (s1) {\bblue{S1: Decode}\\ALUSrcA = 01\\ALUSrcB = 01\\ALUOp = 00};
@@ -25,7 +25,7 @@
 	\draw[arrow] (s0) -- (s1);
 	\draw[arrow] (s1) -- (s2) node[left, pos=0.5, label] {op = 0000011 (lw) or\\op = 0100011 (sw)};
 	\draw[arrow] (s1) -- (s6) node[left, pos=0.5, label] {op =\\0110011\\(R-Type)};
-	\draw[arrow] (s1) -- (s8) node[right, pos=0.5, label] {op = \\0010011\\(I-Type ALU)};
+	\draw[arrow] (s1) -- (s8) node[right, pos=0.5, label, align=left] {op = \\0010011\\(I-Type ALU)};
 	\draw[arrow] (s1) -- (s9) node[right, pos=0.5, label] {op = 1101111\\(jal)};
 	\draw[arrow] (s1) -- (s10.north west) node[right, pos=0.5, label] {op = 1100011\\(beq)};
 	
@@ -37,14 +37,14 @@
 	\draw[arrow] (s8) -- (s7);
 	\draw[arrow] (s9) -- (s7);
 	
-	\node[right=18.5 of s4] (anchorSE) {};
-	\node[above=15.5cm of anchorSE] (anchorNE) {};
+	\coordinate[right=18.5 of s4] (anchorSE) {};
+	\coordinate[above=15.8cm of anchorSE] (anchorNE) {};
 	
-	\draw[line] (s4) -- (anchorSE.center);
-	\draw[line] (s5) |- (anchorSE.center);
-	\draw[line] (s7) |- (anchorSE.center);
-	\draw[line] (s10) |- (anchorSE.center);
-	\draw[line] (anchorSE.center) |- (anchorNE.center);
-	\draw[arrow] (anchorNE.center) -| (s0.north);
+	\draw[line] (s4) -- (anchorSE);
+	\draw[line] (s5) -- (s5 |- anchorSE);
+	\draw[line] (s7) -- (s7 |- anchorSE);
+	\draw[line] (s10) -- (s10 |- anchorSE);
+	\draw[line] (anchorSE) |- (anchorNE);
+	\draw[arrow] (anchorNE) -| (s0.north);
 	
 \end{tikzpicture}

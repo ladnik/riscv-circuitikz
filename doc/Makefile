@@ -6,7 +6,8 @@ TEXS := manual.tex
 # compile a specific .tex file to PDF and clean auxiliary files
 %.pdf: %.tex figures/*.tikz ../tikzlibraryriscvproc.code.tex
 	TEXINPUTS=../: pdflatex -interaction=nonstopmode -shell-escape $<
-	
+	TEXINPUTS=../: pdflatex -interaction=nonstopmode -shell-escape $<
+
 # compile all .tex files
 all: $(TEXS:.tex=.pdf)
 
