@@ -116,6 +116,7 @@
 	\node[align=left, label, custyle, right=0.25em of cu.bresultsrc, yshift=0.5em] {ResultSrc\textsubscript{1:0}};
 	\node[align=left, label, custyle, left=0.75em of andjump.in 2, yshift=-1em] {Branch};
 	\node[align=left, label, custyle, left=0.75em of orjump.in 2, yshift=-1em] {Jump};
+	\node[align=left, label, custyle, right=-0.5em of orjump.bout, yshift=0.8em] {PCSrc};
 	\node[align=left, label, right=0.25em of addpcplus4.bout, yshift=0.5em] {PCPlus4};
 	\node[align=left, label, right=0.25em of addpctarget.bout, yshift=0.5em] {PCTarget};
 	\node[align=left, label, right=0.25em of im.brd, yshift=0.5em] {Instr};
