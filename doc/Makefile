@@ -1,12 +1,12 @@
-# TEXS := $(wildcard *.tex)
-TEXS := manual.tex
+TEXS := $(wildcard *.tex)
+
+LATEXMKFLAGS+=-pdf -halt-on-error -interaction=nonstopmode -shell-escape
 
 .PHONY: all clean distclean
 
 # compile a specific .tex file to PDF and clean auxiliary files
-%.pdf: %.tex figures/*.tikz ../tikzlibraryriscvproc.code.tex
-	TEXINPUTS=../: pdflatex -interaction=nonstopmode -shell-escape $<
-	TEXINPUTS=../: pdflatex -interaction=nonstopmode -shell-escape $<
+%.pdf: %.tex
+	TEXINPUTS=..//: latexmk $(LATEXMKFLAGS) $<
 
 # compile all .tex files
 all: $(TEXS:.tex=.pdf)

@@ -1,17 +1,23 @@
-\documentclass[a4paper,titlepage]{article}
+\documentclass[10pt,a4paper]{scrartcl}
 
-\usepackage{a4wide}
+% Formatting and Layout
+\usepackage[standardsections]{scrhack}
+\usepackage[left=2cm,right=2cm,top=2.5cm,bottom=2cm,headheight=1cm]{geometry} % Page margins
+
+% Fonts and Encoding
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{hyperref}
 
+% Graphics and Figures
 \usepackage{tikz}
 \usepackage{circuitikz}
 \usepackage{ctikzmanutils}
-\usepackage[]{csquotes}
 \usetikzlibrary{calc, positioning, automata, arrows.meta, riscvproc}
 
+% Miscellaneous
+\usepackage{hyperref}
+\usepackage{csquotes}
 \usepackage{caption}
-\usepackage{fancyhdr} 
 \usepackage{lmodern}
 \usepackage{showexpl}
 \usepackage{tabularx}
@@ -28,17 +34,13 @@
 	colorlinks=false,
 }
 
-
-\renewcommand{\rmdefault}{lmss} % set font to sans serif
-
 \parindent=0pt
 \parskip=4pt plus 6pt minus 2pt
 
-\lstset{
-	gobble=6,
-	basicstyle=\ttfamily\small
-}
+\renewcommand{\familydefault}{\sfdefault} % set font to sans seri
 
+\ctikzset{processor/font=\fontsize{10}{12}\fontfamily{lmss}\selectfont}
+\tikzset{font=\fontsize{10}{12}\fontfamily{lmss}\selectfont}
 \definecolor{modblue}{HTML}{288DCC}
 
 % modified https://github.com/circuitikz/circuitikz/blob/c94be92df781cfbcba21c6d9c5e95a98976917a5/doc/ctikzmanutils.sty#L108
@@ -80,10 +82,10 @@
 
 \begin{center}
 	\LARGE \textbf{\thetitle}
-
+	
 	\normalsize \theauthor
 
-	\normalsize \thedate
+	\normalsize As of \thedate
 \end{center}
 
 \tableofcontents
@@ -100,7 +102,12 @@ To use the predefined components, you must include the library \texttt{riscvproc
 	\usetikzlibrary{riscvproc}
 	...
 \end{verbatim}
-
+If you aim for the same look as in this document, adjust fonts and colors accordingly. Note that these settings have global scope. If you wish to adjust them only for a single \texttt{tikzpicture} or \texttt{circuitikz} environment, pass it there.
+\begin{verbatim}
+	\ctikzset{processor/font=\fontsize{10}{12}\fontfamily{lmss}\selectfont}
+	\tikzset{font=\fontsize{10}{12}\fontfamily{lmss}\selectfont}
+	\definecolor{modblue}{HTML}{288DCC}
+\end{verbatim}
 Components are then availiable in \texttt{circuitikz} environments:
 \begin{center}
 	\begin{LTXexample}[varwidth, rframe=]
