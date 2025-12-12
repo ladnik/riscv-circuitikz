@@ -80,10 +80,10 @@
 	\draw[custyle] (cu.bmemwrite) -| (dm.bwe);
 	\draw[custyle] (cu.bresultsrc) -| (muxresult.bsel);
 	
-    \draw[custyle] (cu.bpcsrc) ++(0,0.7em) -| ($(andjump.bin 2) - (0.25,0)$) -- (andjump.bin 2);
-    \draw[custyle] (cu.bpcsrc) ++(0,0.2em) -| ($(orjump.in 2) - (0.25,0)$) -- (orjump.in 2);
+    \draw[custyle] (cu.bpcsrc) ++(0,0.5em) -| ($(andjump.bin 2) - (0.125,0)$) -- (andjump.bin 2);
+    \draw[custyle] (cu.bpcsrc) ++(0,0em) -| ($(orjump.bin 2) - (0.25,0)$) -- (orjump.in 2);
     \draw[custyle] (andjump.bout) -- (orjump.in 1);
-    \draw[custyle] (orjump.out) -- ++(0.5, 0) -- ++(0, 1)-| (muxpcnext.bsel);	
+    \draw[custyle] (orjump.out) -- ++(0.75, 0) -- ++(0, 1)-| (muxpcnext.bsel);	
 	
 	% additional connections
 	\draw[] (addpcplus4.bout) -| ($(muxresult.bin2) + (-0.5, 0)$) -- (muxresult.bin2);
@@ -114,8 +114,9 @@
 	\node[align=left, label, custyle, right=0.25em of cu.balucontrol, yshift=0.5em] {ALUControl\textsubscript{2:0}};
 	\node[align=left, label, custyle, right=0.25em of cu.bmemwrite, yshift=0.5em] {MemWrite};
 	\node[align=left, label, custyle, right=0.25em of cu.bresultsrc, yshift=0.5em] {ResultSrc\textsubscript{1:0}};
-	\node[align=left, label, custyle, left=0.75em of andjump.in 2, yshift=-1em] {Branch};
-	\node[align=left, label, custyle, left=0.75em of orjump.in 2, yshift=-1em] {Jump};
+	\node[align=left, label, custyle, right=0.25em of cu.bpcsrc, yshift=1em] {Branch};
+	\node[anchor=east, align=right, label, custyle, yshift=0.5em, xshift=-0.25em] at (cu.bpcsrc -| orjump.in 2) {Jump};
+	\node[align=left, label, custyle, right=0em of orjump.bout, yshift=0.5em] {PCSrc};
 	\node[align=left, label, right=0.25em of addpcplus4.bout, yshift=0.5em] {PCPlus4};
 	\node[align=left, label, right=0.25em of addpctarget.bout, yshift=0.5em] {PCTarget};
 	\node[align=left, label, right=0.25em of im.brd, yshift=0.5em] {Instr};
