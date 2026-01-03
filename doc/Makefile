@@ -1,12 +1,13 @@
 TEXS := $(wildcard *.tex)
+LIB := $(realpath ../lib/tikzlibraryriscvproc.code.tex)
 
 LATEXMKFLAGS+=-pdf -halt-on-error -interaction=nonstopmode -shell-escape
 
 .PHONY: all clean distclean
 
 # compile a specific .tex file to PDF and clean auxiliary files
-%.pdf: %.tex
-	TEXINPUTS=..//: latexmk $(LATEXMKFLAGS) $<
+%.pdf: %.tex $(LIB)
+	TEXINPUTS=../lib//: latexmk $(LATEXMKFLAGS) $<
 
 # compile all .tex files
 all: $(TEXS:.tex=.pdf)
