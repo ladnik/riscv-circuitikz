@@ -209,7 +209,7 @@
 	\node[align=left, anchor=west, label, yshift=0.5em] at ($(alu.bout -| regexecute.bout) + (0.25em, 0)$) {ALUResultM};
 	\node[align=left, anchor=west, label, yshift=0.5em] at ($(dm.bwd -| regexecute.bout) + (0.25em, 0)$) {WriteDataM};
 	\node[align=left, anchor=west, label, yshift=0.5em] at ($(a3anchor.center -| regexecute.bout) + (0.25em, 0)$) {RdM};
-	\node[align=left, anchor=west, label, yshift=0.5em] at ($(addpcplus4.bout-| regexecute.bout) + (0.25em, 0)$) {PCPlus4D};
+	\node[align=left, anchor=west, label, yshift=0.5em] at ($(addpcplus4.bout-| regexecute.bout) + (0.25em, 0)$) {PCPlus4M};
 
 	% writeback
 	\node[label, custyle, align=left, anchor=west, yshift=0.5em] at ($(cu.bregwrite -| regmemcu.bout) + (0.25em, 0)$) {RegWriteW};
