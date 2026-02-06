@@ -1,3 +1,4 @@
+% !TeX root = ../doc/manual.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                  riscvproc                                   %
 %                A RISC-V Processor Components CircuiTikZ Library              %
@@ -18,10 +19,8 @@
 \ctikzset{processor/scale/.initial=1}						% scale of all components
 \ctikzset{processor/thickness/.initial=1}					% line width of all components
 \ctikzset{processor/leadthickness/.initial=1}				% line width of all leads
-\def\customfont{\rmfamily}
-\ctikzset{processor/font/.store in=\customfont}				% set font for component labels
-
-% TODO: line thickness for leads
+\def\processorfont{\fontsize{10}{12}\fontfamily{lmss}\selectfont}
+\ctikzset{processor/font/.store in=\processorfont}				% set font for component labels
 
 
 \ctikzset{processor/memory/height/.initial=2}				% height of memory components
@@ -247,8 +246,8 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{\customfont A}
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{\customfont RD}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{\processorfont A}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{\processorfont RD}
 		\endpgfscope
 	}
 }
@@ -430,10 +429,10 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{\customfont A}
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{\customfont RD}
-		\pgftext[center,x=0.5\pgf@circ@res@right,y=0.85\pgf@circ@res@up]{\customfont WE}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{\customfont WD}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@up]{\processorfont A}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.5\pgf@circ@res@up]{\processorfont RD}
+		\pgftext[center,x=0.5\pgf@circ@res@right,y=0.85\pgf@circ@res@up]{\processorfont WE}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{\processorfont WD}
 		%\pgftext[center,x=0,y=0\pgf@circ@res@up]{\shortstack{Data\\Memory}}
 	}
 }
@@ -663,15 +662,15 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@up]{\customfont A1}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{\customfont A2}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.3\pgf@circ@res@down]{\customfont A3}
-		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{\customfont WD3}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@up]{\processorfont A1}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{\processorfont A2}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.3\pgf@circ@res@down]{\processorfont A3}
+		\pgftext[left,x=0.9\pgf@circ@res@left,y=0.6\pgf@circ@res@down]{\processorfont WD3}
 
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.6\pgf@circ@res@up]{\customfont RD1}
-		\pgftext[right,x=0.9\pgf@circ@res@right,y=0pt]{\customfont RD2}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0.6\pgf@circ@res@up]{\processorfont RD1}
+		\pgftext[right,x=0.9\pgf@circ@res@right,y=0pt]{\processorfont RD2}
 
-		\pgftext[center,x=0,y=0.85\pgf@circ@res@up]{\customfont WE3}
+		\pgftext[center,x=0,y=0.85\pgf@circ@res@up]{\processorfont WE3}
 	}
 }
 
@@ -858,14 +857,14 @@
 
 		\ifpgfcirc@draw@enable@input
 			\ifpgfcirc@draw@clear@input
-				\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+5pt, rotate=90]{\customfont \scriptsize EN}
+				\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+5pt, rotate=90]{\processorfont \scriptsize EN}
 			\else
-				\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+2pt]{\customfont \scriptsize EN}
+				\pgftext[bottom,x=0pt,y=\pgf@circ@res@down+2pt]{\processorfont \scriptsize EN}
 			\fi
 		\fi
 
 		\ifpgfcirc@draw@clear@input
-			\pgftext[bottom,x=5pt,y=\pgf@circ@res@down+7.25pt, rotate=90]{\customfont \scriptsize CLR}
+			\pgftext[bottom,x=5pt,y=\pgf@circ@res@down+7.25pt, rotate=90]{\processorfont \scriptsize CLR}
 		\fi
 	}
 }
@@ -1231,7 +1230,7 @@
 
 			%draw text
 			\pgf@circ@text@strokecolor
-			\pgftext[center,x=0.25\pgf@circ@res@right,y=0pt]{\customfont #4}
+			\pgftext[center,x=0.25\pgf@circ@res@right,y=0pt]{\processorfont #4}
 		}
 	}
 
@@ -1439,8 +1438,8 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[center,x=0pt,y=0.5\pgf@circ@res@up]{\customfont 0}
-		\pgftext[center,x=0pt,y=0.5\pgf@circ@res@down]{\customfont 1}
+		\pgftext[center,x=0pt,y=0.5\pgf@circ@res@up]{\processorfont 0}
+		\pgftext[center,x=0pt,y=0.5\pgf@circ@res@down]{\processorfont 1}
 	}
 }
 
@@ -1649,9 +1648,9 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[center,x=0pt,y=0.6\pgf@circ@res@up]{\customfont 00}
-		\pgftext[center,x=0pt,y=0pt]{\customfont 01}
-		\pgftext[center,x=0pt,y=0.6\pgf@circ@res@down]{\customfont 10}
+		\pgftext[center,x=0pt,y=0.6\pgf@circ@res@up]{\processorfont 00}
+		\pgftext[center,x=0pt,y=0pt]{\processorfont 01}
+		\pgftext[center,x=0pt,y=0.6\pgf@circ@res@down]{\processorfont 10}
 	}
 }
 
@@ -1879,10 +1878,10 @@
 
 		%draw text
 		\pgf@circ@text@strokecolor
-		\pgftext[center,x=0pt,y=0.75\pgf@circ@res@up]{\customfont 00}
-		\pgftext[center,x=0pt,y=0.25\pgf@circ@res@up]{\customfont 01}
-		\pgftext[center,x=0pt,y=0.25\pgf@circ@res@down]{\customfont 10}
-		\pgftext[center,x=0pt,y=0.75\pgf@circ@res@down]{\customfont 11}
+		\pgftext[center,x=0pt,y=0.75\pgf@circ@res@up]{\processorfont 00}
+		\pgftext[center,x=0pt,y=0.25\pgf@circ@res@up]{\processorfont 01}
+		\pgftext[center,x=0pt,y=0.25\pgf@circ@res@down]{\processorfont 10}
+		\pgftext[center,x=0pt,y=0.75\pgf@circ@res@down]{\processorfont 11}
 	}
 }
 
@@ -2478,13 +2477,13 @@
 			
 			%draw text
 			\pgf@circ@text@strokecolor
-			\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{\customfont op}
-			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.25\pgf@circ@res@down]{\customfont funct3}
-			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@down]{\customfont funct7\textsubscript{5}}
+			\pgftext[left,x=0.9\pgf@circ@res@left,y=0pt]{\processorfont op}
+			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.25\pgf@circ@res@down]{\processorfont funct3}
+			\pgftext[left,x=0.9\pgf@circ@res@left,y=0.5\pgf@circ@res@down]{\processorfont funct7\textsubscript{5}}
 
 			\ifnum#2<2
 				\ifpgfcirc@draw@zero
-                    \pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\customfont zero}
+                    \pgftext[left,x=0.9\pgf@circ@res@left,y=0.75\pgf@circ@res@down]{\processorfont zero}
                 \fi
 			\fi
 		}

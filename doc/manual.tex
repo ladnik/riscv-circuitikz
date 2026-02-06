@@ -38,8 +38,6 @@
 \parskip=4pt plus 6pt minus 2pt
 
 \renewcommand{\familydefault}{\sfdefault} % set font to sans serif
-
-\ctikzset{processor/font=\fontsize{10}{12}\fontfamily{lmss}\selectfont}
 \tikzset{font=\fontsize{10}{12}\fontfamily{lmss}\selectfont}
 \definecolor{modblue}{HTML}{288DCC}
 
@@ -104,7 +102,6 @@ To use the predefined components, you must include the library \texttt{riscvproc
 \end{verbatim}
 If you aim for the same look as in this document, adjust fonts and colors accordingly. Note that these settings have global scope. If you wish to adjust them only for a single \texttt{tikzpicture} or \texttt{circuitikz} environment, pass it there.
 \begin{verbatim}
-	\ctikzset{processor/font=\fontsize{10}{12}\fontfamily{lmss}\selectfont}
 	\tikzset{font=\fontsize{10}{12}\fontfamily{lmss}\selectfont}
 	\definecolor{modblue}{HTML}{288DCC}
 \end{verbatim}
