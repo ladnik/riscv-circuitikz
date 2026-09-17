@@ -19,8 +19,17 @@
 \ctikzset{processor/scale/.initial=1}						% scale of all components
 \ctikzset{processor/thickness/.initial=1}					% line width of all components
 \ctikzset{processor/leadthickness/.initial=1}				% line width of all leads
-\def\processorfont{\fontsize{10}{12}\fontfamily{lmss}\selectfont}
-\ctikzset{processor/font/.store in=\processorfont}				% set font for component labels
+\def\pgfcirc@processor@font{\fontsize{10}{12}\fontfamily{lmss}\selectfont}
+\ctikzset{processor/font/.store in=\pgfcirc@processor@font}	% set font for component labels
+
+% \processorfont starts every \pgftext label. The label color is the PDF fill color set by
+% \pgf@circ@text@strokecolor, but LaTeX's own current color is not updated by that, so box
+% constructs like \textsubscript (an \sbox) would fall back to the outer color (black).
+% Sync it inside the label box before selecting the font.
+\def\processorfont{%
+	\pgfutil@ifundefined{\string\color@pgffillcolor}{}{\pgfutil@color{pgffillcolor}}%
+	\pgfcirc@processor@font
+}
 
 
 \ctikzset{processor/memory/height/.initial=2}				% height of memory components
